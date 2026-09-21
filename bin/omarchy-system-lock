@@ -12,8 +12,8 @@ fi
 
 if ! pidof hyprlock >/dev/null; then
   if [[ ${OMARCHY_LOCK_ONLY:-false} == "true" ]]; then
-    # Run in foreground so swayidle -w waits for lock before sleeping
-    hyprlock --immediate-render
+    hyprlock --immediate-render &
+    sleep 1
   else
     (
       hyprlock --immediate-render
