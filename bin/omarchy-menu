@@ -150,10 +150,10 @@ show_capture_menu() {
 }
 
 show_screenshot_menu() {
-  case $(menu "Screenshot" "  Region\n  Screen\n  Window") in
-  *Region*) omarchy-capture-screenshot ;;
-  *Screen*) omarchy-capture-screenshot fullscreen ;;
-  *Window*) omarchy-capture-screenshot window ;;
+  case $(menu "Screenshot" "  Select Region\n  Full Screen\n  Active Window") in
+  *"Select Region"*) omarchy-capture-screenshot ;;
+  *"Full Screen"*) omarchy-capture-screenshot fullscreen ;;
+  *"Active Window"*) omarchy-capture-screenshot window ;;
   *) back_to show_capture_menu ;;
   esac
 }
