@@ -22,6 +22,7 @@ Current=omarchy
 EOF
 else
   sudo sed -i 's/^Session=hyprland-uwsm$/Session=omarchy/' /etc/sddm.conf.d/autologin.conf
+  sudo sed -i 's/^Session=niri$/Session=omarchy/' /etc/sddm.conf.d/autologin.conf
 fi
 
 # Prevent password-based SDDM logins from creating an encrypted login keyring
