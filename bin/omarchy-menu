@@ -140,14 +140,21 @@ show_reminder_message_input() {
 }
 
 show_capture_menu() {
-  case $(menu "Capture" "  Screenshot\n  Screenshot Screen\n  Screenshot Window\n  Screenrecord\n󰴑  Text Extraction\n󰃉  Color") in
-  *"Screenshot Screen"*) omarchy-capture-screenshot fullscreen ;;
-  *"Screenshot Window"*) omarchy-capture-screenshot window ;;
-  *Screenshot*) omarchy-capture-screenshot ;;
+  case $(menu "Capture" "  Screenshot\n  Screenrecord\n󰴑  Text Extraction\n󰃉  Color") in
+  *Screenshot*) show_screenshot_menu ;;
   *Screenrecord*) show_screenrecord_menu ;;
   *Text*) omarchy-capture-text-extraction ;;
   *Color*) niri msg pick-color | grep "Hex:" | awk '{print $2}' | wl-copy && notify-send -u low "󰃉  Color copied to clipboard" ;;
   *) back_to show_trigger_menu ;;
+  esac
+}
+
+show_screenshot_menu() {
+  case $(menu "Screenshot" "  Region\n  Screen\n  Window") in
+  *Region*) omarchy-capture-screenshot ;;
+  *Screen*) omarchy-capture-screenshot fullscreen ;;
+  *Window*) omarchy-capture-screenshot window ;;
+  *) back_to show_capture_menu ;;
   esac
 }
 
