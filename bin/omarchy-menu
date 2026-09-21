@@ -144,7 +144,7 @@ show_capture_menu() {
   *Screenshot*) show_screenshot_menu ;;
   *Screenrecord*) show_screenrecord_menu ;;
   *Text*) omarchy-capture-text-extraction ;;
-  *Color*) niri msg pick-color | grep "Hex:" | awk '{print $2}' | wl-copy && notify-send -u low "󰃉  Color copied to clipboard" ;;
+  *Color*) omarchy-capture-color ;;
   *) back_to show_trigger_menu ;;
   esac
 }
