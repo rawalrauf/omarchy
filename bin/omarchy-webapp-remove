@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# omarchy:summary=Remove web app desktop launchers
+# omarchy:args=[name...]
+
+set -e
+
+DESKTOP_DIR="$HOME/.local/share/applications"
+ICON_DIR="$HOME/.local/share/icons/hicolor/512x512@2/apps"
+
+if (( $# == 0 )); then
+  # Find all visible main web apps (ignores NoDisplay=true entries)
+  declare -A NAME_TO_FILE
+  while IFS= read -r -d '' file; do
+    if grep -q '^Exec=.*\(omarchy-launch-webapp\|omarchy-webapp-handler\).*' "$file"; then
+      # Skip hidden pre-generated files
+      if grep -q '^NoDisplay=true' "$file"; then
+        continue
+      fi
+
+      app_name=$(grep "^Name=" "$file" | cut -d= -f2- | head -1)
+      [[ -z "$app_name" ]] && app_name=$(basename "${file%.desktop}")
+      NAME_TO_FILE["$app_name"]="$file"
+      WEB_APPS+=("$app_name")
+    fi
+  done < <(find "$DESKTOP_DIR" -maxdepth 1 -name '*.desktop' -print0)
+
+  if ((${#WEB_APPS[@]})); then
+    IFS=$'\n' SORTED_WEB_APPS=($(sort <<<"${WEB_APPS[*]}"))
+    unset IFS
+    APP_NAMES_STRING=$(gum choose --no-limit --header "Select web app to remove..." --selected-prefix="✗ " "${SORTED_WEB_APPS[@]}")
+    APP_NAMES=()
+    while IFS= read -r line; do
+      [[ -n $line ]] && APP_NAMES+=("$line")
+    done <<< "$APP_NAMES_STRING"
+  else
+    echo "No web apps to remove."
+    exit 1
+  fi
+else
+  APP_NAMES=("$@")
+fi
+
+if (( ${#APP_NAMES[@]} == 0 )); then
+  echo "You must select at least one web app to remove."
+  exit 1
+fi
+
+for APP_NAME in "${APP_NAMES[@]}"; do
+  # Resolve to actual desktop file — either via name map or direct filename
+  if [[ -n "${NAME_TO_FILE[$APP_NAME]+_}" ]]; then
+    DESKTOP_FILE="${NAME_TO_FILE[$APP_NAME]}"
+  else
+    DESKTOP_FILE="$DESKTOP_DIR/$APP_NAME.desktop"
+  fi
+
+  if [[ ! -f "$DESKTOP_FILE" ]]; then
+    echo "Warning: Could not find desktop file for '$APP_NAME'"
+    continue
+  fi
+
+  # Extract app URL from Exec command line to calculate clean domain for app_id cleanup
+  EXEC_URL=$(grep "^Exec=" "$DESKTOP_FILE" | head -1 | awk '{print $2}')
+  CLEAN_DOMAIN=$(echo "$EXEC_URL" | sed -E 's|^[a-zA-Z0-9+.-]+://||; s|^www\.||; s|/.*$||')
+
+  ICON_PATH=$(grep "^Icon=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2-)
+
+  # 1. Remove main desktop file and main icon
+  rm -f "$DESKTOP_FILE"
+  [[ -n "$ICON_PATH" && -f "$ICON_PATH" ]] && rm -f "$ICON_PATH"
+
+  # 2. Remove hidden pre-generated app_id desktop entries and icon symlinks
+  if [[ -n "$CLEAN_DOMAIN" ]]; then
+    for prefix in chrome brave msedge opera vivaldi helium thorium; do
+      APP_ID="${prefix}-${CLEAN_DOMAIN}__-Default"
+      rm -f "$DESKTOP_DIR/${APP_ID}.desktop"
+      rm -f "$ICON_DIR/${APP_ID}.png"
+    done
+  fi
+
+  echo "Removed $APP_NAME"
+done
+
+# 3. Update system caches
+update-desktop-database "$DESKTOP_DIR" &>/dev/null
+gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" &>/dev/null

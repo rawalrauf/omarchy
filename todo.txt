@@ -1,0 +1,17 @@
+set default font update to ttf-0xproto-nerd, I've already added to install pkgs list
+
+add repo update -Sy script before every install to avoid issue with no pks found
+
+niri small config updates and autostarts updates
+
+waybar updates like automatic timezone select and menu button transprency later
+
+sddm install scripts add and rename hyprland-uwsm edit those, remove cross cursor from sddm login success
+
+copy audio-cmd-audio-switcher from old system
+
+add omarchy restart niri in omarchy-theme-set if needed
+
+swayidle triggering hyrplock that trun blank after 3 secs, and keyboard light won't come back
+
+new gum has breaking changes so look for its updated syntax, currently switching back to old version

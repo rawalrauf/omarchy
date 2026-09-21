@@ -1,0 +1,15 @@
+// Do not Chnage the order of these lines 
+
+// user config:- you can update user config here
+include "autostart.kdl"
+include "monitors.kdl"
+include "input.kdl"
+
+// default config:- don't do changes here unless you have to
+include "../../.local/share/omarchy/default/niri/all.kdl"
+
+// user config:- you can update user config here
+include "bindings.kdl"
+include "looknfeel.kdl"
+
+

@@ -1,0 +1,15 @@
+window-rule {
+    match app-id=r"^org\.omarchy\.(float\.)?[^.]+$"
+    match app-id="pqiv"
+    open-floating true
+    default-column-width { fixed 875; }
+    default-window-height { fixed 600; }
+}
+window-rule {
+    match app-id="mpv"
+    open-floating true
+    default-column-width { proportion 0.7150; }
+    default-window-height { proportion 0.9050; }
+  }
+
+

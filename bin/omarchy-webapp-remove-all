@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# omarchy:summary=Remove all web apps installed via omarchy-webapp-install.
+
+set -e
+
+APP_DIR="${1:-$HOME/.local/share/applications}"
+ICON_DIR="$HOME/.local/share/icons/hicolor/512x512@2/apps"
+
+echo "Scanning for web apps in $APP_DIR..."
+
+webapp_desktop_files=()
+while IFS= read -r -d '' file; do
+  # Find all main web app launchers (ignoring NoDisplay=true entries)
+  if grep -q "Exec=omarchy-launch-webapp\|Exec=omarchy-webapp-handler" "$file" 2>/dev/null; then
+    if ! grep -q '^NoDisplay=true' "$file" 2>/dev/null; then
+      webapp_desktop_files+=("$file")
+    fi
+  fi
+done < <(find "$APP_DIR" -maxdepth 1 -name "*.desktop" -print0 2>/dev/null)
+
+if (( ${#webapp_desktop_files[@]} == 0 )); then
+  # Fallback cleanup check for orphaned hidden desktop entries/symlinks
+  rm -f "$APP_DIR"/*-__-Default.desktop 2>/dev/null || true
+  rm -f "$ICON_DIR"/*-__-Default.png 2>/dev/null || true
+  echo "No web apps found."
+  exit 0
+fi
+
+for file in "${webapp_desktop_files[@]}"; do
+  app_name=$(basename "$file" .desktop)
+
+  # Extract URL to isolate clean domain for pre-generated symlinks
+  EXEC_URL=$(grep "^Exec=" "$file" | head -1 | awk '{print $2}')
+  CLEAN_DOMAIN=$(echo "$EXEC_URL" | sed -E 's|^[a-zA-Z0-9+.-]+://||; s|^www\.||; s|/.*$||')
+
+  icon_path=$(grep "^Icon=" "$file" 2>/dev/null | cut -d= -f2-)
+
+  echo "Removing web app: $app_name"
+
+  # 1. Remove main files
+  rm -f "$file"
+  [[ -n "$icon_path" && -f "$icon_path" ]] && rm -f "$icon_path"
+
+  # 2. Remove hidden pre-generated desktop files and icon symlinks
+  if [[ -n "$CLEAN_DOMAIN" ]]; then
+    for prefix in chrome brave msedge opera vivaldi helium thorium; do
+      APP_ID="${prefix}-${CLEAN_DOMAIN}__-Default"
+      rm -f "$APP_DIR/${APP_ID}.desktop"
+      rm -f "$ICON_DIR/${APP_ID}.png"
+    done
+  fi
+done
+
+# Extra safety pass to clean any stray hidden app entries
+rm -f "$APP_DIR"/*-__-Default.desktop 2>/dev/null || true
+rm -f "$ICON_DIR"/*-__-Default.png 2>/dev/null || true
+
+# Update databases
+update-desktop-database "$APP_DIR" &>/dev/null
+gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" &>/dev/null
+
+echo "All web apps removed successfully."

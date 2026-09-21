@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# omarchy:summary=Launch or focus a TUI window matching base, float, or tile mode
+# omarchy:args=[--app-id=ID] <command> [args...]
+
+if (($# == 0)); then
+  echo "Usage: omarchy-launch-or-focus-tui [--app-id=ID] <command> [args...]"
+  exit 1
+fi
+
+EXPLICIT_ID=""
+if [[ "$1" == --app-id=* ]]; then
+  EXPLICIT_ID="${1#--app-id=}"
+  shift
+fi
+
+# Extract binary name from first argument (e.g., "lazygit" from "lazygit -p ~/path")
+CMD_NAME=$(basename "$1")
+
+# Query Niri for any running window matching org.omarchy.<CMD_NAME>, org.omarchy.float.<CMD_NAME>, or org.omarchy.tile.<CMD_NAME>
+RUNNING_ID=$(niri msg -j windows 2>/dev/null | jq -r --arg cmd "$CMD_NAME" '
+  .[] | select(.app_id != null) | select(.app_id | test("^org\\.omarchy\\.(float\\.|tile\\.)?" + $cmd + "$")) | .app_id
+' | head -n 1)
+
+if [[ -n "$RUNNING_ID" && "$RUNNING_ID" != "null" ]]; then
+  TARGET_APP_ID="$RUNNING_ID"
+else
+  if [[ -n "$EXPLICIT_ID" ]]; then
+    TARGET_APP_ID="$EXPLICIT_ID"
+  else
+    TARGET_APP_ID="org.omarchy.$CMD_NAME"
+  fi
+fi
+
+LAUNCH_COMMAND="omarchy-launch-tui --app-id=$TARGET_APP_ID $@"
+
+exec omarchy-launch-or-focus "$TARGET_APP_ID" "$LAUNCH_COMMAND"

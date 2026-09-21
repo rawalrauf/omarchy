@@ -1,0 +1,8 @@
+include "apps/system.kdl"
+include "apps/terminals.kdl"
+include "apps/password-managers.kdl"
+include "apps/pip.kdl"
+include "apps/walker.kdl"
+include "apps/webcam-overlay.kdl"
+include "apps/browser.kdl"
+

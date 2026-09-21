@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# omarchy:summary=Lock the computer and turn off the display
+# omarchy:group=system
+# omarchy:name=lock
+# omarchy:examples=omarchy system lock
+
+# Ensure 1password is locked
+if pgrep -x "1password" >/dev/null; then
+  1password --lock &
+fi
+
+if ! pidof hyprlock >/dev/null; then
+  if [[ ${OMARCHY_LOCK_ONLY:-false} == "true" ]]; then
+    # Run in foreground so swayidle -w waits for lock before sleeping
+    hyprlock --immediate-render
+  else
+    (
+      hyprlock --immediate-render
+      omarchy-system-wake
+    ) &
+
+    (
+      sleep 3
+      pidof hyprlock >/dev/null || exit 0
+      omarchy-brightness-keyboard off
+      omarchy-brightness-display off
+    ) &
+  fi
+fi

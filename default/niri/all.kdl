@@ -1,0 +1,8 @@
+include "autostart.kdl"
+include "looknfeel.kdl"
+include "window-rules.kdl"
+include "layer-rules.kdl"
+include "bindings.kdl"
+include "miscellaneous.kdl"
+
+

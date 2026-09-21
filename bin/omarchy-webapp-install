@@ -1,0 +1,154 @@
+#!/bin/bash
+
+# omarchy:summary=Create a desktop launcher for a web app
+# omarchy:args=[name url icon [custom-exec] [mime-types]]
+
+set -e
+
+ICON_DIR="$HOME/.local/share/icons/hicolor/512x512@2/apps"
+APPS_DIR="$HOME/.local/share/applications"
+
+# 1. Check if at least one Chromium-based browser is installed
+HAS_CHROMIUM=false
+for candidate in google-chrome chromium chromium-bin brave-browser microsoft-edge vivaldi opera thorium-browser ungoogled-chromium helium; do
+  if command -v "$candidate" &>/dev/null || find {~/.local,~/.nix-profile,/usr}/share/applications/ -name "${candidate}*.desktop" 2>/dev/null | grep -q .; then
+    HAS_CHROMIUM=true
+    break
+  fi
+done
+
+if [[ "$HAS_CHROMIUM" == "false" ]]; then
+  echo -e "\e[31mError: No Chromium-based browser found on your system.\e[0m"
+  echo "Install a Chromium based browser (e.g., Brave, Chromium, Vivaldi)."
+  exit 1
+fi
+
+# Function to validate basic URL structure
+validate_url() {
+  local url="$1"
+  local url_regex='^(https?://)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(/.*)?$'
+  if [[ ! "$url" =~ $url_regex ]]; then
+    return 1
+  fi
+  return 0
+}
+
+if (($# < 3)); then
+  echo -e "\e[32mLet's create a new web app you can start with the app launcher.\n\e[0m"
+  APP_NAME=$(gum input --prompt "Name> " --placeholder "My favorite web app")
+
+  # Prompt for URL and validate
+  while true; do
+    APP_URL=$(gum input --prompt "URL> " --placeholder "https://example.com")
+    if validate_url "$APP_URL"; then
+      break
+    fi
+    echo -e "\e[31mInvalid URL format. Please enter a valid URL (e.g., youtube.com or https://youtube.com)\e[0m\n"
+  done
+
+  if [[ ! $APP_URL =~ ^[a-zA-Z][a-zA-Z0-9+.-]*: ]]; then
+    APP_URL="https://$APP_URL"
+  fi
+
+  FAVICON_URL="https://www.google.com/s2/favicons?domain=${APP_URL}&sz=128"
+  mkdir -p "$ICON_DIR"
+
+  # Silent curl with connect-timeout to prevent bad errors on slow/offline networks
+  if curl -fsSL --connect-timeout 8 -o "$ICON_DIR/$APP_NAME.png" "$FAVICON_URL" 2>/dev/null && [[ -s $ICON_DIR/$APP_NAME.png ]]; then
+    ICON_REF="$APP_NAME.png"
+  else
+    ICON_REF=$(gum input --prompt "Icon URL> " --placeholder "Enter PNG icon URL manually (see https://dashboardicons.com for more icons)")
+  fi
+
+  CUSTOM_EXEC=""
+  MIME_TYPES=""
+  INTERACTIVE_MODE=true
+else
+  APP_NAME="$1"
+  APP_URL="$2"
+
+  if ! validate_url "$APP_URL"; then
+    echo "Error: Invalid URL format '$APP_URL'"
+    exit 1
+  fi
+
+  if [[ ! $APP_URL =~ ^[a-zA-Z][a-zA-Z0-9+.-]*: ]]; then
+    APP_URL="https://$APP_URL"
+  fi
+  ICON_REF="$3"
+  CUSTOM_EXEC="$4"
+  MIME_TYPES="$5"
+  INTERACTIVE_MODE=false
+fi
+
+if [[ -z $APP_NAME || -z $APP_URL ]]; then
+  echo "You must set app name and app URL!"
+  exit 1
+fi
+
+mkdir -p "$ICON_DIR" "$APPS_DIR"
+
+if [[ -z $ICON_REF ]]; then
+  ICON_REF="https://www.google.com/s2/favicons?domain=${APP_URL}&sz=128"
+fi
+
+if [[ $ICON_REF =~ ^https?:// ]]; then
+  ICON_PATH="$ICON_DIR/$APP_NAME.png"
+  if ! curl -fsSL --connect-timeout 8 -o "$ICON_PATH" "$ICON_REF" 2>/dev/null || [[ ! -s $ICON_PATH ]]; then
+    echo "Error: Failed to download icon."
+    exit 1
+  fi
+else
+  ICON_PATH="$ICON_DIR/$ICON_REF"
+fi
+
+EXEC_COMMAND="${CUSTOM_EXEC:-omarchy-launch-webapp $APP_URL}"
+DESKTOP_FILE="$APPS_DIR/$APP_NAME.desktop"
+
+# 1. Main entry visible in app launchers (Super + Space)
+cat >"$DESKTOP_FILE" <<EOF
+[Desktop Entry]
+Version=1.0
+Name=$APP_NAME
+Comment=$APP_NAME
+Exec=$EXEC_COMMAND
+Terminal=false
+Type=Application
+Icon=$ICON_PATH
+StartupNotify=true
+EOF
+
+if [[ -n $MIME_TYPES ]]; then
+  echo "MimeType=$MIME_TYPES" >>"$DESKTOP_FILE"
+fi
+
+chmod +x "$DESKTOP_FILE"
+
+# 2. Extract clean domain (strips http://, https://, www., and trailing slash paths)
+CLEAN_DOMAIN=$(echo "$APP_URL" | sed -E 's|^[a-zA-Z0-9+.-]+://||; s|^www\.||; s|/.*$||')
+
+# Pre-generate hidden app_id mappings using the exact "prefix-domain__-Default" format
+for prefix in chrome brave msedge opera vivaldi helium thorium; do
+  APP_ID="${prefix}-${CLEAN_DOMAIN}__-Default"
+
+  # Symlink icon for niri/window GTK lookup
+  ln -sf "$ICON_PATH" "$ICON_DIR/${APP_ID}.png"
+
+  # Create hidden desktop entry for wlr/taskbar matching (NoDisplay=true hides from launchers)
+  cat >"$APPS_DIR/${APP_ID}.desktop" <<EOF
+[Desktop Entry]
+Version=1.0
+Name=$APP_NAME
+Type=Application
+Icon=$ICON_PATH
+NoDisplay=true
+EOF
+done
+
+# 3. Update databases silently
+update-desktop-database "$APPS_DIR" &>/dev/null
+gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" &>/dev/null
+
+if [[ $INTERACTIVE_MODE == "true" ]]; then
+  echo -e "You can now find $APP_NAME using the app launcher (SUPER + SPACE)\n"
+fi

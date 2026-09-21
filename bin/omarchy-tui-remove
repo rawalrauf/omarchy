@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# omarchy:summary=Remove selected TUI desktop shortcuts
+
+set -e
+
+ICON_DIR="$HOME/.local/share/icons/hicolor/512x512@2/apps"
+DESKTOP_DIR="$HOME/.local/share/applications"
+
+if (($# == 0)); then
+  declare -A NAME_TO_ID
+  TUI_NAMES=()
+
+  while IFS= read -r -d '' file; do
+    if grep -qE '^Exec=.*(omarchy-launch-tui|omarchy-launch-or-focus-tui)' "$file"; then
+      FULL_ID=$(basename "${file%.desktop}")
+      CLEAN_NAME=$(echo "$FULL_ID" | sed -E 's/^org\.omarchy\.(float\.|tile\.)?//')
+
+      NAME_TO_ID["$CLEAN_NAME"]="$FULL_ID"
+      TUI_NAMES+=("$CLEAN_NAME")
+    fi
+  done < <(find "$DESKTOP_DIR" -maxdepth 1 -name 'org.omarchy.*.desktop' -print0)
+
+  if ((${#TUI_NAMES[@]})); then
+    IFS=$'\n' SORTED_NAMES=($(sort <<<"${TUI_NAMES[*]}"))
+    unset IFS
+
+    SELECTED_NAMES_STRING=$(gum choose --no-limit --header "Select TUI to remove..." --selected-prefix="✗ " "${SORTED_NAMES[@]}")
+
+    APP_IDS=()
+    while IFS= read -r line; do
+      if [[ -n "$line" && -n "${NAME_TO_ID[$line]}" ]]; then
+        APP_IDS+=("${NAME_TO_ID[$line]}")
+      fi
+    done <<< "$SELECTED_NAMES_STRING"
+  else
+    echo "No TUIs to remove."
+    exit 1
+  fi
+else
+  APP_IDS=("$@")
+fi
+
+if ((${#APP_IDS[@]} == 0)); then
+  exit 0
+fi
+
+for ID in "${APP_IDS[@]}"; do
+  CLEAN=$(echo "$ID" | sed -E 's/^org\.omarchy\.(float\.|tile\.)?//')
+
+  rm -f "$DESKTOP_DIR/$ID.desktop"
+  rm -f "$ICON_DIR/$ID.png"
+
+  echo "Removed $CLEAN"
+done
+
+if command -v update-desktop-database &>/dev/null; then
+  update-desktop-database "$DESKTOP_DIR" &>/dev/null
+fi
+
+gtk-update-icon-cache -q -f "$HOME/.local/share/icons/hicolor" >/dev/null 2>&1

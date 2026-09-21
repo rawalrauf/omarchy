@@ -1,0 +1,25 @@
+binds {
+
+    Mod+Q repeat=false { close-window; }
+    Mod+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "xdg-terminal-exec"; }
+    Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
+    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "walker"; }
+
+    Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
+
+    Mod+O repeat=false { toggle-overview; }
+
+    Print { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Alt+Print { screenshot-window; }
+
+    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+
+    Mod+Shift+E { spawn-sh "omarchy-system-logout"; }
+
+    Mod+Shift+P { power-off-monitors; }
+    Mod+P { toggle-window-rule-opacity; }
+
+    Super+Ctrl+V allow-when-locked=true hotkey-overlay-title=null { spawn-sh "omarchy-launch-walker -m clipboard"; }
+}
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# omarchy:summary=Log out of the current session
+# omarchy:examples=omarchy logout | omarchy system logout
+# omarchy:aliases=omarchy logout
+
+uwsm stop

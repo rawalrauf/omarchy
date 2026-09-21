@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# omarchy:summary=Restart the swayidle service (used for idle detection and auto-lock).
+
+omarchy-restart-app swayidle -w -C ~/.config/swayidle/swayidle.conf
