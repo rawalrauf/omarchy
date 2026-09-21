@@ -14,6 +14,8 @@ if [[ $1 == "pre" && $sleep_action == "hibernate" ]]; then
   if [[ -n "$device" ]]; then
     brightnessctl -d "$device" set 0 >/dev/null 2>&1
   fi
+
+  pkill -x hyprlock 2>/dev/null || true
 fi
 
 if [[ $1 == "post" && $sleep_action == "hibernate" ]]; then
