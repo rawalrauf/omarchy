@@ -9,9 +9,7 @@ sudo mkdir -p /etc/sddm.conf.d
 cat <<EOF | sudo tee /etc/sddm.conf.d/10-wayland.conf >/dev/null
 [General]
 DisplayServer=wayland
-
-[Theme]
-CursorTheme=breeze_cursors
+GreeterEnvironment=XCURSOR_THEME=breeze_cursors,XCURSOR_SIZE=24
 EOF
 
 if [[ ! -f /etc/sddm.conf.d/autologin.conf ]]; then
