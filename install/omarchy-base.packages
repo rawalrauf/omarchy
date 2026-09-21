@@ -6,8 +6,6 @@ swaybg
 swayosd
 swayidle
 ttf-0xproto-nerd
-breeze-cursors
-1password-beta
 1password-cli
 aether
 alacritty
@@ -56,13 +54,7 @@ gum
 gvfs-mtp
 gvfs-nfs
 gvfs-smb
-hypridle
-hyprland
-hyprland-guiutils
-hyprland-preview-share-picker
 hyprlock
-hyprpicker
-hyprsunset
 imagemagick
 impala
 imv
@@ -131,7 +123,6 @@ tree-sitter-cli
 tmux
 tobi-try
 ttf-ia-writer
-ttf-0xproto-nerd
 typora
 tzupdate
 ufw
@@ -147,7 +138,7 @@ wireplumber
 wl-clipboard
 woff2-font-awesome
 xdg-desktop-portal-gtk
-xdg-desktop-portal-hyprland
+xdg-desktop-portal-wlr
 xdg-terminal-exec
 xmlstarlet
 xournalpp

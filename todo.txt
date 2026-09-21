@@ -6,8 +6,6 @@ waybar updates like automatic timezone select and menu button transprency later
 
 sddm install scripts add and rename hyprland-uwsm edit those, remove cross cursor from sddm login success
 
-copy audio-cmd-audio-switcher from old system
-
 add omarchy restart niri in omarchy-theme-set if needed
 
 swayidle triggering hyrplock that trun blank after 3 secs, and keyboard light won't come back
