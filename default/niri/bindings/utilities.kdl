@@ -9,9 +9,9 @@ binds {
 
     Mod+O repeat=false { toggle-overview; }
 
-    Print { screenshot; }
-    Ctrl+Print { screenshot-screen; }
-    Alt+Print { screenshot-window; }
+    Print { spawn-sh "omarchy-capture-screenshot"; }
+    Ctrl+Print { spawn-sh "omarchy-capture-screenshot fullscreen"; }
+    Alt+Print { spawn-sh "omarchy-capture-screenshot window"; }
 
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 

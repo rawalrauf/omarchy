@@ -55,6 +55,7 @@ fullscreen)
 window)
   window_id=$(niri msg --json pick-window 2>/dev/null | jq -r '.id // empty')
   if [[ -n $window_id ]]; then
+    niri msg action focus-window --id "$window_id"
     niri msg action screenshot-window --id "$window_id"
   else
     niri msg action screenshot-window
@@ -69,8 +70,6 @@ FILEPATH=$(wait_for_screenshot "$MARKER")
 rm -f "$MARKER"
 
 [[ -z $FILEPATH ]] && exit 0
-
-echo "$FILEPATH"
 
 (
   ACTION=$(notify-send "Screenshot saved" "Edit with Super + Alt + , (or click this)" -t 10000 -i "$FILEPATH" -A "default=edit")
