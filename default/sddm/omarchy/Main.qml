@@ -118,7 +118,7 @@ Rectangle {
             anchors.rightMargin: 20
             verticalAlignment: TextInput.AlignVCenter
             echoMode: TextInput.Password
-            font.family: "JetBrainsMono Nerd Font"
+            font.family: "0xProto Nerd Font"
             font.pixelSize: 24
             font.letterSpacing: 5
             passwordCharacter: "\u2022"
