@@ -16,6 +16,6 @@ binds {
     XF86AudioNext  allow-when-locked=true { spawn "swayosd-client" "--playerctl" "next"; }
     XF86AudioPrev  allow-when-locked=true { spawn "swayosd-client" "--playerctl" "previous"; }
 
-    Super+XF86AudioMute allow-when-locked=true { spawn-sh "omarchy-cmd-audio-switch"; }
+    Super+XF86AudioMute allow-when-locked=true { spawn-sh "omarchy-audio-output-switch"; }
 }
 

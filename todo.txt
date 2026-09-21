@@ -1,6 +1,4 @@
-set default font update to ttf-0xproto-nerd, I've already added to install pkgs list
-
-add repo update -Sy script before every install to avoid issue with no pks found
+Do it yourself:  add repo update -Sy script before every install to avoid issue with no pks found
 
 niri small config updates and autostarts updates
 
