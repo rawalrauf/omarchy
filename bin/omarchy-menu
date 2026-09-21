@@ -824,7 +824,7 @@ show_system_menu() {
   case $(menu "System" "$options") in
   *Lock*) omarchy-system-lock ;;
   *Suspend*) systemctl suspend ;;
-  *Hibernate*) systemctl hibernate ;;
+  *Hibernate*) omarchy-system-hibernate ;;
   *Logout*) omarchy-system-logout ;;
   *Restart*) omarchy-system-reboot ;;
   *Shutdown*) omarchy-system-shutdown ;;
