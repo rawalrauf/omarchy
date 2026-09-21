@@ -2,32 +2,20 @@
 
 # omarchy:summary=Take a screenshot
 # omarchy:group=capture
-# omarchy:args=[smart|region|windows|fullscreen] [slurp|copy|save] [--editor=<name>]
+# omarchy:args=[smart|region|window|fullscreen] [--editor=<name>]
 # omarchy:examples=omarchy screenshot | omarchy capture screenshot region
 # omarchy:aliases=omarchy screenshot
 
-[[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
-OUTPUT_DIR="${OMARCHY_SCREENSHOT_DIR:-${XDG_PICTURES_DIR:-$HOME/Pictures}}"
-
-if [[ ! -d $OUTPUT_DIR ]]; then
-  mkdir -p "$OUTPUT_DIR"
-  notify-send "Created screenshot directory: $OUTPUT_DIR" -u normal -t 2000
-fi
-
-pkill slurp && exit 0
+OUTPUT_DIR="$HOME/Pictures/Screenshots"
+mkdir -p "$OUTPUT_DIR"
 
 SCREENSHOT_EDITOR="${OMARCHY_SCREENSHOT_EDITOR:-satty}"
 
-# Parse --editor flag from any position
-ARGS=()
 for arg in "$@"; do
   if [[ $arg == --editor=* ]]; then
     SCREENSHOT_EDITOR="${arg#--editor=}"
-  else
-    ARGS+=("$arg")
   fi
 done
-set -- "${ARGS[@]}"
 
 open_editor() {
   local filepath="$1"
@@ -42,83 +30,44 @@ open_editor() {
   fi
 }
 
+wait_for_screenshot() {
+  local before="$1"
+  local timeout=5
+  local elapsed=0
+  while (( elapsed < timeout * 10 )); do
+    local latest
+    latest=$(find "$OUTPUT_DIR" -name "*.png" -newer "$before" 2>/dev/null | sort | tail -1)
+    [[ -n $latest ]] && echo "$latest" && return 0
+    sleep 0.1
+    (( elapsed++ ))
+  done
+  return 1
+}
+
 MODE="${1:-smart}"
-PROCESSING="${2:-slurp}"
 
-# accounting for portrait/transformed displays
+MARKER=$(mktemp "$OUTPUT_DIR/.marker.XXXXXX")
 
-
-get_rectangles() {
-  niri msg --json outputs | jq -r '.[] | select(.current_mode != null) | "\(.logical.x),\(.logical.y) \(.logical.width)x\(.logical.height)"'
-  niri msg --json windows | jq -r '.[] | select(.is_focused == true or .workspace_id != null) | "\(.geometry.x),\(.geometry.y) \(.geometry.width)x\(.geometry.height)"'
-}
-
-cleanup_freeze() {
-  [[ -n $PID ]] && kill $PID 2>/dev/null
-}
-trap cleanup_freeze EXIT
-
-# Select based on mode
 case "$MODE" in
-region)
-  SELECTION=$(slurp 2>/dev/null)
-  ;;
-windows)
-  SELECTION=$(get_rectangles | slurp -r 2>/dev/null)
-  ;;
 fullscreen)
-  SELECTION=$(niri msg --json focused-output | jq -r '"\(.logical.x),\(.logical.y) \(.logical.width)x\(.logical.height)"')
+  niri msg action screenshot-screen
   ;;
-smart | *)
-  RECTS=$(get_rectangles)
-  SELECTION=$(echo "$RECTS" | slurp 2>/dev/null)
-
-  # If the selection area is L * W < 20, we'll assume you were trying to select whichever
-  # window or output it was inside of to prevent accidental 2px snapshots
-  if [[ $SELECTION =~ ^([0-9]+),([0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]]; then
-    if ((${BASH_REMATCH[3]} * ${BASH_REMATCH[4]} < 20)); then
-      click_x="${BASH_REMATCH[1]}"
-      click_y="${BASH_REMATCH[2]}"
-
-      while IFS= read -r rect; do
-        if [[ $rect =~ ^([0-9]+),([0-9]+)[[:space:]]([0-9]+)x([0-9]+) ]]; then
-          rect_x="${BASH_REMATCH[1]}"
-          rect_y="${BASH_REMATCH[2]}"
-          rect_width="${BASH_REMATCH[3]}"
-          rect_height="${BASH_REMATCH[4]}"
-
-          if ((click_x >= rect_x && click_x < rect_x + rect_width && click_y >= rect_y && click_y < rect_y + rect_height)); then
-            SELECTION="${rect_x},${rect_y} ${rect_width}x${rect_height}"
-            break
-          fi
-        fi
-      done <<<"$RECTS"
-    fi
-  fi
+window)
+  niri msg action screenshot-window
+  ;;
+smart | region | *)
+  niri msg action screenshot
   ;;
 esac
 
-[[ -z $SELECTION ]] && exit 0
+FILEPATH=$(wait_for_screenshot "$MARKER")
+rm -f "$MARKER"
 
-FILENAME="screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png"
-FILEPATH="$OUTPUT_DIR/$FILENAME"
+[[ -z $FILEPATH ]] && exit 0
 
-case "$PROCESSING" in
-  slurp)
-    grim -g "$SELECTION" "$FILEPATH" || exit 1
-    echo "$FILEPATH"
-    wl-copy <"$FILEPATH"
+echo "$FILEPATH"
 
-    (
-      ACTION=$(notify-send "Screenshot saved to clipboard and file" "Edit with Super + Alt + , (or click this)" -t 10000 -i "$FILEPATH" -A "default=edit")
-      [[ $ACTION == "default" ]] && open_editor "$FILEPATH"
-    ) >/dev/null 2>&1 &
-    ;;
-  copy)
-    grim -g "$SELECTION" - | wl-copy
-    ;;
-  save)
-    grim -g "$SELECTION" "$FILEPATH" || exit 1
-    echo "$FILEPATH"
-    ;;
-esac
+(
+  ACTION=$(notify-send "Screenshot saved" "Edit with Super + Alt + , (or click this)" -t 10000 -i "$FILEPATH" -A "default=edit")
+  [[ $ACTION == "default" ]] && open_editor "$FILEPATH"
+) >/dev/null 2>&1 &
