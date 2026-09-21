@@ -53,9 +53,7 @@ fullscreen)
   niri msg action screenshot-screen
   ;;
 window)
-  window_id=$(niri msg --json pick-window 2>/dev/null | jq -r '.id // empty')
-  [[ -z $window_id ]] && exit 0
-  niri msg action screenshot-window --id "$window_id"
+  niri msg action screenshot-window
   ;;
 smart | region | *)
   niri msg action screenshot
