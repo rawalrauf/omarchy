@@ -140,7 +140,9 @@ show_reminder_message_input() {
 }
 
 show_capture_menu() {
-  case $(menu "Capture" "  Screenshot\n  Screenrecord\n󰴑  Text Extraction\n󰃉  Color") in
+  case $(menu "Capture" "  Screenshot\n  Screenshot Screen\n  Screenshot Window\n  Screenrecord\n󰴑  Text Extraction\n󰃉  Color") in
+  *"Screenshot Screen"*) omarchy-capture-screenshot fullscreen ;;
+  *"Screenshot Window"*) omarchy-capture-screenshot window ;;
   *Screenshot*) omarchy-capture-screenshot ;;
   *Screenrecord*) show_screenrecord_menu ;;
   *Text*) omarchy-capture-text-extraction ;;
