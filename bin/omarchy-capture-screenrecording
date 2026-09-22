@@ -52,7 +52,7 @@ start_webcam_overlay() {
   cam_h=$(( screen_h * 4 / 9 * 4 / 3 ))
 
   local preferred_resolutions=("640x480" "640x360" "1280x720" "1920x1080")
-  local video_size_arg=""
+  local video_size_arg="-video_size 640x480"
   local available_formats
   available_formats=$(v4l2-ctl --list-formats-ext -d "$WEBCAM_DEVICE" 2>/dev/null)
 
