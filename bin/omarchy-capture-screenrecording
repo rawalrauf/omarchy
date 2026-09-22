@@ -62,7 +62,7 @@ start_webcam_overlay() {
     fi
   done
 
-  SDL_VIDEODRIVER=wayland ffplay -f v4l2 $video_size_arg -framerate 30 "$WEBCAM_DEVICE" \
+  ffplay -f v4l2 $video_size_arg -framerate 30 "$WEBCAM_DEVICE" \
     -vf "scale=${target_width}:-1" \
     -window_title "WebcamOverlay" \
     -noborder \
