@@ -88,7 +88,7 @@ cleanup_webcam() {
 
 default_resolution() {
   local width height
-  read -r width height < <(niri msg --json focused-output | jq -r '"\(.current_mode.width) \(.current_mode.height)"')
+  read -r width height < <(niri msg --json focused-output | jq -r '.modes[.current_mode] | "\(.width) \(.height)"')
   if ((width > 3840 || height > 2160)); then
     echo "3840x2160"
   else
