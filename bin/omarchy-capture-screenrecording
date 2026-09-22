@@ -2,18 +2,9 @@
 
 # omarchy:summary=Start or stop screen recording
 # omarchy:group=capture
-# omarchy:args=[--region|--fullscreen|--window] [--with-desktop-audio] [--with-microphone-audio] [--with-webcam] [--webcam-device=<device>] [--resolution=<size>] [--stop-recording]
+# omarchy:args=[--with-desktop-audio] [--with-microphone-audio] [--with-webcam] [--webcam-device=<device>] [--resolution=<size>] [--stop-recording]
 # omarchy:examples=omarchy screenrecord | omarchy capture screenrecording --with-desktop-audio
 # omarchy:aliases=omarchy screenrecord
-#
-# Capture modes:
-#   (default)     Portal picker — choose region, window, or monitor interactively
-#   --region      Same as default, portal picker
-#   --fullscreen  Record the focused monitor directly (no picker)
-#   --window      Record the focused window directly (no picker)
-#
-# Env: OMARCHY_SCREENRECORD_DEBUG=true logs gpu-screen-recorder stderr to
-# $XDG_RUNTIME_DIR/omarchy-screenrecord.log
 
 [[ -f ~/.config/user-dirs.dirs ]] && source ~/.config/user-dirs.dirs
 OUTPUT_DIR="${OMARCHY_SCREENRECORD_DIR:-${XDG_VIDEOS_DIR:-$HOME/Videos}}"
@@ -28,12 +19,9 @@ MICROPHONE_AUDIO="false"
 WEBCAM="false"
 WEBCAM_DEVICE=""
 RESOLUTION=""
-CAPTURE_MODE="portal"
 STOP_RECORDING="false"
-
-RUNTIME_DIR="${XDG_RUNTIME_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/omarchy}"
+RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}"
 RECORDING_FILE="$RUNTIME_DIR/omarchy-screenrecord-filename"
-LOG_FILE=$([[ ${OMARCHY_SCREENRECORD_DEBUG:-false} == "true" ]] && echo "$RUNTIME_DIR/omarchy-screenrecord.log" || echo "/dev/null")
 
 for arg in "$@"; do
   case "$arg" in
@@ -42,9 +30,6 @@ for arg in "$@"; do
   --with-webcam) WEBCAM="true" ;;
   --webcam-device=*) WEBCAM_DEVICE="${arg#*=}" ;;
   --resolution=*) RESOLUTION="${arg#*=}" ;;
-  --fullscreen) CAPTURE_MODE="fullscreen" ;;
-  --window) CAPTURE_MODE="window" ;;
-  --region) CAPTURE_MODE="region" ;;
   --stop-recording) STOP_RECORDING="true" ;;
   esac
 done
@@ -60,31 +45,31 @@ start_webcam_overlay() {
     fi
   fi
 
+  local scale
+  scale=$(niri msg --json focused-output | jq -r '.logical.scale // 1')
+  local target_width
+  target_width=$(awk "BEGIN {printf \"%.0f\", 360 * $scale}")
+
   local preferred_resolutions=("640x360" "1280x720" "1920x1080")
-  local capture_options="framerate=30"
-  local available_formats=$(v4l2-ctl --list-formats-ext -d "$WEBCAM_DEVICE" 2>/dev/null)
+  local video_size_arg=""
+  local available_formats
+  available_formats=$(v4l2-ctl --list-formats-ext -d "$WEBCAM_DEVICE" 2>/dev/null)
 
   for resolution in "${preferred_resolutions[@]}"; do
     if echo "$available_formats" | grep -q "$resolution"; then
-      capture_options="video_size=$resolution,$capture_options"
+      video_size_arg="-video_size $resolution"
       break
     fi
   done
 
-  mpv "av://v4l2:$WEBCAM_DEVICE" \
-    --profile=low-latency --untimed --no-cache \
-    --demuxer-lavf-o="$capture_options" \
-    '--vf=lavfi=[crop=ih*8/9:ih]' \
-    --title="WebcamOverlay" --wayland-app-id="WebcamOverlay" \
-    --no-border --no-audio --no-osc --osd-level=0 \
-    --really-quiet &>/dev/null &
-
-  local waited=0
-  while ((waited < 40)) && ! niri msg --json windows 2>/dev/null | jq -e 'any(.[]; .title == "WebcamOverlay")' >/dev/null 2>&1; do
-    sleep 0.1
-    ((waited++))
-  done
-  sleep 0.3
+  ffplay -f v4l2 $video_size_arg -framerate 30 "$WEBCAM_DEVICE" \
+    -vf "scale=${target_width}:-1" \
+    -window_title "WebcamOverlay" \
+    -noborder \
+    -fflags nobuffer -flags low_delay \
+    -probesize 32 -analyzeduration 0 \
+    -loglevel quiet &
+  sleep 1
 }
 
 cleanup_webcam() {
@@ -102,48 +87,6 @@ default_resolution() {
 }
 
 start_screenrecording() {
-  mkdir -p "$RUNTIME_DIR"
-  [[ -z ${XDG_RUNTIME_DIR:-} ]] && chmod 700 "$RUNTIME_DIR"
-
-  local capture_args=()
-
-  case $CAPTURE_MODE in
-  fullscreen)
-    local monitor
-    monitor=$(niri msg --json focused-output | jq -r '.name')
-    capture_args=(-w "$monitor" -s "${RESOLUTION:-$(default_resolution)}")
-    ;;
-  window)
-    local win_geo selection
-    win_geo=$(niri msg --json windows | jq -r '.[] | select(.is_focused == true) | "\(.geometry.x),\(.geometry.y) \(.geometry.width)x\(.geometry.height)"')
-    if [[ -n $win_geo ]]; then
-      selection=$(echo "$win_geo" | slurp -r 2>/dev/null)
-    else
-      selection=$(slurp 2>/dev/null)
-    fi
-    [[ -z $selection ]] && return 1
-    [[ $selection =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]] || return 1
-    capture_args=(-w region -region "${BASH_REMATCH[3]}x${BASH_REMATCH[4]}+${BASH_REMATCH[1]}+${BASH_REMATCH[2]}")
-    [[ -n $RESOLUTION ]] && capture_args+=(-s "$RESOLUTION")
-    ;;
-  region)
-    local selection
-    local rects
-    rects=$(niri msg --json outputs | jq -r '.[] | select(.current_mode != null) | "\(.logical.x),\(.logical.y) \(.logical.width)x\(.logical.height)"')
-    rects+=$'\n'$(niri msg --json windows | jq -r '.[] | "\(.geometry.x),\(.geometry.y) \(.geometry.width)x\(.geometry.height)"')
-    selection=$(echo "$rects" | slurp 2>/dev/null)
-    [[ -z $selection ]] && return 1
-    [[ $selection =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]] || return 1
-    capture_args=(-w region -region "${BASH_REMATCH[3]}x${BASH_REMATCH[4]}+${BASH_REMATCH[1]}+${BASH_REMATCH[2]}")
-    [[ -n $RESOLUTION ]] && capture_args+=(-s "$RESOLUTION")
-    ;;
-  portal | *)
-    capture_args=(-w portal -s "${RESOLUTION:-$(default_resolution)}" -restore-portal-session yes)
-    ;;
-  esac
-
-  [[ $WEBCAM == "true" ]] && start_webcam_overlay
-
   local filename="$OUTPUT_DIR/screenrecording-$(date +'%Y-%m-%d_%H-%M-%S').mp4"
   local audio_devices=""
   local audio_args=()
@@ -157,8 +100,9 @@ start_screenrecording() {
 
   [[ -n $audio_devices ]] && audio_args+=(-a "$audio_devices" -ac aac)
 
-  echo "===== $(date '+%F %T') mode: $CAPTURE_MODE =====" >>"$LOG_FILE"
-  gpu-screen-recorder "${capture_args[@]}" -k auto -f 60 -fm cfr -fallback-cpu-encoding yes -o "$filename" "${audio_args[@]}" 2>>"$LOG_FILE" &
+  local resolution="${RESOLUTION:-$(default_resolution)}"
+
+  gpu-screen-recorder -w portal -k auto -s "$resolution" -f 60 -fm cfr -fallback-cpu-encoding yes -o "$filename" "${audio_args[@]}" &
   local pid=$!
 
   while kill -0 $pid 2>/dev/null && [[ ! -f $filename ]]; do
@@ -168,17 +112,14 @@ start_screenrecording() {
   if kill -0 $pid 2>/dev/null; then
     echo "$filename" >"$RECORDING_FILE"
     toggle_screenrecording_indicator
-  else
-    cleanup_webcam
-    return 1
   fi
 }
 
 stop_screenrecording() {
-  pkill -SIGINT -f "^gpu-screen-recorder" 2>/dev/null || true
+  pkill -SIGINT -f "^gpu-screen-recorder"
 
   local count=0
-  while pgrep -f "^gpu-screen-recorder" >/dev/null && ((count < 100)); do
+  while pgrep -f "^gpu-screen-recorder" >/dev/null && ((count < 50)); do
     sleep 0.1
     ((count++))
   done
@@ -190,16 +131,12 @@ stop_screenrecording() {
     pkill -9 -f "^gpu-screen-recorder"
     notify-send "Screen recording error" "Recording was force-killed. Video may be corrupted." -u critical -t 5000
   else
-    finalize_recording
+    trim_first_frame
     local filename
     filename=$(cat "$RECORDING_FILE" 2>/dev/null)
-    [[ -z $filename || ! -f $filename ]] && rm -f "$RECORDING_FILE" && return
-    local preview="${filename%.mp4}-preview.png"
-    ffmpeg -y -i "$filename" -ss 00:00:00.1 -vframes 1 -q:v 2 "$preview" -loglevel quiet 2>/dev/null
     (
-      ACTION=$(notify-send "Screen recording saved" "Open (or click this)" -t 10000 -i "${preview:-$filename}" -A "default=open")
+      ACTION=$(notify-send "Screen recording saved" "Open (or click this)" -t 10000 -i "$filename" -A "default=open")
       [[ $ACTION == "default" ]] && mpv "$filename" >/dev/null 2>&1
-      sleep 2 && rm -f "$preview"
     ) >/dev/null 2>&1 &
   fi
 
@@ -214,26 +151,16 @@ screenrecording_active() {
   pgrep -f "^gpu-screen-recorder" >/dev/null
 }
 
-finalize_recording() {
+trim_first_frame() {
   local latest
   latest=$(cat "$RECORDING_FILE" 2>/dev/null)
-  [[ -f $latest ]] || return
-
-  local video_codec=(-c:v copy)
-  if ffprobe -v error -select_streams v:0 -read_intervals %+0.2 -show_entries packet=flags -of csv=p=0 "$latest" 2>/dev/null | grep -q D; then
-    video_codec=(-c:v libx264 -preset veryfast -crf 20)
-  fi
-
-  local args=(-y -ss 0.1 -i "$latest" "${video_codec[@]}")
-  if ffprobe -v error -select_streams a -show_entries stream=codec_type -of csv=p=0 "$latest" 2>/dev/null | grep -q audio; then
-    args+=(-af "volume=enable='lt(t,0.4)':volume=0,afade=t=in:st=0.4:d=0.05,loudnorm=I=-14:TP=-1.5:LRA=11")
-  fi
-
-  local processed="${latest%.mp4}-processed.mp4"
-  if ffmpeg "${args[@]}" "$processed" -loglevel quiet 2>/dev/null; then
-    mv "$processed" "$latest"
-  else
-    rm -f "$processed"
+  if [[ -n $latest && -f $latest ]]; then
+    local trimmed="${latest%.mp4}-trimmed.mp4"
+    if ffmpeg -y -ss 0.1 -i "$latest" -c copy "$trimmed" -loglevel quiet 2>/dev/null; then
+      mv "$trimmed" "$latest"
+    else
+      rm -f "$trimmed"
+    fi
   fi
 }
 
@@ -242,5 +169,6 @@ if screenrecording_active; then
 elif [[ $STOP_RECORDING == "true" ]]; then
   exit 1
 else
-  start_screenrecording
+  [[ $WEBCAM == "true" ]] && start_webcam_overlay
+  start_screenrecording || cleanup_webcam
 fi
