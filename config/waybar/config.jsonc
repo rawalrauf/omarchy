@@ -74,11 +74,23 @@
     "format": "  {used:0.1f}G",
   },
   "clock": {
-    "timezone": "Asia/Karachi",
     "format": "{:%I:%M %p}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
     "format-alt": "{:%Y-%m-%d}",
+    "on-click-right": "omarchy-launch-floating-terminal-with-presentation omarchy-tz-select",
     "interval": 60,
+    "calendar": {
+      "mode": "month",
+      "weeks-pos": "left",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#d4be98'><b>{}</b></span>",
+        "days": "<span color='#d4be98'>{}</span>",
+        "weeks": "<span color='#7daea3'>W{}</span>",
+        "weekdays": "<span color='#a9b665'><b>{}</b></span>",
+        "today": "<span color='#e78a4e'><b><u>{}</u></b></span>"
+      }
+    },
   },
   "backlight": {
     "device": "intel_backlight",
