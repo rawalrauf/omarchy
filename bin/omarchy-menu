@@ -312,12 +312,13 @@ show_background_menu() {
 }
 
 show_font_menu() {
-  theme=$(menu "Font" "$(omarchy-font-list)" "--width 350" "$(omarchy-font-current)")
-  if [[ $theme == "CNCLD" || -z $theme ]]; then
-    back_to show_style_menu
-  else
-    omarchy-font-set "$theme"
-  fi
+  local current
+  current=$(omarchy-font-current)
+  local fonts
+  mapfile -t fonts < <(omarchy-font-list)
+  local theme
+  theme=$(omarchy-menu-select "Font" --current "$current" "${fonts[@]}" -- --width 350) || back_to show_style_menu
+  [[ -n $theme ]] && omarchy-font-set "$theme"
 }
 
 show_setup_menu() {
