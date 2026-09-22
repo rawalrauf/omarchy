@@ -44,7 +44,7 @@ for arg in "$@"; do
   --resolution=*) RESOLUTION="${arg#*=}" ;;
   --fullscreen) CAPTURE_MODE="fullscreen" ;;
   --window) CAPTURE_MODE="window" ;;
-  --region) CAPTURE_MODE="portal" ;;
+  --region) CAPTURE_MODE="region" ;;
   --stop-recording) STOP_RECORDING="true" ;;
   esac
 done
