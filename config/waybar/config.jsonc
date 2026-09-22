@@ -90,8 +90,6 @@
   "battery": {
     "states": {
       "good": 95,
-      "warning": 40,
-      "critical": 30,
     },
     "format": "{icon} {capacity}%",
     "format-charging": " {capacity}%",
@@ -115,7 +113,7 @@
     "format": "{icon} {volume}%",
     "tooltip": false,
     "format-muted": " Muted",
-    "on-click": "lishalinux-launch-audio",
+    "on-click": "omarchy-launch-audio",
     "on-scroll-up": "",
     "on-scroll-down": "",
     "format-icons": {
@@ -158,6 +156,6 @@
     "tooltip-format": "{device_alias}",
     "tooltip-format-connected": " {device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}",
-    "on-click": "lishalinux-launch-bluetooth",
+    "on-click": "omarchy-launch-bluetooth",
   },
 }
