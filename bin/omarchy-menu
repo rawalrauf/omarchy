@@ -213,7 +213,17 @@ show_share_menu() {
 }
 
 show_toggle_menu() {
-  local options="󰔎  Nightlight\n󱫖  Idle Lock\n󰂛  Notifications\n󰍜  Top Bar\n󱂬  Workspace Layout\n  Window Gaps\n  1-Window Ratio\n󰍹  Monitor Scaling\n  Direct Boot\n󰟵  Passwordless Sudo"
+  local nightlight="󰔎  Nightlight"
+  local idle="󱫖  Idle Lock"
+  local notifications="󰂛  Notifications"
+  local bar="󰍜  Top Bar"
+
+  pgrep -x hyprsunset >/dev/null && nightlight="$nightlight ✓"
+  pgrep -x swayidle >/dev/null && idle="$idle ✓"
+  ! makoctl mode | grep -q 'do-not-disturb' && notifications="$notifications ✓"
+  pgrep -x waybar >/dev/null && bar="$bar ✓"
+
+  local options="$nightlight\n$idle\n$notifications\n$bar\n󱂬  Workspace Layout\n  Window Gaps\n  1-Window Ratio\n󰍹  Monitor Scaling\n  Direct Boot\n󰟵  Passwordless Sudo"
 
   case $(menu "Toggle" "$options") in
   *Nightlight*) omarchy-toggle-nightlight ;;
@@ -334,12 +344,23 @@ show_setup_menu() {
 }
 
 show_setup_power_menu() {
-  profile=$(menu "Power Profile" "$(omarchy-powerprofiles-list)" "" "$(powerprofilesctl get)")
+  local current
+  current=$(powerprofilesctl get)
+  local options
+  options=$(omarchy-powerprofiles-list | while IFS= read -r line; do
+    if [[ $line == "$current" ]]; then
+      echo "$line ✓"
+    else
+      echo "$line"
+    fi
+  done)
+
+  profile=$(menu "Power Profile" "$options" "" "$current ✓")
 
   if [[ $profile == "CNCLD" || -z $profile ]]; then
     back_to show_setup_menu
   else
-    powerprofilesctl set "$profile"
+    powerprofilesctl set "${profile% ✓}"
   fi
 }
 
@@ -770,7 +791,16 @@ show_update_menu() {
 }
 
 show_update_channel_menu() {
-  case $(menu "Update channel" "🟢 Stable\n🟡 RC\n🟠 Edge\n🔴 Dev") in
+  local current
+  current=$(omarchy-version-channel)
+
+  local stable="🟢 Stable" rc="🟡 RC" edge="🟠 Edge" dev="🔴 Dev"
+  [[ $current == "stable" ]] && stable="🟢 Stable ✓"
+  [[ $current == "rc" ]] && rc="🟡 RC ✓"
+  [[ $current == "edge" ]] && edge="🟠 Edge ✓"
+  [[ $current == "dev" ]] && dev="🔴 Dev ✓"
+
+  case $(menu "Update channel" "$stable\n$rc\n$edge\n$dev") in
   *Stable*) present_terminal "omarchy-channel-set stable" ;;
   *RC*) present_terminal "omarchy-channel-set rc" ;;
   *Edge*) present_terminal "omarchy-channel-set edge" ;;
