@@ -13,7 +13,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id=r"^WebcamOverlay"
+    match app-id="mpv" title="WebcamOverlay"
     open-floating true
     default-column-width { fixed 360; }
     default-window-height { fixed 203; }

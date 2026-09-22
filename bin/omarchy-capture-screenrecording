@@ -79,7 +79,12 @@ start_webcam_overlay() {
     --no-border --no-audio --no-osc --osd-level=0 \
     --really-quiet &>/dev/null &
 
-  sleep 0.8
+  local waited=0
+  while ((waited < 40)) && ! niri msg --json windows 2>/dev/null | jq -e 'any(.[]; .title == "WebcamOverlay")' >/dev/null 2>&1; do
+    sleep 0.1
+    ((waited++))
+  done
+  sleep 0.3
 }
 
 cleanup_webcam() {
@@ -109,17 +114,27 @@ start_screenrecording() {
     capture_args=(-w "$monitor" -s "${RESOLUTION:-$(default_resolution)}")
     ;;
   window)
-    local window_id
-    window_id=$(niri msg --json focused-window | jq -r '.id // empty')
-    [[ -z $window_id ]] && return 1
-    capture_args=(-w "window:id:$window_id" -s "${RESOLUTION:-$(default_resolution)}")
+    local win_geo selection
+    win_geo=$(niri msg --json windows | jq -r '.[] | select(.is_focused == true) | "\(.geometry.x),\(.geometry.y) \(.geometry.width)x\(.geometry.height)"')
+    if [[ -n $win_geo ]]; then
+      selection=$(echo "$win_geo" | slurp -r 2>/dev/null)
+    else
+      selection=$(slurp 2>/dev/null)
+    fi
+    [[ -z $selection ]] && return 1
+    [[ $selection =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]] || return 1
+    capture_args=(-w region -region "${BASH_REMATCH[3]}x${BASH_REMATCH[4]}+${BASH_REMATCH[1]}+${BASH_REMATCH[2]}")
+    [[ -n $RESOLUTION ]] && capture_args+=(-s "$RESOLUTION")
     ;;
   region)
     local selection
-    selection=$(niri msg --json outputs | jq -r '.[] | select(.current_mode != null) | "\(.logical.x),\(.logical.y) \(.logical.width)x\(.logical.height)"' | slurp 2>/dev/null)
+    local rects
+    rects=$(niri msg --json outputs | jq -r '.[] | select(.current_mode != null) | "\(.logical.x),\(.logical.y) \(.logical.width)x\(.logical.height)"')
+    rects+=$'\n'$(niri msg --json windows | jq -r '.[] | "\(.geometry.x),\(.geometry.y) \(.geometry.width)x\(.geometry.height)"')
+    selection=$(echo "$rects" | slurp 2>/dev/null)
     [[ -z $selection ]] && return 1
     [[ $selection =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]] || return 1
-    capture_args=(-w "region:${BASH_REMATCH[3]}x${BASH_REMATCH[4]}+${BASH_REMATCH[1]}+${BASH_REMATCH[2]}")
+    capture_args=(-w region -region "${BASH_REMATCH[3]}x${BASH_REMATCH[4]}+${BASH_REMATCH[1]}+${BASH_REMATCH[2]}")
     [[ -n $RESOLUTION ]] && capture_args+=(-s "$RESOLUTION")
     ;;
   portal | *)
