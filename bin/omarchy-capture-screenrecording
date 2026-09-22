@@ -21,7 +21,7 @@ WEBCAM_DEVICE=""
 RESOLUTION=""
 STOP_RECORDING="false"
 RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}"
-RECORDING_FILE="$RUNTIME_DIR/omarchy-screenrecord-filename"
+RECORDING_FILE="/tmp/omarchy-screenrecord-filename"
 
 for arg in "$@"; do
   case "$arg" in
