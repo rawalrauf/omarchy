@@ -70,6 +70,14 @@ start_webcam_overlay() {
     -probesize 32 -analyzeduration 0 \
     -loglevel quiet &
   sleep 1
+
+  local win_id screen_w screen_h
+  win_id=$(niri msg --json windows 2>/dev/null | jq -r '.[] | select(.title == "WebcamOverlay") | .id // empty' | head -1)
+  if [[ -n $win_id ]]; then
+    screen_w=$(niri msg --json focused-output | jq -r '.logical.width')
+    screen_h=$(niri msg --json focused-output | jq -r '.logical.height')
+    niri msg action move-floating-window --id "$win_id" -x "$((screen_w - target_width - 20))" -y "$((screen_h - 203 - 20))"
+  fi
 }
 
 cleanup_webcam() {

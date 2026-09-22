@@ -12,8 +12,8 @@ spawn-sh-at-startup "uwsm app -- swayidle -w -C ~/.config/swayidle/swayidle.conf
 // Polkit agent
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 
-// XDG desktop portal wlr backend for screen recording/sharing
-spawn-sh-at-startup "systemctl --user start xdg-desktop-portal-wlr.service"
+// XDG desktop portal wlr backend for screen recording/sharing (enable if portal mode needed)
+//spawn-sh-at-startup "systemctl --user start xdg-desktop-portal-wlr.service"
 
 // Auto-mount removable drives
 spawn-sh-at-startup "uwsm app -- udiskie --automount --no-notify --no-tray"

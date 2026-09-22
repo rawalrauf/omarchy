@@ -12,11 +12,3 @@ window-rule {
     default-window-height { proportion 0.9050; }
 }
 
-window-rule {
-    match app-id="mpv" title="WebcamOverlay"
-    open-floating true
-    default-column-width { fixed 360; }
-    default-window-height { fixed 203; }
-}
-
-
