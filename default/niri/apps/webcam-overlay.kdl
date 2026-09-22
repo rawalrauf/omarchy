@@ -1,5 +1,5 @@
 window-rule {
-    match app-id="mpv" title="WebcamOverlay"
+    match app-id="ffplay" title="WebcamOverlay"
     open-floating true
     opacity 1.0
     default-column-width { fixed 360; }
