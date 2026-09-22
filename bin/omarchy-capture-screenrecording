@@ -45,6 +45,12 @@ start_webcam_overlay() {
     fi
   fi
 
+  local screen_h
+  screen_h=$(niri msg --json focused-output | jq -r '.logical.height')
+  local cam_w cam_h
+  cam_w=$(( screen_h * 2 / 9 ))
+  cam_h=$(( screen_h / 4 ))
+
   local preferred_resolutions=("640x360" "1280x720" "1920x1080")
   local video_size_arg=""
   local available_formats
@@ -58,7 +64,7 @@ start_webcam_overlay() {
   done
 
   ffplay -f v4l2 $video_size_arg -framerate 30 "$WEBCAM_DEVICE" \
-    -x 360 -y 203 \
+    -x "$cam_w" -y "$cam_h" \
     -window_title "WebcamOverlay" \
     -noborder \
     -fflags nobuffer -flags low_delay \
