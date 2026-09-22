@@ -88,9 +88,6 @@
     "on-scroll-down": "",
   },
   "battery": {
-    "states": {
-      "good": 95,
-    },
     "format": "{icon} {capacity}%",
     "format-charging": " {capacity}%",
     "format-plugged": " {capacity}%",
@@ -107,10 +104,6 @@
       "󰂂",
       "󰁹"
     ],
-    "tooltip-format-discharging": "{time} remaining ({power:>1.0f}W)",
-    "tooltip-format-charging": "{time} until full ({power:>1.0f}W)",
-    "tooltip-format-plugged": "Fully charged",
-    "interval": 5,
     "on-click": "omarchy-menu power",
   },
   "pulseaudio": {
