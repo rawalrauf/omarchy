@@ -4,4 +4,6 @@
 # omarchy:examples=omarchy logout | omarchy system logout
 # omarchy:aliases=omarchy logout
 
+omarchy-niri-window-close-all
+sleep 1
 uwsm stop
