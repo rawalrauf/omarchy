@@ -382,6 +382,7 @@ show_setup_default_browser_menu() {
   browser_desktop_exists microsoft-edge.desktop && options+=("󰇩  Edge")
   browser_desktop_exists firefox.desktop && options+=("󰈹  Firefox")
   browser_desktop_exists zen.desktop && options+=("󰖟  Zen")
+  browser_desktop_exists vivaldi-stable.desktop && options+=("󰖟  Vivaldi")
 
   local current=""
   case "$(omarchy-default-browser)" in
@@ -392,6 +393,7 @@ show_setup_default_browser_menu() {
   edge) current="󰇩  Edge" ;;
   firefox) current="󰈹  Firefox" ;;
   zen) current="󰖟  Zen" ;;
+  vivaldi) current="󰖟  Vivaldi" ;;
   esac
 
   local choice
@@ -404,6 +406,7 @@ show_setup_default_browser_menu() {
   *Edge*) omarchy-default-browser edge ;;
   *Firefox*) omarchy-default-browser firefox ;;
   *Zen*) omarchy-default-browser zen ;;
+  *Vivaldi*) omarchy-default-browser vivaldi ;;
   esac
 }
 

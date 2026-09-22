@@ -13,6 +13,7 @@ if (($# == 0)); then
   microsoft-edge.desktop) echo "edge" ;;
   firefox.desktop) echo "firefox" ;;
   zen.desktop) echo "zen" ;;
+  vivaldi-stable.desktop) echo "vivaldi" ;;
   *) xdg-settings get default-web-browser ;;
   esac
   exit 0
