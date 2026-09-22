@@ -109,7 +109,18 @@ start_screenrecording() {
     capture_args=(-w "$monitor" -s "${RESOLUTION:-$(default_resolution)}")
     ;;
   window)
-    capture_args=(-w focused -s "${RESOLUTION:-$(default_resolution)}")
+    local window_id
+    window_id=$(niri msg --json focused-window | jq -r '.id // empty')
+    [[ -z $window_id ]] && return 1
+    capture_args=(-w "window:id:$window_id" -s "${RESOLUTION:-$(default_resolution)}")
+    ;;
+  region)
+    local selection
+    selection=$(niri msg --json outputs | jq -r '.[] | select(.current_mode != null) | "\(.logical.x),\(.logical.y) \(.logical.width)x\(.logical.height)"' | slurp 2>/dev/null)
+    [[ -z $selection ]] && return 1
+    [[ $selection =~ ^(-?[0-9]+),(-?[0-9]+)[[:space:]]([0-9]+)x([0-9]+)$ ]] || return 1
+    capture_args=(-w "region:${BASH_REMATCH[3]}x${BASH_REMATCH[4]}+${BASH_REMATCH[1]}+${BASH_REMATCH[2]}")
+    [[ -n $RESOLUTION ]] && capture_args+=(-s "$RESOLUTION")
     ;;
   portal | *)
     capture_args=(-w portal -s "${RESOLUTION:-$(default_resolution)}" -restore-portal-session yes)
@@ -149,10 +160,10 @@ start_screenrecording() {
 }
 
 stop_screenrecording() {
-  pkill -SIGINT -f "^gpu-screen-recorder"
+  pkill -SIGINT -f "^gpu-screen-recorder" 2>/dev/null || true
 
   local count=0
-  while pgrep -f "^gpu-screen-recorder" >/dev/null && ((count < 50)); do
+  while pgrep -f "^gpu-screen-recorder" >/dev/null && ((count < 100)); do
     sleep 0.1
     ((count++))
   done
@@ -167,13 +178,14 @@ stop_screenrecording() {
     finalize_recording
     local filename
     filename=$(cat "$RECORDING_FILE" 2>/dev/null)
+    [[ -z $filename || ! -f $filename ]] && rm -f "$RECORDING_FILE" && return
     local preview="${filename%.mp4}-preview.png"
     ffmpeg -y -i "$filename" -ss 00:00:00.1 -vframes 1 -q:v 2 "$preview" -loglevel quiet 2>/dev/null
     (
       ACTION=$(notify-send "Screen recording saved" "Open (or click this)" -t 10000 -i "${preview:-$filename}" -A "default=open")
-      [[ $ACTION == "default" ]] && mpv "$filename"
+      [[ $ACTION == "default" ]] && mpv "$filename" >/dev/null 2>&1
       sleep 2 && rm -f "$preview"
-    ) &
+    ) >/dev/null 2>&1 &
   fi
 
   rm -f "$RECORDING_FILE"

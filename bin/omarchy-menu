@@ -194,7 +194,7 @@ show_screenrecord_menu() {
   With desktop audio
   With desktop + microphone
   With desktop + microphone + webcam") in
-  *"Select Region"*) omarchy-capture-screenrecording ;;
+  *"Select Region"*) omarchy-capture-screenrecording --region ;;
   *"Full Screen"*) omarchy-capture-screenrecording --fullscreen ;;
   *"Focused Window"*) omarchy-capture-screenrecording --window ;;
   *"With desktop audio"*) omarchy-capture-screenrecording --with-desktop-audio ;;
