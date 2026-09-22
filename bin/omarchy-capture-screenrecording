@@ -111,6 +111,7 @@ start_screenrecording() {
 
   local monitor
   monitor=$(niri msg --json focused-output | jq -r '.name')
+  paplay /usr/share/sounds/freedesktop/stereo/dialog-warning.oga &>/dev/null &
   gpu-screen-recorder -w "$monitor" -k auto -s "$resolution" -f 60 -fm cfr -fallback-cpu-encoding yes -o "$filename" "${audio_args[@]}" 2>/dev/null &
   local pid=$!
 
@@ -121,8 +122,6 @@ start_screenrecording() {
   if kill -0 $pid 2>/dev/null; then
     echo "$filename" >"$RECORDING_FILE"
     toggle_screenrecording_indicator
-    paplay /usr/share/sounds/freedesktop/stereo/dialog-warning.oga &>/dev/null &
-    notify-send -u low "󰻂  Recording started" -t 2000
   fi
 }
 
