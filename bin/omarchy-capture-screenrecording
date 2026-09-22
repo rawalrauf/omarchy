@@ -111,7 +111,7 @@ start_screenrecording() {
 
   local monitor
   monitor=$(niri msg --json focused-output | jq -r '.name')
-  gpu-screen-recorder -w "$monitor" -k auto -s "$resolution" -f 60 -fm cfr -fallback-cpu-encoding yes -o "$filename" "${audio_args[@]}" &
+  gpu-screen-recorder -w "$monitor" -k auto -s "$resolution" -f 60 -fm cfr -fallback-cpu-encoding yes -o "$filename" "${audio_args[@]}" 2>/dev/null &
   local pid=$!
 
   while kill -0 $pid 2>/dev/null && [[ ! -f $filename ]]; do
