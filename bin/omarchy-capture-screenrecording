@@ -63,7 +63,7 @@ start_webcam_overlay() {
     fi
   done
 
-  ffplay -f v4l2 $video_size_arg -framerate 30 "$WEBCAM_DEVICE" \
+  ffplay -f v4l2 $video_size_arg -input_format mjpeg -framerate 30 "$WEBCAM_DEVICE" \
     -vf "hflip" \
     -x "$cam_w" -y "$cam_h" \
     -window_title "WebcamOverlay" \
