@@ -1,38 +1,67 @@
 #!/bin/bash
 
-# omarchy:summary=Pick one option with Walker
+# omarchy:summary=Pick one option with Walker, optionally marking the current selection
 # omarchy:group=menu
 # omarchy:name=select
-# omarchy:args=prompt option... [-- walker args...]
-# omarchy:examples=omarchy menu select Format jpg png|omarchy-menu-select Resolution 4k 1080p 720p -- --width 400
+# omarchy:args=<prompt> [--current <value>] <option>... [-- walker args...]
+# omarchy:examples=omarchy menu select "Power Profile" --current balanced performance balanced power-saver | omarchy menu select Format jpg png
 
 set -euo pipefail
 
 if (( $# < 2 )); then
-  echo "Usage: omarchy-menu-select <prompt> <option>... [-- walker args...]" >&2
+  echo "Usage: omarchy-menu-select <prompt> [--current <value>] <option>... [-- walker args...]" >&2
   exit 1
 fi
 
 prompt="$1"
 shift
 
+current=""
 options=()
 walker_args=()
 
 while (( $# > 0 )); do
-  if [[ $1 == "--" ]]; then
-    shift
-    walker_args=("$@")
-    break
-  fi
-
-  options+=("$1")
-  shift
+  case "$1" in
+    --current)
+      current="$2"
+      shift 2
+      ;;
+    --)
+      shift
+      walker_args=("$@")
+      break
+      ;;
+    *)
+      options+=("$1")
+      shift
+      ;;
+  esac
 done
 
 if (( ${#options[@]} == 0 )); then
-  echo "Usage: omarchy-menu-select <prompt> <option>... [-- walker args...]" >&2
+  echo "Usage: omarchy-menu-select <prompt> [--current <value>] <option>..." >&2
   exit 1
 fi
 
-printf '%s\n' "${options[@]}" | omarchy-launch-walker --dmenu --width 295 --minheight 1 --maxheight 300 -p "$prompt…" "${walker_args[@]}" 2>/dev/null
+marked_options=()
+preselect=""
+for opt in "${options[@]}"; do
+  if [[ -n $current && $opt == "$current" ]]; then
+    marked_options+=("$opt ✓")
+    preselect="$opt ✓"
+  else
+    marked_options+=("$opt")
+  fi
+done
+
+preselect_args=()
+if [[ -n $preselect ]]; then
+  index=$(printf '%s\n' "${marked_options[@]}" | grep -nxF "$preselect" | cut -d: -f1)
+  [[ -n $index ]] && preselect_args+=("-c" "$index")
+fi
+
+result=$(printf '%s\n' "${marked_options[@]}" | omarchy-launch-walker --dmenu --width 295 --minheight 1 --maxheight 300 -p "$prompt…" "${preselect_args[@]}" "${walker_args[@]}" 2>/dev/null)
+
+[[ -z $result ]] && exit 1
+
+echo "${result% ✓}"

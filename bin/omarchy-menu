@@ -344,24 +344,11 @@ show_setup_menu() {
 }
 
 show_setup_power_menu() {
-  local current
+  local current profile
   current=$(powerprofilesctl get)
-  local options
-  options=$(omarchy-powerprofiles-list | while IFS= read -r line; do
-    if [[ $line == "$current" ]]; then
-      echo "$line ✓"
-    else
-      echo "$line"
-    fi
-  done)
-
-  profile=$(menu "Power Profile" "$options" "" "$current ✓")
-
-  if [[ $profile == "CNCLD" || -z $profile ]]; then
-    back_to show_setup_menu
-  else
-    powerprofilesctl set "${profile% ✓}"
-  fi
+  profile=$(omarchy-menu-select "Power Profile" --current "$current" $(omarchy-powerprofiles-list | tr '\n' ' '))
+  [[ -z $profile ]] && back_to show_setup_menu
+  powerprofilesctl set "$profile"
 }
 
 show_setup_security_menu() {
@@ -385,15 +372,16 @@ browser_desktop_exists() {
   [[ -f ~/.local/share/applications/$1 || -f ~/.nix-profile/share/applications/$1 || -f /usr/share/applications/$1 ]]
 }
 
+
 show_setup_default_browser_menu() {
-  local options=""
-  browser_desktop_exists chromium.desktop && options="$options  Chromium"
-  browser_desktop_exists google-chrome.desktop && options="${options:+$options\n}󰊯  Chrome"
-  browser_desktop_exists brave-browser.desktop && options="${options:+$options\n}󰖟  Brave"
-  browser_desktop_exists brave-origin-beta.desktop && options="${options:+$options\n}󰖟  Brave Origin"
-  browser_desktop_exists microsoft-edge.desktop && options="${options:+$options\n}󰇩  Edge"
-  browser_desktop_exists firefox.desktop && options="${options:+$options\n}󰈹  Firefox"
-  browser_desktop_exists zen.desktop && options="${options:+$options\n}󰖟  Zen"
+  local options=()
+  browser_desktop_exists chromium.desktop && options+=("  Chromium")
+  browser_desktop_exists google-chrome.desktop && options+=("󰊯  Chrome")
+  browser_desktop_exists brave-browser.desktop && options+=("󰖟  Brave")
+  browser_desktop_exists brave-origin-beta.desktop && options+=("󰖟  Brave Origin")
+  browser_desktop_exists microsoft-edge.desktop && options+=("󰇩  Edge")
+  browser_desktop_exists firefox.desktop && options+=("󰈹  Firefox")
+  browser_desktop_exists zen.desktop && options+=("󰖟  Zen")
 
   local current=""
   case "$(omarchy-default-browser)" in
@@ -406,7 +394,9 @@ show_setup_default_browser_menu() {
   zen) current="󰖟  Zen" ;;
   esac
 
-  case $(menu "Default Browser" "$options" "" "$current") in
+  local choice
+  choice=$(omarchy-menu-select "Default Browser" --current "$current" "${options[@]}") || back_to show_setup_default_menu
+  case "$choice" in
   *Chromium*) omarchy-default-browser chromium ;;
   *Chrome*) omarchy-default-browser chrome ;;
   *"Brave Origin"*) omarchy-default-browser brave-origin ;;
@@ -414,16 +404,15 @@ show_setup_default_browser_menu() {
   *Edge*) omarchy-default-browser edge ;;
   *Firefox*) omarchy-default-browser firefox ;;
   *Zen*) omarchy-default-browser zen ;;
-  *) show_setup_default_menu ;;
   esac
 }
 
 show_setup_default_terminal_menu() {
-  local options=""
-  omarchy-cmd-present alacritty && options="$options  Alacritty"
-  omarchy-cmd-present foot && options="${options:+$options\n}  Foot"
-  omarchy-cmd-present ghostty && options="${options:+$options\n}  Ghostty"
-  omarchy-cmd-present kitty && options="${options:+$options\n}  Kitty"
+  local options=()
+  omarchy-cmd-present alacritty && options+=("  Alacritty")
+  omarchy-cmd-present foot && options+=("  Foot")
+  omarchy-cmd-present ghostty && options+=("  Ghostty")
+  omarchy-cmd-present kitty && options+=("  Kitty")
 
   local current=""
   case "$(omarchy-default-terminal)" in
@@ -433,25 +422,26 @@ show_setup_default_terminal_menu() {
   kitty) current="  Kitty" ;;
   esac
 
-  case $(menu "Default Terminal" "$options" "" "$current") in
+  local choice
+  choice=$(omarchy-menu-select "Default Terminal" --current "$current" "${options[@]}") || back_to show_setup_default_menu
+  case "$choice" in
   *Alacritty*) omarchy-default-terminal alacritty ;;
   *Foot*) omarchy-default-terminal foot ;;
   *Ghostty*) omarchy-default-terminal ghostty ;;
   *Kitty*) omarchy-default-terminal kitty ;;
-  *) show_setup_default_menu ;;
   esac
 }
 
 show_setup_default_editor_menu() {
-  local options=""
-  omarchy-cmd-present nvim && options="$options  Neovim"
-  omarchy-cmd-present code && options="${options:+$options\n}  VSCode"
-  omarchy-cmd-present cursor && options="${options:+$options\n}  Cursor"
-  omarchy-cmd-present zeditor && options="${options:+$options\n}  Zed"
-  omarchy-cmd-present sublime_text && options="${options:+$options\n}  Sublime Text"
-  omarchy-cmd-present helix && options="${options:+$options\n}  Helix"
-  omarchy-cmd-present vim && options="${options:+$options\n}  Vim"
-  omarchy-cmd-present emacs && options="${options:+$options\n}  Emacs"
+  local options=()
+  omarchy-cmd-present nvim && options+=("  Neovim")
+  omarchy-cmd-present code && options+=("  VSCode")
+  omarchy-cmd-present cursor && options+=("  Cursor")
+  omarchy-cmd-present zeditor && options+=("  Zed")
+  omarchy-cmd-present sublime_text && options+=("  Sublime Text")
+  omarchy-cmd-present helix && options+=("  Helix")
+  omarchy-cmd-present vim && options+=("  Vim")
+  omarchy-cmd-present emacs && options+=("  Emacs")
 
   local current=""
   case "$(omarchy-default-editor)" in
@@ -465,7 +455,9 @@ show_setup_default_editor_menu() {
   emacs) current="  Emacs" ;;
   esac
 
-  case $(menu "Default Editor" "$options" "" "$current") in
+  local choice
+  choice=$(omarchy-menu-select "Default Editor" --current "$current" "${options[@]}") || back_to show_setup_default_menu
+  case "$choice" in
   *Neovim*) omarchy-default-editor nvim ;;
   *VSCode*) omarchy-default-editor code ;;
   *Cursor*) omarchy-default-editor cursor ;;
@@ -474,9 +466,9 @@ show_setup_default_editor_menu() {
   *Helix*) omarchy-default-editor helix ;;
   *Vim*) omarchy-default-editor vim ;;
   *Emacs*) omarchy-default-editor emacs ;;
-  *) show_setup_default_menu ;;
   esac
 }
+
 
 show_setup_config_menu() {
   case $(menu "Setup" "  Swayidle\n  Hyprlock\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n󰞅  XCompose") in
@@ -791,22 +783,11 @@ show_update_menu() {
 }
 
 show_update_channel_menu() {
-  local current
+  local current channel
   current=$(omarchy-version-channel)
-
-  local stable="🟢 Stable" rc="🟡 RC" edge="🟠 Edge" dev="🔴 Dev"
-  [[ $current == "stable" ]] && stable="🟢 Stable ✓"
-  [[ $current == "rc" ]] && rc="🟡 RC ✓"
-  [[ $current == "edge" ]] && edge="🟠 Edge ✓"
-  [[ $current == "dev" ]] && dev="🔴 Dev ✓"
-
-  case $(menu "Update channel" "$stable\n$rc\n$edge\n$dev") in
-  *Stable*) present_terminal "omarchy-channel-set stable" ;;
-  *RC*) present_terminal "omarchy-channel-set rc" ;;
-  *Edge*) present_terminal "omarchy-channel-set edge" ;;
-  *Dev*) present_terminal "omarchy-channel-set dev" ;;
-  *) show_update_menu ;;
-  esac
+  channel=$(omarchy-menu-select "Update Channel" --current "$current" stable rc edge dev)
+  [[ -z $channel ]] && back_to show_update_menu
+  present_terminal "omarchy-channel-set $channel"
 }
 show_update_process_menu() {
   case $(menu "Restart" "  Swayidle\n󰎟  Mako\n  Swayosd\n󰌧  Walker\n󰍜  Waybar") in
