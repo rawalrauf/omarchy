@@ -3,17 +3,25 @@
 //spawn-sh-at-startup "dbus-update-activation-environment --systemd --all"
 
 // Theme-sensitive / visual apps
-
 spawn-sh-at-startup "uwsm app -- swaybg -i ~/.config/omarchy/current/background -m fill"
-spawn-at-startup "uwsm" "app" "--" "waybar"
+spawn-sh-at-startup "! omarchy-toggle-enabled waybar-off && uwsm app -- waybar"
 //spawn-at-startup "uwsm" "app" "--" "swayosd-server"
 spawn-at-startup "uwsm" "app" "--" "mako"
 spawn-sh-at-startup "uwsm app -- swayidle -w -C ~/.config/swayidle/swayidle.conf"
 
-//Polkit agent
+// Polkit agent
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 
-// First-run commands
-// spawn-sh-at-startup "omarchy-cmd-first-run"
+// Auto-mount removable drives
+spawn-sh-at-startup "uwsm app -- udiskie --automount --no-notify --no-tray"
+
+// Power profile based on AC/battery state
+spawn-sh-at-startup "omarchy-powerprofiles-init"
+
+// First boot setup (runs once, deletes its own marker after)
+spawn-sh-at-startup "omarchy-first-run"
+
+// Post-boot hooks from ~/.config/omarchy/hooks/post-boot.d/
+spawn-sh-at-startup "sleep 2 && omarchy-hook post-boot"
 
 
