@@ -4,7 +4,7 @@
 
 // Theme-sensitive / visual apps
 spawn-sh-at-startup "uwsm app -- swaybg -i ~/.config/omarchy/current/background -m fill"
-spawn-sh-at-startup "! omarchy-toggle-enabled waybar-off && uwsm app -- waybar"
+spawn-sh-at-startup "omarchy-toggle-enabled waybar-off || uwsm app -- waybar"
 //spawn-at-startup "uwsm" "app" "--" "swayosd-server"
 spawn-at-startup "uwsm" "app" "--" "mako"
 spawn-sh-at-startup "uwsm app -- swayidle -w -C ~/.config/swayidle/swayidle.conf"
