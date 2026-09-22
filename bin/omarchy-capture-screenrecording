@@ -64,6 +64,7 @@ start_webcam_overlay() {
   done
 
   ffplay -f v4l2 $video_size_arg -framerate 30 "$WEBCAM_DEVICE" \
+    -vf "crop=ih*9/16:ih" \
     -x "$cam_w" -y "$cam_h" \
     -window_title "WebcamOverlay" \
     -noborder \
