@@ -9,6 +9,3 @@ source ~/.config/uwsm/default
 
 # Activate mise if present on the system
 omarchy-cmd-present mise && eval "$(mise activate bash --shims)"
-
-# Ensure SDL uses Wayland backend
-export SDL_VIDEODRIVER=wayland
