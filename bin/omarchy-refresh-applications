@@ -3,9 +3,11 @@
 # omarchy:summary=Ensure all default .desktop, web apps, TUIs, and npx wrappers are installed.
 
 mkdir -p ~/.local/share/icons/hicolor/512x512@2/apps/
-cp ~/.local/share/omarchy/applications/icons/*.png ~/.local/share/icons/hicolor/512x512@2/apps/
 
-gtk-update-icon-cache -f -t ~/.local/share/icons/hicolor &>/dev/null
+for icon in ~/.local/share/omarchy/applications/icons/*.png; do
+  cp "$icon" ~/.local/share/icons/hicolor/512x512@2/apps/
+  gtk-update-icon-cache -f -t ~/.local/share/icons/hicolor &>/dev/null
+done
 
 # Copy .desktop declarations
 mkdir -p ~/.local/share/applications
