@@ -62,18 +62,3 @@
     margin-left:-20px;
 }
 
-
-
-
-
-
-
-#clock tooltip {
-  background-color: #282828;
-  border: 1px solid #7daea3;
-  border-radius: 8px;
-}
-
-#clock tooltip label {
-  color: #d4be98;
-}

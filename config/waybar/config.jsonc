@@ -42,13 +42,13 @@
     "tooltip-format": "{title} | {app_id}",
     "on-click": "activate",
     "on-click-middle": "close",
-    "ignore-list": [
-      "com.mitchellh.ghostty",
-      "Alacritty",
-      "foot",
-      "kitty",
-      "org.wezfurlong.wezterm"
-    ],
+    //"ignore-list": [
+      //"com.mitchellh.ghostty",
+      //"Alacritty",
+      //"foot",
+      //"kitty",
+      //"org.wezfurlong.wezterm"
+    //],
   },
   "niri/window": {
     "format": "{title}",
