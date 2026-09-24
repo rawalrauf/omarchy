@@ -21,9 +21,10 @@ fi
 
 for file in "${tui_desktop_files[@]}"; do
   full_id=$(basename "$file" .desktop)
-  clean_name=$(echo "$full_id" | sed -E 's/^org\.omarchy\.(float\.|tile\.)?//')
+  display_name=$(grep "^Name=" "$file" 2>/dev/null | cut -d= -f2- | head -1)
+  [[ -z $display_name ]] && display_name="$full_id"
 
-  echo "Removing TUI: $clean_name"
+  echo "Removing TUI: $display_name"
 
   rm -f "$file"
   rm -f "$ICON_DIR/$full_id.png"

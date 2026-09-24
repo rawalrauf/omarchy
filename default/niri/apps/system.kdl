@@ -1,5 +1,5 @@
 window-rule {
-    match app-id=r"^org\.omarchy\.(float\.)?[^.]+$"
+    match app-id=r"^org\.omarchy\.float\.[^.]+$"
     match app-id="pqiv"
     open-floating true
     default-column-width { fixed 875; }
