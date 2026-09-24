@@ -2,5 +2,5 @@
 Version=1.0
 Name=Audio
 Type=Application
-Icon=/home/rawalrauf/.local/share/icons/hicolor/512x512@2/apps/org.omarchy.wiremix.png
+Icon=org.omarchy.wiremix
 NoDisplay=true
