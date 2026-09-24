@@ -23,14 +23,13 @@ if [[ -z $APP_NAME || -z $APP_EXEC || -z $ICON_URL ]]; then
   exit 1
 fi
 
-# Extract the first word/binary name from APP_EXEC
-FIRST_WORD=$(echo "$APP_EXEC" | awk '{print $1}')
-CMD_NAME=$(basename "$FIRST_WORD")
+# Sanitize APP_NAME to a lowercase slug for use in app-id and filenames
+APP_SLUG=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/-$//')
 
 if [[ $WINDOW_STYLE == "float" ]]; then
-  APP_ID="org.omarchy.float.$CMD_NAME"
+  APP_ID="org.omarchy.float.$APP_SLUG"
 else
-  APP_ID="org.omarchy.tile.$CMD_NAME"
+  APP_ID="org.omarchy.tile.$APP_SLUG"
 fi
 
 DESKTOP_DIR="$HOME/.local/share/applications"
