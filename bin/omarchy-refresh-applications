@@ -3,7 +3,6 @@
 # omarchy:summary=Ensure all default .desktop, web apps, TUIs, and npx wrappers are installed.
 
 mkdir -p ~/.local/share/icons/hicolor/512x512@2/apps/
-mkdir -p ~/.local/share/icons/hicolor/512x512/apps/
 
 for icon in ~/.local/share/omarchy/applications/icons/*.png; do
   cp "$icon" ~/.local/share/icons/hicolor/512x512@2/apps/
@@ -14,6 +13,7 @@ done
 mkdir -p ~/.local/share/applications
 cp ~/.local/share/omarchy/applications/*.desktop ~/.local/share/applications/
 cp ~/.local/share/omarchy/applications/hidden/*.desktop ~/.local/share/applications/
+cp ~/.local/share/omarchy/applications/tuis/*.desktop ~/.local/share/applications/
 
 if omarchy-cmd-present foot; then
   cp ~/.local/share/omarchy/default/foot/foot.desktop ~/.local/share/applications/
