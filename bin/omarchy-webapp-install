@@ -124,12 +124,23 @@ fi
 
 chmod +x "$DESKTOP_FILE"
 
-# 2. Extract clean domain (strips http://, https://, www., and trailing slash paths)
-CLEAN_DOMAIN=$(echo "$APP_URL" | sed -E 's|^[a-zA-Z0-9+.-]+://||; s|^www\.||; s|/.*$||')
+# 2. Derive app ID base matching Chromium's exact format
+# Strip scheme, encode path: first / -> __, rest -> _, trailing / stripped
+APP_URL_STRIPPED=$(echo "$APP_URL" | sed -E 's|^[a-zA-Z0-9+.-]+://||')
+APP_URL_STRIPPED="${APP_URL_STRIPPED%/}"
+if [[ $APP_URL_STRIPPED == */* ]]; then
+  APP_ID_DOMAIN="${APP_URL_STRIPPED%%/*}"
+  APP_ID_PATH="${APP_URL_STRIPPED#*/}"
+  APP_ID_PATH="${APP_ID_PATH%/}"
+  APP_ID_PATH="${APP_ID_PATH//\//_}"
+  APP_ID_BASE="${APP_ID_DOMAIN}__${APP_ID_PATH}"
+else
+  APP_ID_BASE="${APP_URL_STRIPPED}__"
+fi
 
-# Pre-generate hidden app_id mappings using the exact "prefix-domain__-Default" format
+# Pre-generate hidden app_id mappings using the exact "prefix-domain__path-Default" format
 for prefix in chrome brave msedge opera vivaldi helium thorium; do
-  APP_ID="${prefix}-${CLEAN_DOMAIN}__-Default"
+  APP_ID="${prefix}-${APP_ID_BASE}-Default"
 
   # Symlink icon for niri/window GTK lookup
   ln -sf "$ICON_PATH" "$ICON_DIR/${APP_ID}.png"
