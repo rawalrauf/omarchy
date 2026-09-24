@@ -59,9 +59,19 @@ for APP_NAME in "${APP_NAMES[@]}"; do
     continue
   fi
 
-  # Extract app URL from Exec command line to calculate clean domain for app_id cleanup
+  # Extract app URL from Exec command line to calculate app_id matching install script logic
   EXEC_URL=$(grep "^Exec=" "$DESKTOP_FILE" | head -1 | awk '{print $2}')
-  CLEAN_DOMAIN=$(echo "$EXEC_URL" | sed -E 's|^[a-zA-Z0-9+.-]+://||; s|^www\.||; s|/.*$||')
+  APP_URL_STRIPPED=$(echo "$EXEC_URL" | sed -E 's|^[a-zA-Z0-9+.-]+://||')
+  APP_URL_STRIPPED="${APP_URL_STRIPPED%/}"
+  if [[ $APP_URL_STRIPPED == */* ]]; then
+    APP_ID_DOMAIN="${APP_URL_STRIPPED%%/*}"
+    APP_ID_PATH="${APP_URL_STRIPPED#*/}"
+    APP_ID_PATH="${APP_ID_PATH%/}"
+    APP_ID_PATH="${APP_ID_PATH//\//_}"
+    APP_ID_BASE="${APP_ID_DOMAIN}__${APP_ID_PATH}"
+  else
+    APP_ID_BASE="${APP_URL_STRIPPED}__"
+  fi
 
   ICON_PATH=$(grep "^Icon=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2-)
 
@@ -70,9 +80,9 @@ for APP_NAME in "${APP_NAMES[@]}"; do
   [[ -n "$ICON_PATH" && -f "$ICON_PATH" ]] && rm -f "$ICON_PATH"
 
   # 2. Remove hidden pre-generated app_id desktop entries and icon symlinks
-  if [[ -n "$CLEAN_DOMAIN" ]]; then
+  if [[ -n "$APP_ID_BASE" ]]; then
     for prefix in chrome brave msedge opera vivaldi helium thorium; do
-      APP_ID="${prefix}-${CLEAN_DOMAIN}__-Default"
+      APP_ID="${prefix}-${APP_ID_BASE}-Default"
       rm -f "$DESKTOP_DIR/${APP_ID}.desktop"
       rm -f "$ICON_DIR/${APP_ID}.png"
     done
