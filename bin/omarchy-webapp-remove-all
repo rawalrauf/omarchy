@@ -30,9 +30,19 @@ fi
 for file in "${webapp_desktop_files[@]}"; do
   app_name=$(basename "$file" .desktop)
 
-  # Extract URL to isolate clean domain for pre-generated symlinks
+  # Extract URL to derive app-id base matching Chromium's exact format
   EXEC_URL=$(grep "^Exec=" "$file" | head -1 | awk '{print $2}')
-  CLEAN_DOMAIN=$(echo "$EXEC_URL" | sed -E 's|^[a-zA-Z0-9+.-]+://||; s|^www\.||; s|/.*$||')
+  APP_URL_STRIPPED=$(echo "$EXEC_URL" | sed -E 's|^[a-zA-Z0-9+.-]+://||')
+  APP_URL_STRIPPED="${APP_URL_STRIPPED%/}"
+  if [[ $APP_URL_STRIPPED == */* ]]; then
+    APP_ID_DOMAIN="${APP_URL_STRIPPED%%/*}"
+    APP_ID_PATH="${APP_URL_STRIPPED#*/}"
+    APP_ID_PATH="${APP_ID_PATH%/}"
+    APP_ID_PATH="${APP_ID_PATH//\//_}"
+    APP_ID_BASE="${APP_ID_DOMAIN}__${APP_ID_PATH}"
+  else
+    APP_ID_BASE="${APP_URL_STRIPPED}__"
+  fi
 
   icon_path=$(grep "^Icon=" "$file" 2>/dev/null | cut -d= -f2-)
 
@@ -43,9 +53,9 @@ for file in "${webapp_desktop_files[@]}"; do
   [[ -n "$icon_path" && -f "$icon_path" ]] && rm -f "$icon_path"
 
   # 2. Remove hidden pre-generated desktop files and icon symlinks
-  if [[ -n "$CLEAN_DOMAIN" ]]; then
+  if [[ -n "$APP_ID_BASE" ]]; then
     for prefix in chrome brave msedge opera vivaldi helium thorium; do
-      APP_ID="${prefix}-${CLEAN_DOMAIN}__-Default"
+      APP_ID="${prefix}-${APP_ID_BASE}-Default"
       rm -f "$APP_DIR/${APP_ID}.desktop"
       rm -f "$ICON_DIR/${APP_ID}.png"
     done
