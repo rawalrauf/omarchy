@@ -37,7 +37,9 @@ ICON_DIR="$HOME/.local/share/icons/hicolor/512x512@2/apps"
 DESKTOP_FILE="$DESKTOP_DIR/$APP_ID.desktop"
 
 if [[ ! $ICON_URL =~ ^https?:// ]] && [[ -f $ICON_URL ]]; then
-  ICON_PATH="$ICON_URL"
+  ICON_PATH="$ICON_DIR/$APP_ID.png"
+  mkdir -p "$ICON_DIR"
+  cp "$ICON_URL" "$ICON_PATH"
 else
   ICON_PATH="$ICON_DIR/$APP_ID.png"
   mkdir -p "$ICON_DIR"
