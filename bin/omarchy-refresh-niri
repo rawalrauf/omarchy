@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# omarchy:summary=Reset niri user configs to Omarchy defaults
+
+omarchy-refresh-config niri/config.kdl
+omarchy-refresh-config niri/autostart.kdl
+omarchy-refresh-config niri/bindings.kdl
+omarchy-refresh-config niri/looknfeel.kdl
+omarchy-refresh-config niri/monitors.kdl
+omarchy-refresh-config niri/input.kdl
+
+niri msg action load-config-file 2>/dev/null || true

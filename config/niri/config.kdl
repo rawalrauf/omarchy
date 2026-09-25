@@ -1,15 +1,27 @@
-// Do not Chnage the order of these lines 
+// IMPORT ORDER MATTERS — do not change without understanding why:
+//
+// 1. User configs BEFORE default: these need to be first because niri processes
+//    certain blocks (autostart, monitors, input) in order — user values here
+//    set up the environment before the default config runs.
+//
+// 2. Default config (omarchy repo): provides all core window rules, bindings,
+//    autostart apps, look & feel, layer rules, and miscellaneous settings.
+//    Lives in ~/.local/share/omarchy/default/niri/ — do not edit directly.
+//
+// 3. User configs AFTER default: these override the default. bindings.kdl and
+//    looknfeel.kdl go here so user keybinds and visual tweaks win over defaults.
+//    Scripts like omarchy-niri-window-gaps-toggle and omarchy-niri-monitor-scaling-cycle
+//    edit looknfeel.kdl here. Add new toggleable user preferences to looknfeel.kdl.
 
-// user config:- you can update user config here
+// ── Pre-default user config ──────────────────────────────────────────────────
 include "autostart.kdl"
 include "monitors.kdl"
 include "input.kdl"
 
-// default config:- don't do changes here unless you have to
+// ── Omarchy defaults (repo) ──────────────────────────────────────────────────
 include "../../.local/share/omarchy/default/niri/all.kdl"
 
-// user config:- you can update user config here
+// ── Post-default user overrides ──────────────────────────────────────────────
 include "bindings.kdl"
 include "looknfeel.kdl"
-
 

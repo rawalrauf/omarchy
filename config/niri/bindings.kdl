@@ -1,7 +1,7 @@
+// User keybinding overrides — loaded after the default bindings.
+// Add custom binds here. These override any matching default binds.
+// To see all default binds, check ~/.local/share/omarchy/default/niri/bindings/
 binds {
-    Mod+Q repeat=false { close-window; }
-    Mod+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "xdg-terminal-exec"; }
-
     Super+Space hotkey-overlay-title="Omarchy Menu" { spawn-sh "omarchy-menu"; }
     Super+Alt+Space hotkey-overlay-title="Apps Menu" { spawn-sh "omarchy-menu apps"; }
 }
