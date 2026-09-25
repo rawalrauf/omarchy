@@ -27,9 +27,9 @@ fi
 APP_SLUG=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/-$//')
 
 if [[ $WINDOW_STYLE == "float" ]]; then
-  APP_ID="org.omarchy.float.$APP_SLUG"
+  APP_ID="org.omarchy.$APP_SLUG"
 else
-  APP_ID="org.omarchy.tile.$APP_SLUG"
+  APP_ID="org.omarchy.$APP_SLUG.tile"
 fi
 
 DESKTOP_DIR="$HOME/.local/share/applications"
