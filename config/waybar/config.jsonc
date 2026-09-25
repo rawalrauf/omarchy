@@ -43,7 +43,8 @@
     "on-click": "activate",
     "on-click-middle": "close",
     "ignore-list": [
-      "ffplay" //webcamoverlay
+      "ffplay", //webcamoverlay
+      "at.yrlf.wl_mirror" //mirror window
       //"com.mitchellh.ghostty",
       //"Alacritty",
       //"foot",
