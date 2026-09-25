@@ -24,6 +24,9 @@ spawn-sh-at-startup "omarchy-powerprofiles-init"
 // First boot setup (runs once, deletes its own marker after)
 spawn-sh-at-startup "omarchy-first-run"
 
+// Monitor event watcher for recover on disconnect
+spawn-sh-at-startup "uwsm app -- omarchy-niri-monitor-watch"
+
 // Post-boot hooks from ~/.config/omarchy/hooks/post-boot.d/
 spawn-sh-at-startup "sleep 2 && omarchy-hook post-boot"
 
