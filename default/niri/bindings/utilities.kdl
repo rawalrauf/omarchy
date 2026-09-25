@@ -3,7 +3,10 @@ binds {
     Mod+Q repeat=false { close-window; }
     Mod+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "xdg-terminal-exec"; }
     Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "walker"; }
+    Super+Alt+L hotkey-overlay-title="Lock the Screen" { spawn-sh "omarchy-system-lock"; }
+
+    Super+Space hotkey-overlay-title="Omarchy Menu" { spawn-sh "omarchy-menu"; }
+    Super+Alt+Space hotkey-overlay-title="Apps Menu" { spawn-sh "omarchy-menu apps"; }
 
     Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
