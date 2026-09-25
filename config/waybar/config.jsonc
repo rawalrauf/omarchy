@@ -97,10 +97,10 @@
     "on-scroll-up": "",
     "on-scroll-down": "",
   },
-  "battery": {
+   "battery": {
     "format": "{icon} {capacity}%",
-    "format-charging": " {capacity}%",
-    "format-plugged": " {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
     "format-icons": [
       "󰂎",
       "󰁺",
@@ -114,6 +114,9 @@
       "󰂂",
       "󰁹"
     ],
+    "states": {
+      "critical": 10
+    },
     "on-click": "omarchy-menu power",
   },
   "pulseaudio": {

@@ -40,6 +40,10 @@
   color: #a55555;
 }
 
+#battery.critical {
+  color: #a55555;
+}
+
 #workspaces button {
     all:initial;
     padding: 0.05rem;
