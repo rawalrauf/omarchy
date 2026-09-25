@@ -40,9 +40,7 @@ recover() {
       sleep 1
       enable
     else
-      FOCUSED=$(niri msg --json focused-window 2>/dev/null | jq -r '.id // empty')
       pkill -x wl-mirror 2>/dev/null || true
-      [[ -n $FOCUSED ]] && niri msg action focus-window --id "$FOCUSED" 2>/dev/null || true
     fi
   fi
 }
