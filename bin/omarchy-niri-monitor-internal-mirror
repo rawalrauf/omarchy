@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # omarchy:summary=Toggle mirroring the internal laptop display to an external monitor via wl-mirror
-# omarchy:args=<on|off|toggle>
+# omarchy:args=<on|off|toggle|recover>
 
 STATE_FILE="$HOME/.local/state/omarchy/mirror-on"
 mkdir -p "$HOME/.local/state/omarchy"
@@ -18,6 +18,7 @@ enable() {
     notify-send -u low "󰍹  No internal display found"
     exit 1
   fi
+  pkill -x wl-mirror 2>/dev/null || true
   nohup wl-mirror --fullscreen-output "$EXTERNAL" "$INTERNAL" >/dev/null 2>&1 &
   disown $!
   touch "$STATE_FILE"
@@ -30,12 +31,25 @@ disable() {
   notify-send -u low "󰍹  Mirroring disabled"
 }
 
+recover() {
+  if [[ -f $STATE_FILE ]]; then
+    if [[ -n $EXTERNAL ]]; then
+      pkill -x wl-mirror 2>/dev/null || true
+      sleep 1
+      enable
+    else
+      pkill -x wl-mirror 2>/dev/null || true
+    fi
+  fi
+}
+
 case "$1" in
   on) enable ;;
   off) disable ;;
   toggle) [[ -f $STATE_FILE ]] && disable || enable ;;
+  recover) recover ;;
   *)
-    echo "Usage: $(basename "$0") {on|off|toggle}" >&2
+    echo "Usage: $(basename "$0") {on|off|toggle|recover}" >&2
     exit 1
     ;;
 esac
