@@ -4,8 +4,8 @@ Requires=omarchy-battery-monitor.service
 
 [Timer]
 OnBootSec=1min
-OnUnitActiveSec=30sec
-AccuracySec=10sec
+OnUnitActiveSec=10sec
+AccuracySec=5sec
 
 [Install]
 WantedBy=timers.target
