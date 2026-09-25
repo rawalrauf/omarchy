@@ -149,7 +149,7 @@
   "network": {
     "on-click":"omarchy-launch-wifi",
     "format-wifi": "󰖩 {signalStrength}%",
-    "format-ethernet": "󰈀",
+    "format-ethernet": "󰈀 {bandwidthDownBits}",
     "tooltip-format": "{essid} - {ifname} via {gwaddr}",
     "format-linked": "󰖪",
     "format-disconnected": "󰖪",
