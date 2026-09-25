@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# omarchy:summary=Watch niri output events and recover monitor state when a monitor is removed
+
+niri msg --json event-stream 2>/dev/null | while read -r event; do
+  if echo "$event" | grep -q '"OutputsChanged"'; then
+    omarchy-niri-monitor-internal recover
+    omarchy-niri-monitor-internal-mirror recover
+  fi
+done

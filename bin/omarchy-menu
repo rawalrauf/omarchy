@@ -260,8 +260,8 @@ show_hardware_menu() {
   fi
 
   case $(menu "Toggle" "$options") in
-  *Laptop*) omarchy-hyprland-monitor-internal toggle ;;
-  *Mirror*) omarchy-hyprland-monitor-internal-mirror toggle ;;
+  *Laptop*) omarchy-niri-monitor-internal toggle ;;
+  *Mirror*) omarchy-niri-monitor-internal-mirror toggle ;;
   *Haptics*) show_hardware_touchpad_haptics_menu ;;
   *Touchpad*) omarchy-toggle-touchpad ;;
   *Touchscreen*) omarchy-toggle-touchscreen ;;
