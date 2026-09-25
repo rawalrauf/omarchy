@@ -213,20 +213,19 @@ show_share_menu() {
 }
 
 show_toggle_menu() {
-  local nightlight="󰔎  Nightlight"
   local idle="󱫖  Idle Lock"
   local notifications="󰂛  Notifications"
   local bar="󰍜  Top Bar"
+  local gaps="  Window Gaps"
 
-  pgrep -x wlsunset >/dev/null && nightlight="$nightlight ✓"
   pgrep -x swayidle >/dev/null && idle="$idle ✓"
   ! makoctl mode | grep -q 'do-not-disturb' && notifications="$notifications ✓"
   pgrep -x waybar >/dev/null && bar="$bar ✓"
+  grep -q "^\s*gaps 0" ~/.config/niri/looknfeel.kdl && gaps="$gaps" || gaps="$gaps ✓"
 
-  local options="$nightlight\n$idle\n$notifications\n$bar\n  Window Gaps\n󰍹  Monitor Scaling\n  Direct Boot\n󰟵  Passwordless Sudo"
+  local options="$idle\n$notifications\n$bar\n$gaps\n󰍹  Monitor Scaling\n  Direct Boot\n󰟵  Passwordless Sudo"
 
   case $(menu "Toggle" "$options") in
-  *Nightlight*) omarchy-toggle-nightlight ;;
   *Idle*) omarchy-toggle-idle ;;
   *Notifications*) omarchy-toggle-notification-silencing ;;
   *Bar*) omarchy-toggle-waybar ;;
