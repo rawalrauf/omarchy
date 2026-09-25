@@ -116,7 +116,7 @@
       "󰁹"
     ],
     "states": {
-      "critical": 10
+      "critical": 15
     },
     "on-click": "omarchy-menu power",
   },
