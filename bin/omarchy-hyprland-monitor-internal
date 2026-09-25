@@ -1,43 +1,44 @@
 #!/bin/bash
 
-# omarchy:summary=Enable, disable, toggle, or recover the internal laptop display
-# omarchy:args=<on|off|toggle|recover>
+# omarchy:summary=Enable, disable, or toggle the internal laptop display
+# omarchy:args=<on|off|toggle>
 
-TOGGLE="internal-monitor-disable"
-TOGGLE_FLAG="$HOME/.local/state/omarchy/toggles/hypr/$TOGGLE.conf"
-MIRROR_TOGGLE="internal-monitor-mirror"
+STATE_FILE="$HOME/.local/state/omarchy/internal-monitor-off"
+mkdir -p "$HOME/.local/state/omarchy"
 
-# Get internal monitor name dynamically
-INTERNAL=$(hyprctl monitors -j | jq -r '.[] | select(.name | contains("eDP")).name' | head -n 1)
+INTERNAL=$(niri msg outputs 2>/dev/null | grep -oP '\(\K[^)]+' | grep "eDP" | head -1)
+
+if [[ -z $INTERNAL ]]; then
+  notify-send -u low "󰍹  No internal display found"
+  exit 1
+fi
 
 enable() {
-  if omarchy-hyprland-toggle-enabled "$TOGGLE"; then
-    omarchy-hyprland-toggle --disabled-notification "󰍹    Laptop display enabled" "$TOGGLE"
-  fi
+  niri msg output "$INTERNAL" on
+  rm -f "$STATE_FILE"
+  notify-send -u low "󰍹  Laptop display enabled"
 }
 
 disable() {
   if ! omarchy-hw-external-monitors; then
-    notify-send -u low "󰍹    Can't disable the only active display"
+    notify-send -u low "󰍹  Can't disable the only active display"
     exit 1
   fi
-  if omarchy-hyprland-toggle-disabled "$TOGGLE" && omarchy-hyprland-toggle-disabled "$MIRROR_TOGGLE"; then
-    echo "monitor=$INTERNAL,disable" >"$TOGGLE_FLAG"
-    notify-send -u low "󰍹    Laptop display disabled"
-    hyprctl reload
-  fi
+  niri msg output "$INTERNAL" off
+  touch "$STATE_FILE"
+  notify-send -u low "󰍹  Laptop display disabled"
 }
 
 recover() {
-  if ! omarchy-hw-external-monitors && omarchy-hyprland-toggle-enabled "$TOGGLE"; then
-    omarchy-hyprland-toggle "$TOGGLE"
+  if ! omarchy-hw-external-monitors && [[ -f $STATE_FILE ]]; then
+    enable
   fi
 }
 
 case "$1" in
   on) enable ;;
   off) disable ;;
-  toggle) if omarchy-hyprland-toggle-enabled "$TOGGLE"; then enable; else disable; fi ;;
+  toggle) [[ -f $STATE_FILE ]] && enable || disable ;;
   recover) recover ;;
   *)
     echo "Usage: $(basename "$0") {on|off|toggle|recover}" >&2
