@@ -33,4 +33,14 @@ fi
 NEW_SCALE=${SCALES[$NEW_IDX]}
 
 niri msg output "$OUTPUT" scale "$NEW_SCALE"
+
+MONITORS_CONF="$HOME/.config/niri/monitors.kdl"
+if [[ -f $MONITORS_CONF ]]; then
+  if grep -qE "^\s*scale " "$MONITORS_CONF"; then
+    sed -i "s|^\([[:space:]]*\)scale [0-9.]*|\1scale $NEW_SCALE|" "$MONITORS_CONF"
+  else
+    sed -i "/transform/i\\    scale $NEW_SCALE" "$MONITORS_CONF"
+  fi
+fi
+
 notify-send -u low "󰍹  Display scaling set to ${NEW_SCALE}x"
