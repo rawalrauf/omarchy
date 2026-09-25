@@ -147,10 +147,9 @@
     "on-scroll-down": "",
   },
   "network": {
-    "interval": 2,
     "on-click":"omarchy-launch-wifi",
     "format-wifi": "󰖩 {signalStrength}%",
-    "format-ethernet": "󰈀 {bandwidthDownBits}",
+    "format-ethernet": "󰈀 100%",
     "tooltip-format": "{essid} - {ifname} via {gwaddr}",
     "format-linked": "󰖪",
     "format-disconnected": "󰖪",
