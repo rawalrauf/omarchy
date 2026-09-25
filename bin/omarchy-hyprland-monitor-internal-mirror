@@ -18,7 +18,8 @@ enable() {
     notify-send -u low "󰍹  No internal display found"
     exit 1
   fi
-  setsid wl-mirror "$INTERNAL" &>/dev/null &
+  nohup wl-mirror --fullscreen-output "$EXTERNAL" "$INTERNAL" >/dev/null 2>&1 &
+  disown $!
   touch "$STATE_FILE"
   notify-send -u low "󰍹  Mirroring enabled on $EXTERNAL"
 }
