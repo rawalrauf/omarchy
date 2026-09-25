@@ -13,4 +13,4 @@ else
   notify-send -u low "  Window gaps disabled"
 fi
 
-niri msg action do-screen-transition 2>/dev/null || true
+niri msg action load-config-file 2>/dev/null || true
