@@ -147,6 +147,7 @@
     "on-scroll-down": "",
   },
   "network": {
+    "interval": 2,
     "on-click":"omarchy-launch-wifi",
     "format-wifi": "󰖩 {signalStrength}%",
     "format-ethernet": "󰈀 {bandwidthDownBits}",
