@@ -100,8 +100,8 @@
    "battery": {
     "interval": 10,
     "format": "{icon} {capacity}%",
-    "format-charging": " {capacity}%",
-    "format-plugged": " {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
     "format-icons": [
       "󰂎",
       "󰁺",
@@ -149,7 +149,7 @@
   "network": {
     "on-click":"omarchy-launch-wifi",
     "format-wifi": "󰖩 {signalStrength}%",
-    "format-ethernet": "󰈀 {signalStrength}%",
+    "format-ethernet": "󰈀",
     "tooltip-format": "{essid} - {ifname} via {gwaddr}",
     "format-linked": "󰖪",
     "format-disconnected": "󰖪",
