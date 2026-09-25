@@ -5,5 +5,5 @@
 upower -i $(upower -e | grep BAT) | awk '
   /energy:/ && !/design/ { energy=$2 }
   /energy-full-design/   { design=$2 }
-  END { if (design > 0) printf "%d", (energy/design)*100 }
+  END { if (design > 0) printf "%d", int((energy/design)*100 + 0.5) }
 '
