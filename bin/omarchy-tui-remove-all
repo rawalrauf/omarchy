@@ -11,10 +11,9 @@ echo "Scanning for TUIs in $DESKTOP_DIR..."
 
 tui_desktop_files=()
 while IFS= read -r -d '' file; do
-  if grep -q '^NoDisplay=true' "$file" 2>/dev/null; then
-    continue
+  if grep -qE '^Exec=.*(omarchy-launch-tui|omarchy-launch-or-focus-tui)' "$file" 2>/dev/null; then
+    tui_desktop_files+=("$file")
   fi
-  tui_desktop_files+=("$file")
 done < <(find "$DESKTOP_DIR" -maxdepth 1 -name "org.omarchy.*.desktop" -print0 2>/dev/null)
 
 if ((${#tui_desktop_files[@]} == 0)); then
