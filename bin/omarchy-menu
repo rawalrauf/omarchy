@@ -218,22 +218,20 @@ show_toggle_menu() {
   local notifications="󰂛  Notifications"
   local bar="󰍜  Top Bar"
 
-  pgrep -x hyprsunset >/dev/null && nightlight="$nightlight ✓"
+  pgrep -x wlsunset >/dev/null && nightlight="$nightlight ✓"
   pgrep -x swayidle >/dev/null && idle="$idle ✓"
   ! makoctl mode | grep -q 'do-not-disturb' && notifications="$notifications ✓"
   pgrep -x waybar >/dev/null && bar="$bar ✓"
 
-  local options="$nightlight\n$idle\n$notifications\n$bar\n󱂬  Workspace Layout\n  Window Gaps\n  1-Window Ratio\n󰍹  Monitor Scaling\n  Direct Boot\n󰟵  Passwordless Sudo"
+  local options="$nightlight\n$idle\n$notifications\n$bar\n  Window Gaps\n󰍹  Monitor Scaling\n  Direct Boot\n󰟵  Passwordless Sudo"
 
   case $(menu "Toggle" "$options") in
   *Nightlight*) omarchy-toggle-nightlight ;;
   *Idle*) omarchy-toggle-idle ;;
   *Notifications*) omarchy-toggle-notification-silencing ;;
   *Bar*) omarchy-toggle-waybar ;;
-  *Layout*) omarchy-hyprland-workspace-layout-toggle ;;
-  *Ratio*) omarchy-hyprland-window-single-square-aspect-toggle ;;
-  *Gaps*) omarchy-hyprland-window-gaps-toggle ;;
-  *Scaling*) omarchy-hyprland-monitor-scaling-cycle ;;
+  *Gaps*) omarchy-niri-window-gaps-toggle ;;
+  *Scaling*) omarchy-niri-monitor-scaling-cycle ;;
   *"Direct Boot"*) present_terminal omarchy-config-direct-boot ;;
   *"Passwordless Sudo"*) present_terminal omarchy-sudo-passwordless ;;
   *) back_to show_trigger_menu ;;
