@@ -2,8 +2,9 @@
 
 # omarchy:summary=Returns the battery percentage remaining as an integer.
 
-upower -i $(upower -e | grep BAT) | awk '
-  /energy:/ && !/design/ { energy=$2 }
-  /energy-full-design/   { design=$2 }
-  END { if (design > 0) printf "%d", int((energy/design)*100 + 0.5) }
-'
+energy_now=$(cat /sys/class/power_supply/BAT*/energy_now 2>/dev/null | head -1)
+energy_full_design=$(cat /sys/class/power_supply/BAT*/energy_full_design 2>/dev/null | head -1)
+
+if [[ -n $energy_now && -n $energy_full_design ]] && (( energy_full_design > 0 )); then
+  awk "BEGIN { printf \"%d\", int(($energy_now/$energy_full_design)*100 + 0.5) }"
+fi
