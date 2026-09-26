@@ -2,6 +2,6 @@
 // Add custom binds here. These override any matching default binds.
 // To see all default binds, check ~/.local/share/omarchy/default/niri/bindings/
 binds {
-    Super+Space hotkey-overlay-title="Omarchy Menu" { spawn-sh "omarchy-menu"; }
-    Super+Alt+Space hotkey-overlay-title="Apps Menu" { spawn-sh "omarchy-menu apps"; }
+    Mod+Space hotkey-overlay-title="Omarchy Menu" { spawn-sh "omarchy-menu"; }
+    Mod+Alt+Space hotkey-overlay-title="Apps Menu" { spawn-sh "omarchy-menu apps"; }
 }
