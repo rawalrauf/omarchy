@@ -279,13 +279,12 @@ show_hardware_touchpad_haptics_menu() {
 }
 
 show_style_menu() {
-  case $(menu "Style" "󰸌  Theme\n󰟵  Unlock\n  Font\n  Background\n  Niri\n  About") in
+  case $(menu "Style" "󰸌  Theme\n󰟵  Unlock\n  Font\n  Background\n  Niri") in
   *Theme*) show_theme_menu ;;
   *Unlock*) omarchy-launch-walker -m menus:omarchyunlocks --width 800 --minheight 400 ;;
   *Font*) show_font_menu ;;
   *Background*) show_background_menu ;;
   *Niri*) open_in_editor ~/.config/niri/looknfeel.kdl ;;
-  *About*) show_about_menu ;;
   *) show_main_menu ;;
   esac
 }
