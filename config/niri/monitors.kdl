@@ -4,19 +4,21 @@
 // Find the full list of options on the wiki:
 // https://yalter.github.io/niri/Configuration:-Outputs
 //
-// Remove the "/- " prefix from any output block to activate it.
+// The eDP-1 block is disabled by default (/-) since output names vary per system.
+// Remove the "/- " prefix and update the output name to activate.
+// omarchy-niri-monitor-scaling-cycle will activate and edit the scale value here.
 
 /-output "eDP-1" {
     // off
 
     // Resolution and refresh rate. Omit to auto-select.
-    mode "1920x1080@60.008"
+    // mode "1920x1080@60.008"
 
     // Scale factor. Managed by omarchy-niri-monitor-scaling-cycle.
-    scale 1.25
+    // scale 1.25
 
     // Rotation: normal, 90, 180, 270, flipped, flipped-90, flipped-180, flipped-270
-    transform "normal"
+    // transform "normal"
 
     // Position in the global coordinate space.
     // position x=0 y=0

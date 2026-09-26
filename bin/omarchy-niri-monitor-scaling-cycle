@@ -38,8 +38,9 @@ MONITORS_CONF="$HOME/.config/niri/monitors.kdl"
 if [[ -f $MONITORS_CONF ]]; then
   if grep -qE "^\s*scale " "$MONITORS_CONF"; then
     sed -i "s|^\([[:space:]]*\)scale [0-9.]*|\1scale $NEW_SCALE|" "$MONITORS_CONF"
-  else
-    sed -i "/transform/i\\    scale $NEW_SCALE" "$MONITORS_CONF"
+  elif grep -qE "^/-output \"$OUTPUT\"" "$MONITORS_CONF"; then
+    sed -i "s|^/-output \"$OUTPUT\"|output \"$OUTPUT\"|" "$MONITORS_CONF"
+    sed -i "/output \"$OUTPUT\"/,/^}/ s|//\s*scale [0-9.]*|scale $NEW_SCALE|" "$MONITORS_CONF"
   fi
 fi
 
