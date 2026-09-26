@@ -125,10 +125,10 @@ if [[ $1 == "--print" || $1 == "-p" ]]; then
 else
   records=$(output_binding_records)
   monitor_height=$(niri msg --json focused-output 2>/dev/null | jq -r '.logical_height // 1080')
-  menu_height=$((monitor_height * 40 / 100))
+  menu_height=$((monitor_height * 65 / 100))
 
   selection=$(cut -f1 <<<"$records" |
-    walker --dmenu -p 'Keybindings' --width 800 --height "$menu_height")
+    walker --dmenu -p 'Keybindings' --width 900 --height "$menu_height")
 
   if [[ -n $selection ]]; then
     record=$(awk -F'\t' -v sel="$selection" '$1 == sel { print; exit }' <<<"$records")
