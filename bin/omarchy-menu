@@ -799,7 +799,7 @@ show_update_process_menu() {
   *Swayosd*) omarchy-restart-swayosd ;;
   *Walker*) omarchy-restart-walker ;;
   *Waybar*) omarchy-restart-waybar ;;
-  *Niri*) niri msg action load-config-file ;;
+  *Niri*) omarchy-restart-niri ;;
   *) show_update_menu ;;
   esac
 }
