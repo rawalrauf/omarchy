@@ -287,7 +287,7 @@ show_style_menu() {
   *Font*) show_font_menu ;;
   *Background*) show_background_menu ;;
   *Niri*) open_in_editor ~/.config/niri/looknfeel.kdl ;;
-  *About*) show_about ;;
+  *About*) show_about_menu ;;
   *) show_main_menu ;;
   esac
 }
