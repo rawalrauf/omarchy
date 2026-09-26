@@ -27,6 +27,6 @@ binds {
     Mod+Ctrl+V allow-when-locked=true hotkey-overlay-title="Clipboard History" { spawn-sh "omarchy-launch-walker -m clipboard"; }
 
     // Voxtype dictation (only active if voxtype is installed)
-    Mod+Ctrl+X hotkey-overlay-title="Toggle Dictation" { spawn-sh "omarchy-cmd-present voxtype && voxtype record toggle || true"; }
-    F9 hotkey-overlay-title="Push to Talk (Dictation)" { spawn-sh "omarchy-cmd-present voxtype && voxtype record start || true"; }
+    Mod+Ctrl+X hotkey-overlay-title="Toggle Dictation" { spawn-sh "omarchy-cmd-present voxtype && voxtype record toggle || notify-send -u low '  Dictation not installed' 'Install via Menu → Install → AI → Dictation'"; }
+    F9 hotkey-overlay-title="Push to Talk (Dictation)" { spawn-sh "omarchy-cmd-present voxtype && voxtype record start || notify-send -u low '  Dictation not installed' 'Install via Menu → Install → AI → Dictation'"; }
 }
