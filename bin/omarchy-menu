@@ -478,7 +478,7 @@ show_setup_config_menu() {
   *Walker*) open_in_editor ~/.config/walker/config.toml && omarchy-restart-walker ;;
   *Waybar*) open_in_editor ~/.config/waybar/config.jsonc && omarchy-restart-waybar ;;
   *Compose*) open_in_editor ~/.XCompose && omarchy-restart-xcompose ;;
-  *Emoji*) omarchy-launch-walker -m emojis ;;
+  *Emoji*) omarchy-launch-walker -m symbols ;;
   *) show_setup_menu ;;
   esac
 }
