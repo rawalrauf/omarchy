@@ -2,7 +2,6 @@
 
 # omarchy:summary=Display niri keybindings defined in your configuration using walker for an interactive search menu.
 
-# All binding files to parse (default first, user overrides after)
 BINDING_FILES=(
   "$HOME/.local/share/omarchy/default/niri/bindings/utilities.kdl"
   "$HOME/.local/share/omarchy/default/niri/bindings/tiling.kdl"
@@ -10,42 +9,47 @@ BINDING_FILES=(
   "$HOME/.config/niri/bindings.kdl"
 )
 
+cache_key() {
+  {
+    printf 'v1\n'
+    for f in "${BINDING_FILES[@]}"; do
+      [[ -f $f ]] && stat -c '%Y %n' "$f"
+    done
+  } | sha256sum | awk '{print $1}'
+}
+
 parse_niri_bindings() {
   for file in "${BINDING_FILES[@]}"; do
     [[ -f $file ]] || continue
-    while IFS= read -r line; do
-      # Skip comments and empty lines
-      [[ $line =~ ^[[:space:]]*(//|$) ]] && continue
-
-      # Match: Key hotkey-overlay-title="Description" { action ... }
-      if [[ $line =~ ^[[:space:]]*([A-Za-z0-9+]+)[[:space:]]+hotkey-overlay-title=\"([^\"]+)\"[[:space:]]*\{ ]]; then
+    grep -v '^\s*//' "$file" | while IFS= read -r line; do
+      # Key with hotkey-overlay-title="description"
+      if [[ $line =~ ^[[:space:]]*([A-Za-z0-9+]+)[[:space:]].*hotkey-overlay-title=\"([^\"]+)\" ]]; then
         key="${BASH_REMATCH[1]}"
         desc="${BASH_REMATCH[2]}"
-        # Normalize key: replace + with spaces around it
         key=$(echo "$key" | sed 's/+/ + /g; s/  */ /g; s/^ //; s/ $//')
-        printf "%-35s → %s\n" "$key" "$desc"
+        # Extract action for dispatch
+        action=$(echo "$line" | grep -oP '(?<=\{)[^}]+' | sed 's/;//g' | xargs)
+        printf '%s\t%s\t%s\n' "$(printf '%-35s → %s' "$key" "$desc")" "$desc" "$action"
 
-      # Match: Key { action ... } — no title, derive from action
-      elif [[ $line =~ ^[[:space:]]*([A-Za-z0-9+]+)[[:space:]]*(\{|repeat=false[[:space:]]*\{|allow-when-locked=true[[:space:]]*\{|allow-inhibiting=false[[:space:]]*\{) ]]; then
+      # Key without title but with action — derive description from action
+      elif [[ $line =~ ^[[:space:]]*([A-Za-z0-9+]+)[[:space:]]*(repeat=false[[:space:]]*)?\{ ]]; then
         key="${BASH_REMATCH[1]}"
-        # Skip if title is null
         [[ $line =~ hotkey-overlay-title=null ]] && continue
-        # Extract action name from { action; } pattern
-        action=$(echo "$line" | grep -oP '(?<=\{)[^}]+' | tr -d ';' | xargs)
+        [[ $line =~ hotkey-overlay-title= ]] && continue
+        action=$(echo "$line" | grep -oP '(?<=\{)[^}]+' | sed 's/;//g' | xargs)
         [[ -z $action ]] && continue
-        # Clean up action
-        action=$(echo "$action" | sed 's/spawn-sh //; s/spawn //; s/"//g; s/omarchy-//g; s/-/ /g')
+        desc=$(echo "$action" | sed 's/-/ /g; s/spawn-sh //; s/spawn //; s/"//g')
         key=$(echo "$key" | sed 's/+/ + /g; s/  */ /g; s/^ //; s/ $//')
-        printf "%-35s → %s\n" "$key" "$action"
+        printf '%s\t%s\t%s\n' "$(printf '%-35s → %s' "$key" "$desc")" "$desc" "$action"
       fi
-    done < "$file"
+    done
   done
 }
 
 prioritize_entries() {
-  awk '
+  awk -F'\t' '
   {
-    line = $0
+    line = $1
     prio = 50
     if (match(line, /Terminal/))           prio = 0
     if (match(line, /Application/))        prio = 1
@@ -72,26 +76,75 @@ prioritize_entries() {
     if (match(line, /height/))             prio = 41
     if (match(line, /volume/))             prio = 60
     if (match(line, /brightness/))         prio = 61
-    if (match(line, /media|play|pause/))   prio = 62
+    if (match(line, /play|pause|media/))   prio = 62
     if (match(line, /quit/))               prio = 90
     if (match(line, /power/))              prio = 91
-
-    printf "%d\t%s\n", prio, line
+    printf "%d\t%s\n", prio, $0
   }' |
   sort -k1,1n -k2,2 |
   cut -f2-
 }
 
-output_keybindings() {
+output_binding_records_uncached() {
   parse_niri_bindings | sort -u | prioritize_entries
 }
 
+output_binding_records() {
+  local cache_dir cache_name cache_file
+
+  cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/omarchy"
+  cache_name="keybindings-$(cache_key).records"
+  cache_file="$cache_dir/$cache_name"
+
+  if [[ -s $cache_file ]]; then
+    cat "$cache_file"
+    return
+  fi
+
+  mkdir -p "$cache_dir"
+  local tmp
+  tmp=$(mktemp "$cache_dir/keybindings.XXXXXX")
+
+  if output_binding_records_uncached > "$tmp"; then
+    mv "$tmp" "$cache_file"
+    find "$cache_dir" -maxdepth 1 -name 'keybindings-*.records' ! -name "$cache_name" -delete 2>/dev/null || true
+    cat "$cache_file"
+  else
+    rm -f "$tmp"
+    output_binding_records_uncached
+  fi
+}
+
+dispatch_binding() {
+  local action="$1"
+  [[ -z $action ]] && return
+
+  # Built-in niri action
+  if [[ ! $action =~ spawn ]]; then
+    local niri_action
+    niri_action=$(echo "$action" | xargs)
+    niri msg action $niri_action 2>/dev/null && return
+  fi
+
+  # spawn-sh or spawn command
+  local cmd
+  cmd=$(echo "$action" | sed 's/spawn-sh //; s/spawn //; s/"//g' | xargs)
+  [[ -n $cmd ]] && niri msg action spawn-sh -- "$cmd" 2>/dev/null
+}
+
 if [[ $1 == "--print" || $1 == "-p" ]]; then
-  output_keybindings
+  output_binding_records | cut -f1
 else
+  records=$(output_binding_records)
   monitor_height=$(niri msg --json focused-output 2>/dev/null | jq -r '.logical_height // 1080')
   menu_height=$((monitor_height * 40 / 100))
 
-  output_keybindings |
-    walker --dmenu -p 'Keybindings' --width 800 --height "$menu_height"
+  selection=$(cut -f1 <<<"$records" |
+    walker --dmenu -p 'Keybindings' --width 800 --height "$menu_height")
+
+  if [[ -n $selection ]]; then
+    record=$(awk -F'\t' -v sel="$selection" '$1 == sel { print; exit }' <<<"$records")
+    action=$(printf '%s' "$record" | cut -f3-)
+    dispatch_binding "$action"
+  fi
 fi
