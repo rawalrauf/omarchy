@@ -793,18 +793,19 @@ show_update_channel_menu() {
   present_terminal "omarchy-channel-set $channel"
 }
 show_update_process_menu() {
-  case $(menu "Restart" "  Swayidle\n󰎟  Mako\n  Swayosd\n󰌧  Walker\n󰍜  Waybar") in
+  case $(menu "Restart" "  Swayidle\n󰎟  Mako\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n  Niri") in
   *Swayidle*) omarchy-restart-swayidle ;;
   *Mako*) omarchy-restart-mako ;;
   *Swayosd*) omarchy-restart-swayosd ;;
   *Walker*) omarchy-restart-walker ;;
   *Waybar*) omarchy-restart-waybar ;;
+  *Niri*) niri msg action load-config-file ;;
   *) show_update_menu ;;
   esac
 }
 
 show_update_config_menu() {
-  case $(menu "Use default config" "  Swayidle\n  Hyprlock\n󱣴  Plymouth\n  Swayosd\n  Tmux\n󰌧  Walker\n󰍜  Waybar") in
+  case $(menu "Use default config" "  Swayidle\n  Hyprlock\n󱣴  Plymouth\n  Swayosd\n  Tmux\n󰌧  Walker\n󰍜  Waybar\n  Niri") in
   *Swayidle*) present_terminal omarchy-refresh-swayidle ;;
   *Hyprlock*) present_terminal omarchy-refresh-hyprlock ;;
   *Plymouth*) present_terminal omarchy-refresh-plymouth ;;
@@ -812,6 +813,7 @@ show_update_config_menu() {
   *Tmux*) present_terminal omarchy-refresh-tmux ;;
   *Walker*) present_terminal omarchy-refresh-walker ;;
   *Waybar*) present_terminal omarchy-refresh-waybar ;;
+  *Niri*) present_terminal omarchy-refresh-niri ;;
   *) show_update_menu ;;
   esac
 }
