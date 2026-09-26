@@ -23,6 +23,6 @@ binds {
     Mod+Shift+P { power-off-monitors; }
     Mod+P { toggle-window-rule-opacity; }
 
-    Super+Period hotkey-overlay-title="Emoji Picker" { spawn-sh "omarchy-launch-walker -m symbols"; }
+    Super+Period hotkey-overlay-title="Emoji Picker" { spawn-sh "omarchy-launch-walker -p ':'"; }
     Super+Ctrl+V allow-when-locked=true hotkey-overlay-title=null { spawn-sh "omarchy-launch-walker -m clipboard"; }
 }
