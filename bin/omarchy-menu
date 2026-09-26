@@ -471,13 +471,14 @@ show_setup_default_editor_menu() {
 
 
 show_setup_config_menu() {
-  case $(menu "Setup" "  Swayidle\n  Hyprlock\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n󰞅  XCompose") in
+  case $(menu "Setup" "  Swayidle\n  Hyprlock\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n󰞅  Compose Shortcuts\n  Emoji Picker") in
   *Swayidle*) open_in_editor ~/.config/swayidle/swayidle.conf && omarchy-restart-swayidle ;;
   *Hyprlock*) open_in_editor ~/.config/hypr/hyprlock.conf ;;
   *Swayosd*) open_in_editor ~/.config/swayosd/config.toml && omarchy-restart-swayosd ;;
   *Walker*) open_in_editor ~/.config/walker/config.toml && omarchy-restart-walker ;;
   *Waybar*) open_in_editor ~/.config/waybar/config.jsonc && omarchy-restart-waybar ;;
-  *XCompose*) open_in_editor ~/.XCompose && omarchy-restart-xcompose ;;
+  *Compose*) open_in_editor ~/.XCompose && omarchy-restart-xcompose ;;
+  *Emoji*) omarchy-launch-walker -m emojis ;;
   *) show_setup_menu ;;
   esac
 }
