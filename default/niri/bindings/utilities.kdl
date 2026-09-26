@@ -25,4 +25,8 @@ binds {
     Mod+Alt+K hotkey-overlay-title="Keybindings" { spawn-sh "omarchy-menu-keybindings"; }
     Mod+Ctrl+E hotkey-overlay-title="Emoji Picker" { spawn-sh "omarchy-launch-walker -m symbols"; }
     Mod+Ctrl+V allow-when-locked=true hotkey-overlay-title="Clipboard History" { spawn-sh "omarchy-launch-walker -m clipboard"; }
+
+    // Voxtype dictation (only active if voxtype is installed)
+    Mod+Ctrl+X hotkey-overlay-title="Toggle Dictation" { spawn-sh "omarchy-cmd-present voxtype && voxtype record toggle || true"; }
+    F9 hotkey-overlay-title="Push to Talk (Dictation)" { spawn-sh "omarchy-cmd-present voxtype && voxtype record start || true"; }
 }
