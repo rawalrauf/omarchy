@@ -8,12 +8,13 @@ input {
 
     keyboard {
         xkb {
-            // layout "us"
-            // variant ""
-            // options "compose:ralt,ctrl:nocaps"
-            // model ""
-            // rules ""
-            // file "~/.config/keymap.xkb"
+            // layout and variant are intentionally left empty — niri auto-fetches
+            // them from org.freedesktop.locale1 (localectl), so the keyboard layout
+            // set during Arch install works automatically without manual config.
+
+            // compose:ralt sets Right Alt as the compose key, enabling XCompose
+            // sequences from ~/.XCompose (special characters, emoji shortcuts etc.)
+            options "compose:ralt"
         }
 
         // Enable numlock on startup
