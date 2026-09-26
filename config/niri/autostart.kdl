@@ -1,7 +1,6 @@
-// This Script starts waybar, a commonly used bar for Wayland compositors.
-//spawn-at-startup "uwsm" "app" "--" "waybar"
-//spawn-sh-at-startup "uwsm app -- swaybg -i ~/.config/omarchy/current/background -m fill"
-// To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
-// spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
+// User autostart overrides — loaded before the default autostart.
+// The default autostart is in ~/.local/share/omarchy/default/niri/autostart.kdl
+// Uncomment lines below to add your own startup commands.
 
-
+// spawn-at-startup "your-app"
+// spawn-sh-at-startup "your-shell-command"

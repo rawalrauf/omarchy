@@ -3,25 +3,17 @@
 // https://yalter.github.io/niri/Configuration:-Input
 
 input {
-
     // mod-key "Super"
     // mod-key-nested "Alt"
 
     keyboard {
-
         xkb {
             // layout "us"
-            // variant "colemak_dh_ortho"
+            // variant ""
             // options "compose:ralt,ctrl:nocaps"
             // model ""
             // rules ""
             // file "~/.config/keymap.xkb"
-
-            // You can also set rules, model, layout, variant and options.
-            // For more information, see xkeyboard-config(7).
-            // If this section is empty, niri will fetch xkb settings
-            // from org.freedesktop.locale1. You can control these using
-            // localectl set-x11-keymap.
         }
 
         // Enable numlock on startup
@@ -102,14 +94,12 @@ input {
     }
 
     focus-follows-mouse max-scroll-amount="0%"
-    // disable-power-key-handling
     // warp-mouse-to-focus
-    // Focus windows and outputs automatically when moving the mouse into them.
-    // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
+    // disable-power-key-handling
     // workspace-auto-back-and-forth
-
 }
 
+// Per-app scroll speed overrides
 window-rule {
     match app-id="com.mitchellh.ghostty"
     scroll-factor 0.2
