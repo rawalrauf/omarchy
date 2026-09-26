@@ -12,9 +12,6 @@ spawn-sh-at-startup "uwsm app -- swayidle -w -C ~/.config/swayidle/swayidle.conf
 // Polkit agent
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 
-// XDG desktop portal wlr backend for screen recording/sharing (enable if portal mode needed)
-//spawn-sh-at-startup "systemctl --user start xdg-desktop-portal-wlr.service"
-
 // Auto-mount removable drives
 spawn-sh-at-startup "uwsm app -- udiskie --automount --no-notify --no-tray"
 
@@ -26,6 +23,9 @@ spawn-sh-at-startup "omarchy-first-run"
 
 // Monitor event watcher for recover on disconnect
 spawn-sh-at-startup "uwsm app -- omarchy-niri-monitor-watch"
+
+// Pre-warm keybindings cache so first open is instant
+spawn-sh-at-startup "omarchy-menu-keybindings --print > /dev/null 2>&1"
 
 // Post-boot hooks from ~/.config/omarchy/hooks/post-boot.d/
 spawn-sh-at-startup "sleep 2 && omarchy-hook post-boot"
