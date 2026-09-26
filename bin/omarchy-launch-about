@@ -2,4 +2,4 @@
 
 # omarchy:summary=Launch the fastfetch TUI that gives information about the current system.
 
-exec omarchy-launch-tui --app-id=org.omarchy.about bash -c 'fastfetch; read -n 1 -s'
+exec omarchy-launch-tui --app-id=org.omarchy.about bash -c 'tput civis; fastfetch; read -n 1 -s; tput cnorm'
