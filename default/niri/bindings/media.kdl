@@ -1,21 +1,19 @@
-
 binds {
     // Volume Control
-    XF86AudioRaiseVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "+5"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "-5"; }
-    XF86AudioMute        allow-when-locked=true { spawn "swayosd-client" "--output-volume" "mute-toggle"; }
-    XF86AudioMicMute     allow-when-locked=true { spawn "swayosd-client" "--input-volume" "mute-toggle"; }
+    XF86AudioRaiseVolume  allow-when-locked=true hotkey-overlay-title="Volume Up" { spawn "swayosd-client" "--output-volume" "+5"; }
+    XF86AudioLowerVolume  allow-when-locked=true hotkey-overlay-title="Volume Down" { spawn "swayosd-client" "--output-volume" "-5"; }
+    XF86AudioMute         allow-when-locked=true hotkey-overlay-title="Toggle Mute" { spawn "swayosd-client" "--output-volume" "mute-toggle"; }
+    XF86AudioMicMute      allow-when-locked=true hotkey-overlay-title="Toggle Microphone Mute" { spawn "swayosd-client" "--input-volume" "mute-toggle"; }
 
     // Brightness Control
-    XF86MonBrightnessUp   allow-when-locked=true { spawn "swayosd-client" "--brightness" "raise"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "swayosd-client" "--brightness" "lower"; }
+    XF86MonBrightnessUp   allow-when-locked=true hotkey-overlay-title="Brightness Up" { spawn "swayosd-client" "--brightness" "raise"; }
+    XF86MonBrightnessDown allow-when-locked=true hotkey-overlay-title="Brightness Down" { spawn "swayosd-client" "--brightness" "lower"; }
 
     // Media Control
-    XF86AudioPlay  allow-when-locked=true { spawn "swayosd-client" "--playerctl" "play-pause"; }
-    XF86AudioPause  allow-when-locked=true { spawn "swayosd-client" "--playerctl" "play-pause"; }
-    XF86AudioNext  allow-when-locked=true { spawn "swayosd-client" "--playerctl" "next"; }
-    XF86AudioPrev  allow-when-locked=true { spawn "swayosd-client" "--playerctl" "previous"; }
+    XF86AudioPlay  allow-when-locked=true hotkey-overlay-title="Play / Pause" { spawn "swayosd-client" "--playerctl" "play-pause"; }
+    XF86AudioPause allow-when-locked=true hotkey-overlay-title=null { spawn "swayosd-client" "--playerctl" "play-pause"; }
+    XF86AudioNext  allow-when-locked=true hotkey-overlay-title="Next Track" { spawn "swayosd-client" "--playerctl" "next"; }
+    XF86AudioPrev  allow-when-locked=true hotkey-overlay-title="Previous Track" { spawn "swayosd-client" "--playerctl" "previous"; }
 
-    Super+XF86AudioMute allow-when-locked=true { spawn-sh "omarchy-audio-output-switch"; }
+    Mod+XF86AudioMute allow-when-locked=true hotkey-overlay-title="Switch Audio Output" { spawn-sh "omarchy-audio-output-switch"; }
 }
-
