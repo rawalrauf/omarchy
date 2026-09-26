@@ -22,24 +22,12 @@ parse_niri_bindings() {
   for file in "${BINDING_FILES[@]}"; do
     [[ -f $file ]] || continue
     grep -v '^\s*//' "$file" | while IFS= read -r line; do
-      # Key with hotkey-overlay-title="description"
+      # Only show binds with explicit hotkey-overlay-title — skips aliases/duplicates
       if [[ $line =~ ^[[:space:]]*([A-Za-z0-9+]+)[[:space:]].*hotkey-overlay-title=\"([^\"]+)\" ]]; then
         key="${BASH_REMATCH[1]}"
         desc="${BASH_REMATCH[2]}"
         key=$(echo "$key" | sed 's/+/ + /g; s/  */ /g; s/^ //; s/ $//')
-        # Extract action for dispatch
         action=$(echo "$line" | grep -oP '(?<=\{)[^}]+' | sed 's/;//g' | xargs)
-        printf '%s\t%s\t%s\n' "$(printf '%-35s → %s' "$key" "$desc")" "$desc" "$action"
-
-      # Key without title but with action — derive description from action
-      elif [[ $line =~ ^[[:space:]]*([A-Za-z0-9+]+)[[:space:]]*(repeat=false[[:space:]]*)?\{ ]]; then
-        key="${BASH_REMATCH[1]}"
-        [[ $line =~ hotkey-overlay-title=null ]] && continue
-        [[ $line =~ hotkey-overlay-title= ]] && continue
-        action=$(echo "$line" | grep -oP '(?<=\{)[^}]+' | sed 's/;//g' | xargs)
-        [[ -z $action ]] && continue
-        desc=$(echo "$action" | sed 's/-/ /g; s/spawn-sh //; s/spawn //; s/"//g')
-        key=$(echo "$key" | sed 's/+/ + /g; s/  */ /g; s/^ //; s/ $//')
         printf '%s\t%s\t%s\n' "$(printf '%-35s → %s' "$key" "$desc")" "$desc" "$action"
       fi
     done

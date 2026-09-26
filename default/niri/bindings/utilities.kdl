@@ -1,8 +1,8 @@
 binds {
 
-    Mod+Q repeat=false { close-window; }
-    Mod+T hotkey-overlay-title="Open a Terminal: alacritty" { spawn "xdg-terminal-exec"; }
-    Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
+    Mod+Q repeat=false hotkey-overlay-title="Close Window" { close-window; }
+    Mod+T hotkey-overlay-title="Open a Terminal" { spawn "xdg-terminal-exec"; }
+    Mod+D hotkey-overlay-title="Launch Application" { spawn "fuzzel"; }
     Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn-sh "omarchy-system-lock"; }
 
     Mod+Space hotkey-overlay-title="Omarchy Menu" { spawn-sh "omarchy-menu"; }
@@ -10,20 +10,20 @@ binds {
 
     Mod+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
-    Mod+O repeat=false { toggle-overview; }
+    Mod+O repeat=false hotkey-overlay-title="Toggle Overview" { toggle-overview; }
 
-    Print { spawn-sh "omarchy-capture-screenshot"; }
-    Ctrl+Print { spawn-sh "omarchy-capture-screenshot fullscreen"; }
-    Alt+Print { spawn-sh "omarchy-capture-screenshot window"; }
+    Print hotkey-overlay-title="Screenshot (Select Region)" { spawn-sh "omarchy-capture-screenshot"; }
+    Ctrl+Print hotkey-overlay-title="Screenshot (Full Screen)" { spawn-sh "omarchy-capture-screenshot fullscreen"; }
+    Alt+Print hotkey-overlay-title="Screenshot (Active Window)" { spawn-sh "omarchy-capture-screenshot window"; }
 
-    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    Mod+Escape allow-inhibiting=false hotkey-overlay-title="Toggle Keyboard Shortcuts Inhibitor" { toggle-keyboard-shortcuts-inhibit; }
 
-    Mod+Shift+E { quit; }
+    Mod+Shift+E hotkey-overlay-title="Log Out" { spawn-sh "omarchy-system-logout"; }
 
-    Mod+Shift+P { power-off-monitors; }
-    Mod+P { toggle-window-rule-opacity; }
+    Mod+Shift+P hotkey-overlay-title="Power Off Monitors" { power-off-monitors; }
+    Mod+P hotkey-overlay-title="Toggle Window Opacity" { toggle-window-rule-opacity; }
 
     Mod+Alt+K hotkey-overlay-title="Keybindings" { spawn-sh "omarchy-menu-keybindings"; }
     Mod+Ctrl+E hotkey-overlay-title="Emoji Picker" { spawn-sh "omarchy-launch-walker -m symbols"; }
-    Mod+Ctrl+V allow-when-locked=true hotkey-overlay-title=null { spawn-sh "omarchy-launch-walker -m clipboard"; }
+    Mod+Ctrl+V allow-when-locked=true hotkey-overlay-title="Clipboard History" { spawn-sh "omarchy-launch-walker -m clipboard"; }
 }
