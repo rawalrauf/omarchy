@@ -1,0 +1,6 @@
+// Toggle flags — managed by omarchy scripts, do not edit manually.
+// Each file is optional: if it doesn't exist, it is silently skipped.
+// Scripts write KDL snippets here to toggle features on/off persistently.
+
+include optional=true "~/.local/state/omarchy/toggles/niri/touchpad-disabled.kdl"
+include optional=true "~/.local/state/omarchy/toggles/niri/touchscreen-disabled.kdl"
