@@ -2,15 +2,7 @@
 
 # omarchy:summary=Toggle window gaps on/off in niri
 
-CONFIG="$HOME/.config/niri/looknfeel.kdl"
-DEFAULT_GAPS=16
-
-if grep -q "^\s*gaps 0" "$CONFIG"; then
-  sed -i "s/^\(\s*\)gaps 0/\1gaps $DEFAULT_GAPS/" "$CONFIG"
-  notify-send -u low "  Window gaps enabled"
-else
-  sed -i "s/^\(\s*\)gaps [0-9]*/\1gaps 0/" "$CONFIG"
-  notify-send -u low "  Window gaps disabled"
-fi
-
-niri msg action load-config-file 2>/dev/null || true
+omarchy-niri-toggle \
+  --enabled-notification "  Window gaps enabled" \
+  --disabled-notification "  Window gaps disabled" \
+  gaps-enabled

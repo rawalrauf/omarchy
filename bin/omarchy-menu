@@ -222,7 +222,7 @@ show_toggle_menu() {
   pgrep -x swayidle >/dev/null && idle="$idle ✓"
   ! makoctl mode | grep -q 'do-not-disturb' && notifications="$notifications ✓"
   pgrep -x waybar >/dev/null && bar="$bar ✓"
-  grep -q "^\s*gaps 0" ~/.config/niri/looknfeel.kdl && gaps="$gaps" || gaps="$gaps ✓"
+  omarchy-niri-toggle-enabled gaps-enabled && gaps="$gaps ✓"
   omarchy-toggle-enabled direct-boot-enabled && directboot="$directboot ✓"
 
   local options="$idle\n$notifications\n$bar\n$gaps\n󰍹  Monitor Scaling\n$directboot\n󰟵  Passwordless Sudo"

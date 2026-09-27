@@ -1,12 +1,9 @@
 // User look & feel overrides — loaded after the default looknfeel.
-// Scripts like omarchy-niri-window-gaps-toggle edit the gaps value here.
 // Add new toggleable preferences here (blur, opacity, animation slowdown, etc.)
 // Default values live in ~/.local/share/omarchy/default/niri/looknfeel.kdl
+// Window gaps are managed by omarchy-niri-window-gaps-toggle via flags.kdl
 
 layout {
-    // Managed by omarchy-niri-window-gaps-toggle
-    gaps 0
-
     // When to center focused column: "never", "always", "on-overflow"
     center-focused-column "never"
 
