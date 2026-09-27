@@ -2,20 +2,14 @@
 // Learn how to configure niri: https://github.com/YaLTeR/niri/wiki
 
 // ── Omarchy defaults (do not edit these directly) ────────────────────────────
-include "~/.local/share/omarchy/default/niri/autostart.kdl"
-include "~/.local/share/omarchy/default/niri/miscellaneous.kdl"
-include "~/.local/share/omarchy/default/niri/looknfeel.kdl"
-include "~/.local/share/omarchy/default/niri/layer-rules.kdl"
-include "~/.local/share/omarchy/default/niri/window-rules.kdl"
-include "~/.local/share/omarchy/default/niri/apps.kdl"
-include "~/.local/share/omarchy/default/niri/bindings.kdl"
+include "~/.local/share/omarchy/default/niri/default.kdl"
 
 // ── User config (overrides go here) ─────────────────────────────────────────
-include "~/config/niri/autostart.kdl"
-include "~/config/niri/monitors.kdl"
-include "~/config/niri/input.kdl"
-include "~/config/niri/bindings.kdl"
-include "~/config/niri/looknfeel.kdl"
+include "~/.config/niri/autostart.kdl"
+include "~/.config/niri/monitors.kdl"
+include "~/.config/niri/input.kdl"
+include "~/.config/niri/bindings.kdl"
+include "~/.config/niri/looknfeel.kdl"
 
 // ── Toggle flags ─────────────────────────────────────────────────────────────
-include "~/config/niri/flags.kdl"
+include "~/.config/niri/flags.kdl"

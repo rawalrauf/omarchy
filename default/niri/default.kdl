@@ -1,0 +1,7 @@
+include "~/.local/share/omarchy/default/niri/autostart.kdl"
+include "~/.local/share/omarchy/default/niri/miscellaneous.kdl"
+include "~/.local/share/omarchy/default/niri/looknfeel.kdl"
+include "~/.local/share/omarchy/default/niri/layer-rules.kdl"
+include "~/.local/share/omarchy/default/niri/window-rules.kdl"
+include "~/.local/share/omarchy/default/niri/apps.kdl"
+include "~/.local/share/omarchy/default/niri/bindings.kdl"
