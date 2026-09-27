@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Toggle permanent Hyprland flags by copying them into a directory that's sourced entirely.
+# omarchy:summary=Toggle niri flags by copying KDL snippets into the toggles/niri directory.
 # omarchy:args=[--enabled-notification <text>] [--disabled-notification <text>] <flag-name>
 
 ENABLED_NOTIFICATION=""
@@ -15,18 +15,19 @@ while [[ $# -gt 1 ]]; do
 done
 
 FLAG_NAME="$1"
-FLAG="$HOME/.local/state/omarchy/toggles/hypr/$FLAG_NAME.conf"
-FLAG_SOURCE="$OMARCHY_PATH/default/hypr/toggles/$FLAG_NAME.conf"
+FLAG="$HOME/.local/state/omarchy/toggles/niri/$FLAG_NAME.kdl"
+FLAG_SOURCE="$OMARCHY_PATH/default/niri/toggles/$FLAG_NAME.kdl"
 
 if [[ -f $FLAG ]]; then
-  rm $FLAG
+  rm "$FLAG"
   [[ -n $DISABLED_NOTIFICATION ]] && notify-send -u low "$DISABLED_NOTIFICATION"
 elif [[ -f $FLAG_SOURCE ]]; then
-  cp $FLAG_SOURCE $FLAG
+  mkdir -p "$(dirname "$FLAG")"
+  cp "$FLAG_SOURCE" "$FLAG"
   [[ -n $ENABLED_NOTIFICATION ]] && notify-send -u low "$ENABLED_NOTIFICATION"
 else
   echo "Flag not found: $FLAG_NAME"
   exit 1
 fi
 
-hyprctl reload
+omarchy-restart-niri

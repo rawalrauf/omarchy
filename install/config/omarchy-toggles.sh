@@ -1,2 +1,2 @@
-# Create toggles directory for persistent feature flags
-mkdir -p ~/.local/state/omarchy/toggles/hypr
+# Create toggles directory for persistent niri feature flag KDL snippets
+mkdir -p ~/.local/state/omarchy/toggles/niri

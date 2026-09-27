@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# omarchy:summary=Print the detected Hyprland touchscreen or tablet device name
+# omarchy:summary=Check if a touchscreen or touch device is present
 
-device=$(hyprctl devices -j | jq -r '[.touch[]?.name, .tablets[]?.name] | first // empty')
-[[ -n $device ]] && echo "$device"
+grep -qi "touchscreen\|multi-touch\|wacom" /proc/bus/input/devices
