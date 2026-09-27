@@ -32,5 +32,5 @@ window-rule {
 }
 
 //apps sepecific tweeks
-include "apps.kdl"
+include "~/.local/share/omarchy/default/niri/apps.kdl"
 
