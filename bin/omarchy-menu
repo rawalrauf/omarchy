@@ -232,11 +232,19 @@ show_toggle_menu() {
   *Notifications*) omarchy-toggle-notification-silencing ;;
   *Bar*) omarchy-toggle-waybar ;;
   *Gaps*) omarchy-niri-window-gaps-toggle ;;
-  *Scaling*) omarchy-niri-monitor-scaling-cycle ;;
+  *Scaling*) show_monitor_scaling_menu ;;
   *"Direct Boot"*) present_terminal omarchy-config-direct-boot ;;
   *"Passwordless Sudo"*) present_terminal omarchy-sudo-passwordless ;;
   *) back_to show_trigger_menu ;;
   esac
+}
+
+show_monitor_scaling_menu() {
+  local current
+  current=$(niri msg outputs 2>/dev/null | grep "Scale:" | awk '{print $2}' | head -1)
+  local scale
+  scale=$(omarchy-menu-select "Monitor Scale" --current "$current" "1" "1.25" "1.5" "2") || back_to show_toggle_menu
+  [[ -n $scale ]] && omarchy-niri-monitor-scaling-cycle --set "$scale"
 }
 
 show_hardware_menu() {

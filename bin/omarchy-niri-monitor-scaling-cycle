@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# omarchy:summary=Cycle focused niri output scaling through 1x, 1.25x, 1.5x, 2x
+# omarchy:summary=Set or cycle niri output scaling through 1x, 1.25x, 1.5x, 2x
+# omarchy:args=[--set <scale>|--reverse|--current]
 
 SCALES=(1 1.25 1.5 2)
 
@@ -14,23 +15,32 @@ fi
 
 CURRENT_SCALE=$(niri msg outputs 2>/dev/null | grep -A10 "($OUTPUT)" | grep "Scale:" | awk '{print $2}' | head -1)
 
-CURRENT_IDX=$(awk -v s="$CURRENT_SCALE" -v list="${SCALES[*]}" 'BEGIN {
-  n = split(list, arr, " ")
-  best = 0; best_diff = 1e9
-  for (i = 1; i <= n; i++) {
-    d = s - arr[i]; if (d < 0) d = -d
-    if (d < best_diff) { best_diff = d; best = i - 1 }
-  }
-  print best
-}')
-
-if [[ "$1" == "--reverse" ]]; then
-  NEW_IDX=$(( (CURRENT_IDX - 1 + ${#SCALES[@]}) % ${#SCALES[@]} ))
-else
-  NEW_IDX=$(( (CURRENT_IDX + 1) % ${#SCALES[@]} ))
+if [[ "$1" == "--current" ]]; then
+  echo "$CURRENT_SCALE"
+  exit 0
 fi
 
-NEW_SCALE=${SCALES[$NEW_IDX]}
+if [[ "$1" == "--set" && -n "$2" ]]; then
+  NEW_SCALE="$2"
+else
+  CURRENT_IDX=$(awk -v s="$CURRENT_SCALE" -v list="${SCALES[*]}" 'BEGIN {
+    n = split(list, arr, " ")
+    best = 0; best_diff = 1e9
+    for (i = 1; i <= n; i++) {
+      d = s - arr[i]; if (d < 0) d = -d
+      if (d < best_diff) { best_diff = d; best = i - 1 }
+    }
+    print best
+  }')
+
+  if [[ "$1" == "--reverse" ]]; then
+    NEW_IDX=$(( (CURRENT_IDX - 1 + ${#SCALES[@]}) % ${#SCALES[@]} ))
+  else
+    NEW_IDX=$(( (CURRENT_IDX + 1) % ${#SCALES[@]} ))
+  fi
+
+  NEW_SCALE=${SCALES[$NEW_IDX]}
+fi
 
 niri msg output "$OUTPUT" scale "$NEW_SCALE"
 
