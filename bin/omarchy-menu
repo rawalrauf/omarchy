@@ -223,7 +223,7 @@ show_toggle_menu() {
   ! makoctl mode | grep -q 'do-not-disturb' && notifications="$notifications ✓"
   pgrep -x waybar >/dev/null && bar="$bar ✓"
   grep -q "^\s*gaps 0" ~/.config/niri/looknfeel.kdl && gaps="$gaps" || gaps="$gaps ✓"
-  efibootmgr 2>/dev/null | grep -qi "omarchy" && directboot="$directboot ✓"
+  omarchy-toggle-enabled direct-boot-enabled && directboot="$directboot ✓"
 
   local options="$idle\n$notifications\n$bar\n$gaps\n󰍹  Monitor Scaling\n$directboot\n󰟵  Passwordless Sudo"
 

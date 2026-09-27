@@ -31,6 +31,7 @@ if [[ -n $existing_entry ]]; then
   if gum confirm "Disable direct boot (remove Omarchy EFI entry)?"; then
     echo "Removing EFI boot entry $boot_num"
     sudo efibootmgr --bootnum "$boot_num" --delete-bootnum >/dev/null
+    rm -f "$HOME/.local/state/omarchy/toggles/direct-boot-enabled"
   fi
 
   exit 0
@@ -54,5 +55,7 @@ else
       --part "$part" \
       --label "Omarchy" \
       --loader "\\EFI\\Linux\\$uki_file"
+    mkdir -p "$HOME/.local/state/omarchy/toggles"
+    touch "$HOME/.local/state/omarchy/toggles/direct-boot-enabled"
   fi
 fi
