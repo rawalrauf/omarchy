@@ -19,7 +19,7 @@ binds {
     Mod+Shift+P hotkey-overlay-title="Power Off Monitors" { power-off-monitors; }
     Mod+P hotkey-overlay-title="Toggle Window Opacity" { toggle-window-rule-opacity; }
 
-    Mod+Ctrl+K hotkey-overlay-title="Keybindings" { spawn-sh "omarchy-menu-keybindings"; }
+    Mod+K hotkey-overlay-title="Keybindings" { spawn-sh "omarchy-menu-keybindings"; }
     Mod+Ctrl+E hotkey-overlay-title="Emoji Picker" { spawn-sh "omarchy-launch-walker -m symbols"; }
     Mod+Ctrl+V allow-when-locked=true hotkey-overlay-title="Clipboard History" { spawn-sh "omarchy-launch-walker -m clipboard"; }
 
