@@ -5,3 +5,4 @@
 include optional=true "~/.local/state/omarchy/toggles/niri/touchpad-disabled.kdl"
 include optional=true "~/.local/state/omarchy/toggles/niri/touchscreen-disabled.kdl"
 include optional=true "~/.local/state/omarchy/toggles/niri/gaps-enabled.kdl"
+include optional=true "~/.local/state/omarchy/toggles/niri/transparency-disabled.kdl"

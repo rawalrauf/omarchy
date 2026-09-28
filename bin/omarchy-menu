@@ -217,21 +217,24 @@ show_toggle_menu() {
   local notifications="󰂛  Notifications"
   local bar="󰍜  Top Bar"
   local gaps="  Window Gaps"
+  local transparency="󰂵  Window Transparency"
   local directboot="  Direct Boot"
 
   pgrep -x swayidle >/dev/null && idle="$idle ✓"
   ! makoctl mode | grep -q 'do-not-disturb' && notifications="$notifications ✓"
   pgrep -x waybar >/dev/null && bar="$bar ✓"
   omarchy-niri-toggle-enabled gaps-enabled && gaps="$gaps ✓"
+  ! omarchy-niri-toggle-enabled transparency-disabled && transparency="$transparency ✓"
   omarchy-toggle-enabled direct-boot-enabled && directboot="$directboot ✓"
 
-  local options="$idle\n$notifications\n$bar\n$gaps\n󰍹  Monitor Scaling\n$directboot\n󰟵  Passwordless Sudo"
+  local options="$idle\n$notifications\n$bar\n$gaps\n$transparency\n󰍹  Monitor Scaling\n$directboot\n󰟵  Passwordless Sudo"
 
   case $(menu "Toggle" "$options") in
   *Idle*) omarchy-toggle-idle ;;
   *Notifications*) omarchy-toggle-notification-silencing ;;
   *Bar*) omarchy-toggle-waybar ;;
   *Gaps*) omarchy-niri-window-gaps-toggle ;;
+  *Transparency*) omarchy-niri-window-transparency-toggle ;;
   *Scaling*) show_monitor_scaling_menu ;;
   *"Direct Boot"*) present_terminal omarchy-config-direct-boot ;;
   *"Passwordless Sudo"*) present_terminal omarchy-sudo-passwordless ;;

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# omarchy:summary=Toggle window transparency on/off in niri
+
+omarchy-niri-toggle \
+  --enabled-notification "  Window transparency enabled" \
+  --disabled-notification "  Window transparency disabled" \
+  transparency-disabled
