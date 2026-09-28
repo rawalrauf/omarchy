@@ -1,10 +1,9 @@
 window-rule {
     match app-id="com.moonlight_stream.Moonlight"
     open-fullscreen true
-    idle-inhibit { on-fullscreen; }
 }
 
 window-rule {
     match app-id="GeForceNOW"
-    idle-inhibit { on-fullscreen; }
+    open-fullscreen true
 }

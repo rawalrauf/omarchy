@@ -2,7 +2,6 @@ window-rule {
     match app-id=r#"steam.*"#
     open-floating true
     opacity 1.0
-    idle-inhibit { on-fullscreen; }
 }
 
 window-rule {
