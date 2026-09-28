@@ -1,19 +1,39 @@
 binds {
     // Volume Control
-    XF86AudioRaiseVolume  allow-when-locked=true hotkey-overlay-title="Volume Up" { spawn "swayosd-client" "--output-volume" "+5"; }
-    XF86AudioLowerVolume  allow-when-locked=true hotkey-overlay-title="Volume Down" { spawn "swayosd-client" "--output-volume" "-5"; }
-    XF86AudioMute         allow-when-locked=true hotkey-overlay-title="Toggle Mute" { spawn "swayosd-client" "--output-volume" "mute-toggle"; }
-    XF86AudioMicMute      allow-when-locked=true hotkey-overlay-title="Toggle Microphone Mute" { spawn "swayosd-client" "--input-volume" "mute-toggle"; }
+    XF86AudioRaiseVolume  allow-when-locked=true hotkey-overlay-title="Volume Up" { spawn-sh "omarchy-swayosd-client --output-volume raise"; }
+    XF86AudioLowerVolume  allow-when-locked=true hotkey-overlay-title="Volume Down" { spawn-sh "omarchy-swayosd-client --output-volume lower"; }
+    XF86AudioMute         allow-when-locked=true hotkey-overlay-title="Toggle Mute" { spawn-sh "omarchy-swayosd-client --output-volume mute-toggle"; }
+    XF86AudioMicMute      allow-when-locked=true hotkey-overlay-title="Toggle Microphone Mute" { spawn-sh "omarchy-audio-input-mute"; }
+
+    // Precise 1% volume
+    Alt+XF86AudioRaiseVolume allow-when-locked=true hotkey-overlay-title="Volume Up (Precise)" { spawn-sh "omarchy-swayosd-client --output-volume +1"; }
+    Alt+XF86AudioLowerVolume allow-when-locked=true hotkey-overlay-title="Volume Down (Precise)" { spawn-sh "omarchy-swayosd-client --output-volume -1"; }
 
     // Brightness Control
-    XF86MonBrightnessUp   allow-when-locked=true hotkey-overlay-title="Brightness Up" { spawn "swayosd-client" "--brightness" "raise"; }
-    XF86MonBrightnessDown allow-when-locked=true hotkey-overlay-title="Brightness Down" { spawn "swayosd-client" "--brightness" "lower"; }
+    XF86MonBrightnessUp   allow-when-locked=true hotkey-overlay-title="Brightness Up" { spawn-sh "omarchy-brightness-display +5%"; }
+    XF86MonBrightnessDown allow-when-locked=true hotkey-overlay-title="Brightness Down" { spawn-sh "omarchy-brightness-display 5%-"; }
+    Shift+XF86MonBrightnessUp   allow-when-locked=true hotkey-overlay-title="Brightness Maximum" { spawn-sh "omarchy-brightness-display 100%"; }
+    Shift+XF86MonBrightnessDown allow-when-locked=true hotkey-overlay-title="Brightness Minimum" { spawn-sh "omarchy-brightness-display 1%"; }
+
+    // Precise 1% brightness
+    Alt+XF86MonBrightnessUp   allow-when-locked=true hotkey-overlay-title="Brightness Up (Precise)" { spawn-sh "omarchy-brightness-display +1%"; }
+    Alt+XF86MonBrightnessDown allow-when-locked=true hotkey-overlay-title="Brightness Down (Precise)" { spawn-sh "omarchy-brightness-display 1%-"; }
+
+    // Keyboard Brightness
+    XF86KbdBrightnessUp   allow-when-locked=true hotkey-overlay-title="Keyboard Brightness Up" { spawn-sh "omarchy-brightness-keyboard up"; }
+    XF86KbdBrightnessDown allow-when-locked=true hotkey-overlay-title="Keyboard Brightness Down" { spawn-sh "omarchy-brightness-keyboard down"; }
+    XF86KbdLightOnOff     allow-when-locked=true hotkey-overlay-title="Keyboard Backlight Cycle" { spawn-sh "omarchy-brightness-keyboard cycle"; }
+
+    // Touchpad hardware keys
+    XF86TouchpadToggle allow-when-locked=true hotkey-overlay-title=null { spawn-sh "omarchy-toggle-touchpad"; }
+    XF86TouchpadOn     allow-when-locked=true hotkey-overlay-title=null { spawn-sh "omarchy-toggle-touchpad on"; }
+    XF86TouchpadOff    allow-when-locked=true hotkey-overlay-title=null { spawn-sh "omarchy-toggle-touchpad off"; }
 
     // Media Control
-    XF86AudioPlay  allow-when-locked=true hotkey-overlay-title="Play / Pause" { spawn "swayosd-client" "--playerctl" "play-pause"; }
-    XF86AudioPause allow-when-locked=true hotkey-overlay-title=null { spawn "swayosd-client" "--playerctl" "play-pause"; }
-    XF86AudioNext  allow-when-locked=true hotkey-overlay-title="Next Track" { spawn "swayosd-client" "--playerctl" "next"; }
-    XF86AudioPrev  allow-when-locked=true hotkey-overlay-title="Previous Track" { spawn "swayosd-client" "--playerctl" "previous"; }
+    XF86AudioPlay  allow-when-locked=true hotkey-overlay-title="Play / Pause" { spawn-sh "omarchy-swayosd-client --playerctl play-pause"; }
+    XF86AudioPause allow-when-locked=true hotkey-overlay-title=null { spawn-sh "omarchy-swayosd-client --playerctl play-pause"; }
+    XF86AudioNext  allow-when-locked=true hotkey-overlay-title="Next Track" { spawn-sh "omarchy-swayosd-client --playerctl next"; }
+    XF86AudioPrev  allow-when-locked=true hotkey-overlay-title="Previous Track" { spawn-sh "omarchy-swayosd-client --playerctl previous"; }
 
     Mod+XF86AudioMute allow-when-locked=true hotkey-overlay-title="Switch Audio Output" { spawn-sh "omarchy-audio-output-switch"; }
 }
