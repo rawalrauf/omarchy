@@ -5,30 +5,21 @@ window-rule {
     open-maximized-to-edges false
     open-fullscreen false
     draw-border-with-background false
-    opacity 0.85
-
 }
 
 window-rule {
     match is-focused=false
+    opacity 0.85
     background-effect {
         blur true
+        xray false
     }
-}
-window-rule{
-    match is-focused=true
-    opacity 1.0
 }
 
 window-rule {
     match is-floating=true
     clip-to-geometry true
     geometry-corner-radius 8
-    background-effect {
-        blur true
-        // xray false  //I prefer floating windows "xray true",
-                      // You can do "xray false" if you want to.
-    }
 }
 
 //apps sepecific tweeks
