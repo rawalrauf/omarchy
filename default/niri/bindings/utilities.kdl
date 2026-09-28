@@ -1,7 +1,6 @@
 binds {
 
     Mod+Q repeat=false hotkey-overlay-title="Close Window" { close-window; }
-    Mod+T hotkey-overlay-title="Open a Terminal" { spawn "xdg-terminal-exec"; }
     Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn-sh "omarchy-system-lock"; }
 
     Mod+Space hotkey-overlay-title="Omarchy Menu" { spawn-sh "omarchy-menu"; }
