@@ -35,10 +35,11 @@
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-update,
+#custom-weather,
 #custom-voxtype {
   min-width: 12px;
+  font-size:13px;
   margin: 0 5px;
-  padding-bottom: 1px;
 }
 
 #custom-screenrecording-indicator.active,
@@ -46,10 +47,6 @@
 #custom-notification-silencing-indicator.active,
 #custom-voxtype.recording {
   color: #a55555;
-}
-
-#custom-weather {
-  margin: 0 7.5px;
 }
 
 #custom-weather.unavailable {
