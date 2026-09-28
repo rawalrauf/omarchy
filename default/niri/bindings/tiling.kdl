@@ -101,7 +101,7 @@ binds {
     Mod+Shift+R  hotkey-overlay-title="Cycle Window Height" { switch-preset-window-height; }
     Mod+Ctrl+R   hotkey-overlay-title="Reset Window Height" { reset-window-height; }
     Mod+F        hotkey-overlay-title="Maximize Column" { maximize-column; }
-    Mod+Shift+F  hotkey-overlay-title="Fullscreen Window" { fullscreen-window; }
+    Mod+F11      hotkey-overlay-title="Fullscreen Window" { fullscreen-window; }
     Mod+Ctrl+F   hotkey-overlay-title="Expand Column to Available Width" { expand-column-to-available-width; }
 
     Mod+C        hotkey-overlay-title="Center Column" { center-column; }
