@@ -1,13 +1,7 @@
 // Chromium-based browsers
 window-rule {
     match app-id=r#"((google-)?[cC]hrom(e|ium)|[bB]rave-browser|[mM]icrosoft-edge|Vivaldi-stable|helium)"#
-    tiled-state true
-}
-
-// Remove /- if you prefer this rule to be active.
-/-window-rule {
-    match is-active=false app-id=r#"((google-)?[cC]hrom(e|ium)|[bB]rave-browser|[mM]icrosoft-edge|Vivaldi-stable|helium)"#
-    opacity 0.95
+    tiled-state true // tells Chromium it's tiled so it drops its own rounded corners
 }
 
 // Firefox-based browsers
@@ -19,8 +13,14 @@ window-rule {
     }
 }
 
+// Remove /- if you prefer this rule to be active.
+window-rule {
+    match is-active=false app-id=r#"((google-)?[cC]hrom(e|ium)|[bB]rave-browser|[mM]icrosoft-edge|Vivaldi-stable|helium)"#
+    opacity 0.95
+}
+
 // Remove /- if you want you prefer this rule to be active.
-/-window-rule {
+window-rule {
     match is-active=false app-id=r#"([fF]irefox|zen|librewolf)"#
     opacity 0.95
 }
