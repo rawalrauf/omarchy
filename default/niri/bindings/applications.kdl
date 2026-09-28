@@ -1,6 +1,6 @@
 binds {
-    Mod+T      hotkey-overlay-title="Open a Terminal" { spawn "xdg-terminal-exec"; }
-    Mod+Return hotkey-overlay-title="Open a Terminal (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\""; }
-    Mod+Ctrl+Return hotkey-overlay-title="Open Tmux (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\" bash -c 'tmux attach || tmux new -s Work'"; }
-    Mod+Shift+F hotkey-overlay-title="Open File Manager (Current Directory)" { spawn-sh "nautilus --new-window \"$(omarchy-cmd-terminal-cwd)\""; }
+    Mod+T             hotkey-overlay-title="Open a Terminal" { spawn "xdg-terminal-exec"; }
+    Mod+Return        hotkey-overlay-title="Open a Terminal (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\""; }
+    Mod+Ctrl+Return   hotkey-overlay-title="Open Tmux (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\" bash -c 'tmux attach || tmux new -s Work'"; }
+    Mod+Shift+Return  hotkey-overlay-title="Open File Manager (Current Directory)" { spawn-sh "nautilus --new-window \"$(omarchy-cmd-terminal-cwd)\""; }
 }
