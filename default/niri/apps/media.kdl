@@ -1,0 +1,28 @@
+window-rule {
+    match title="(?i)^picture.?in.?picture$"
+    open-floating true
+    opacity 1.0
+    default-column-width { fixed 600; }
+    default-window-height { fixed 338; }
+    default-floating-position x=40 y=40 relative-to="bottom-right"
+    border {
+        off
+    }
+}
+
+window-rule {
+    match app-id="ffplay" title="WebcamOverlay"
+    open-floating true
+    opacity 1.0
+    default-floating-position x=40 y=40 relative-to="bottom-right"
+    border {
+        off
+    }
+}
+
+window-rule {
+    match app-id="mpv"
+    open-floating true
+    default-column-width { proportion 0.7150; }
+    default-window-height { proportion 0.9050; }
+}

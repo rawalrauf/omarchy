@@ -1,0 +1,24 @@
+// JetBrains IDEs
+window-rule {
+    match app-id=r#"^jetbrains-.*"#
+    open-floating true
+}
+
+// DaVinci Resolve
+window-rule {
+    match app-id=r#".*[Rr]esolve.*"#
+    open-floating true
+    opacity 1.0
+}
+
+window-rule {
+    match app-id=r#".*[Rr]esolve.*"# title=r#"^DaVinci Resolve( Studio)? - .+$"#
+    open-maximized true
+}
+
+// Terminals
+/-window-rule {
+    match app-id="Alacritty"
+    match app-id="com.mitchellh.ghostty"
+    match app-id="kitty"
+}
