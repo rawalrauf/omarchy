@@ -5,16 +5,14 @@ binds {
 
     Mod+Space hotkey-overlay-title="Omarchy Menu" { spawn-sh "omarchy-menu"; }
     Mod+Alt+Space hotkey-overlay-title="Apps Menu" { spawn-sh "omarchy-menu apps"; }
+    Mod+Escape hotkey-overlay-title="System Menu" { spawn-sh "omarchy-menu system"; }
+    XF86PowerOff allow-when-locked=true hotkey-overlay-title="Power Menu" { spawn-sh "omarchy-menu system"; }
 
-    Mod+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
-
-    Mod+O repeat=false hotkey-overlay-title="Toggle Overview" { toggle-overview; }
+    Mod+Alt+S allow-when-locked=true hotkey-overlay-title="Toggle Screen Reader" { spawn-sh "pkill orca || exec orca"; }
 
     Print hotkey-overlay-title="Screenshot (Select Region)" { spawn-sh "omarchy-capture-screenshot"; }
     Ctrl+Print hotkey-overlay-title="Screenshot (Full Screen)" { spawn-sh "omarchy-capture-screenshot fullscreen"; }
     Alt+Print hotkey-overlay-title="Screenshot (Active Window)" { spawn-sh "omarchy-capture-screenshot window"; }
-
-    Mod+Escape allow-inhibiting=false hotkey-overlay-title="Toggle Keyboard Shortcuts Inhibitor" { toggle-keyboard-shortcuts-inhibit; }
 
     Mod+Shift+E hotkey-overlay-title="Log Out" { spawn-sh "omarchy-system-logout"; }
 
@@ -24,6 +22,14 @@ binds {
     Mod+Alt+K hotkey-overlay-title="Keybindings" { spawn-sh "omarchy-menu-keybindings"; }
     Mod+Ctrl+E hotkey-overlay-title="Emoji Picker" { spawn-sh "omarchy-launch-walker -m symbols"; }
     Mod+Ctrl+V allow-when-locked=true hotkey-overlay-title="Clipboard History" { spawn-sh "omarchy-launch-walker -m clipboard"; }
+
+    // Toggles
+    Mod+Backspace       hotkey-overlay-title="Toggle Window Transparency" { spawn-sh "omarchy-niri-window-transparency-toggle"; }
+    Mod+Shift+Backspace hotkey-overlay-title="Toggle Window Gaps" { spawn-sh "omarchy-niri-window-gaps-toggle"; }
+    Mod+Ctrl+Delete     hotkey-overlay-title="Toggle Laptop Display" { spawn-sh "omarchy-niri-monitor-internal toggle"; }
+    Mod+Ctrl+Alt+Delete hotkey-overlay-title="Toggle Laptop Display Mirror" { spawn-sh "omarchy-niri-monitor-internal-mirror toggle"; }
+
+    Mod+Ctrl+Alt+Escape allow-inhibiting=false hotkey-overlay-title="Toggle Keyboard Shortcuts Inhibitor" { toggle-keyboard-shortcuts-inhibit; }
 
     // Voxtype dictation (only active if voxtype is installed)
     Mod+Ctrl+X hotkey-overlay-title="Toggle Dictation" { spawn-sh "omarchy-cmd-present voxtype && voxtype record toggle || notify-send -u low 'Dictation not installed' 'Install via Menu → Install → AI → Dictation'"; }
