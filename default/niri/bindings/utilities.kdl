@@ -2,10 +2,18 @@ binds {
     // System
     Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn-sh "omarchy-system-lock"; }
     Mod+Alt+Q hotkey-overlay-title="Log Out" { spawn-sh "omarchy-system-logout"; }
-    Mod+Space hotkey-overlay-title="Apps Menu" { spawn-sh "omarchy-menu apps"; }
-    Mod+Alt+Space hotkey-overlay-title="Omarchy Menu" { spawn-sh "omarchy-menu"; }
-    Mod+Escape hotkey-overlay-title="System Menu" { spawn-sh "omarchy-menu system"; }
     XF86PowerOff allow-when-locked=true hotkey-overlay-title="Power Menu" { spawn-sh "omarchy-menu system"; }
+
+    // Menus
+    Mod+Space          hotkey-overlay-title="Apps Menu" { spawn-sh "omarchy-menu apps"; }
+    Mod+Alt+Space      hotkey-overlay-title="Omarchy Menu" { spawn-sh "omarchy-menu"; }
+    Mod+Escape         hotkey-overlay-title="System Menu" { spawn-sh "omarchy-menu system"; }
+    Mod+Alt+T          hotkey-overlay-title="Theme Menu" { spawn-sh "omarchy-menu theme"; }
+    Mod+Alt+A          hotkey-overlay-title="Style Menu" { spawn-sh "omarchy-menu style"; }
+    Mod+Alt+B          hotkey-overlay-title="Background / Wallpaper" { spawn-sh "omarchy-menu background"; }
+    Mod+Alt+H          hotkey-overlay-title="Hardware Menu" { spawn-sh "omarchy-menu hardware"; }
+    Mod+Alt+S          hotkey-overlay-title="Share Menu" { spawn-sh "omarchy-menu share"; }
+    Mod+Alt+O          hotkey-overlay-title="Toggle Menu" { spawn-sh "omarchy-menu toggle"; }
 
     // Captures
     Print              hotkey-overlay-title="Screenshot (Select Region)" { spawn-sh "omarchy-capture-screenshot"; }
@@ -15,19 +23,12 @@ binds {
     Mod+Alt+Print      hotkey-overlay-title="Screen Recording Menu" { spawn-sh "omarchy-menu screenrecord"; }
     Mod+Ctrl+Print     hotkey-overlay-title="Extract Text (OCR)" { spawn-sh "omarchy-capture-text-extraction"; }
     Mod+Shift+Print    hotkey-overlay-title="Color Picker" { spawn-sh "pkill hyprpicker || hyprpicker -a"; }
-    XF86Calculator     hotkey-overlay-title="Calculator" { spawn "gnome-calculator"; }
 
     // Tools
     Mod+K              hotkey-overlay-title="Keybindings" { spawn-sh "omarchy-menu-keybindings"; }
     Mod+Alt+E          hotkey-overlay-title="Emoji Picker" { spawn-sh "omarchy-launch-walker -m symbols"; }
     Mod+Alt+C          allow-when-locked=true hotkey-overlay-title="Clipboard History" { spawn-sh "omarchy-launch-walker -m clipboard"; }
-
-    // Menus
-    Mod+Alt+T          hotkey-overlay-title="Theme Menu" { spawn-sh "omarchy-menu theme"; }
-    Mod+Alt+A          hotkey-overlay-title="Style Menu" { spawn-sh "omarchy-menu style"; }
-    Mod+Alt+H          hotkey-overlay-title="Hardware Menu" { spawn-sh "omarchy-menu hardware"; }
-    Mod+Alt+S          hotkey-overlay-title="Share Menu" { spawn-sh "omarchy-menu share"; }
-    Mod+Alt+O          hotkey-overlay-title="Toggle Menu" { spawn-sh "omarchy-menu toggle"; }
+    XF86Calculator     hotkey-overlay-title="Calculator" { spawn "gnome-calculator"; }
 
     // Reminders
     Mod+Alt+R          hotkey-overlay-title="Set Reminder" { spawn-sh "omarchy-menu reminder-set"; }
@@ -44,7 +45,6 @@ binds {
     Mod+Alt+D          hotkey-overlay-title="Toggle Laptop Display" { spawn-sh "omarchy-niri-monitor-internal toggle"; }
     Mod+Alt+M          hotkey-overlay-title="Toggle Laptop Display Mirror" { spawn-sh "omarchy-niri-monitor-internal-mirror toggle"; }
     Mod+Alt+W          hotkey-overlay-title="Toggle Top Bar (Waybar)" { spawn-sh "omarchy-toggle-waybar"; }
-    Mod+Alt+B          hotkey-overlay-title="Background / Wallpaper" { spawn-sh "omarchy-menu background"; }
     Mod+Alt+I          hotkey-overlay-title="Toggle Idle Lock" { spawn-sh "omarchy-toggle-idle"; }
     Mod+Alt+P          hotkey-overlay-title="Toggle Notification Silencing" { spawn-sh "omarchy-toggle-notification-silencing"; }
     Mod+Alt+Escape     allow-inhibiting=false hotkey-overlay-title="Toggle Keyboard Shortcuts Inhibitor" { toggle-keyboard-shortcuts-inhibit; }
