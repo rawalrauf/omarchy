@@ -1,8 +1,9 @@
 binds {
     Mod+Return        hotkey-overlay-title="Open a Terminal (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\""; }
+    Mod+Shift+Return  hotkey-overlay-title="Open Tmux (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\" bash -c 'tmux attach || tmux new -s Work'"; }
 
     // Standard apps — Mod+Shift
-    Mod+Shift+Return  hotkey-overlay-title="Open File Manager (Current Directory)" { spawn-sh "nautilus --new-window \"$(omarchy-cmd-terminal-cwd)\""; }
+    Mod+Shift+F hotkey-overlay-title="Open File Manager (Current Directory)" { spawn-sh "nautilus --new-window \"$(omarchy-cmd-terminal-cwd)\""; }
     Mod+Shift+B hotkey-overlay-title="Open Browser" { spawn-sh "omarchy-launch-browser"; }
     Mod+Shift+P hotkey-overlay-title="Open Browser (Private)" { spawn-sh "omarchy-launch-browser --private"; }
     Mod+Shift+N hotkey-overlay-title="Open Editor" { spawn-sh "omarchy-launch-editor"; }
