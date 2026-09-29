@@ -10,9 +10,9 @@ binds {
     // Captures
     Print              hotkey-overlay-title="Screenshot (Select Region)" { spawn-sh "omarchy-capture-screenshot"; }
     Ctrl+Print         hotkey-overlay-title="Screenshot (Full Screen)" { spawn-sh "omarchy-capture-screenshot fullscreen"; }
-    Alt+Print          hotkey-overlay-title="Screenshot Menu" { spawn-sh "omarchy-menu capture screenshot"; }
+    Alt+Print          hotkey-overlay-title="Screenshot Menu" { spawn-sh "omarchy-menu screenshot"; }
     Mod+Print          hotkey-overlay-title="Screen Recording" { spawn-sh "omarchy-capture-screenrecording"; }
-    Mod+Alt+Print      hotkey-overlay-title="Screen Recording Menu" { spawn-sh "omarchy-menu capture screenrecord"; }
+    Mod+Alt+Print      hotkey-overlay-title="Screen Recording Menu" { spawn-sh "omarchy-menu screenrecord"; }
     Mod+Ctrl+Print     hotkey-overlay-title="Extract Text (OCR)" { spawn-sh "omarchy-capture-text-extraction"; }
     Mod+Shift+Print    hotkey-overlay-title="Color Picker" { spawn-sh "pkill hyprpicker || hyprpicker -a"; }
 
