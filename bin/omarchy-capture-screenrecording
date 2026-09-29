@@ -144,9 +144,12 @@ stop_screenrecording() {
     trim_first_frame
     local filename
     filename=$(cat "$RECORDING_FILE" 2>/dev/null)
+    local preview="${filename%.mp4}-preview.png"
+    ffmpeg -y -i "$filename" -ss 00:00:00.1 -vframes 1 -q:v 2 "$preview" -loglevel quiet 2>/dev/null
     (
-      ACTION=$(notify-send "Screen recording saved" "Open (or click this)" -t 10000 -i "$filename" -A "default=open")
+      ACTION=$(notify-send "Screen recording saved" "Open with Mod + Alt + , (or click this)" -t 10000 -i "${preview:-$filename}" -A "default=open")
       [[ $ACTION == "default" ]] && mpv "$filename" >/dev/null 2>&1
+      rm -f "$preview"
     ) >/dev/null 2>&1 &
   fi
 

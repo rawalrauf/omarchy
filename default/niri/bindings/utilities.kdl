@@ -37,6 +37,7 @@ binds {
     Mod+Alt+N          hotkey-overlay-title="Dismiss Last Notification" { spawn-sh "makoctl dismiss"; }
     Mod+Alt+Shift+N    hotkey-overlay-title="Dismiss All Notifications" { spawn-sh "makoctl dismiss --all"; }
     Mod+Alt+Shift+I    hotkey-overlay-title="Invoke Last Notification" { spawn-sh "makoctl invoke"; }
+    Mod+Alt+Comma      hotkey-overlay-title="Open Last Notification" { spawn-sh "makoctl invoke"; }
     Mod+Alt+Ctrl+N     hotkey-overlay-title="Toggle Notification Silencing" { spawn-sh "omarchy-toggle-notification-silencing"; }
 
     // Toggles
