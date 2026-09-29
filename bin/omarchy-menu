@@ -885,6 +885,8 @@ go_to_menu() {
   *background*) show_background_menu ;;
   *capture*) show_capture_menu ;;
   *screenshot*) show_screenshot_menu ;;
+  *style*) show_style_menu ;;
+  *theme*) show_theme_menu ;;
   *screenrecord*) show_screenrecord_menu ;;
   *setup*) show_setup_menu ;;
   *power*) show_setup_power_menu ;;
