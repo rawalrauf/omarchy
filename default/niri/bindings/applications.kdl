@@ -10,9 +10,10 @@ binds {
     Mod+Shift+Z hotkey-overlay-title="Open Writing App" { spawn-sh "uwsm-app -- typora --enable-wayland-ime"; }
 
     // Web apps — Mod+Shift
-    Mod+Shift+E hotkey-overlay-title="Open Email" { spawn-sh "omarchy-launch-or-focus-webapp 'https://mail.google.com'"; }
-    Mod+Shift+Y hotkey-overlay-title="Open YouTube" { spawn-sh "omarchy-launch-webapp 'https://youtube.com'"; }
     Mod+Shift+W hotkey-overlay-title="Open WhatsApp" { spawn-sh "omarchy-launch-or-focus-webapp 'https://web.whatsapp.com'"; }
+    Mod+Shift+Y hotkey-overlay-title="Open YouTube" { spawn-sh "omarchy-launch-webapp 'https://youtube.com'"; }
+    Mod+Shift+G hotkey-overlay-title="Open GitHub" { spawn-sh "omarchy-launch-or-focus-webapp 'https://github.com'"; }
+    Mod+Shift+E hotkey-overlay-title="Open Email (Gmail)" { spawn-sh "omarchy-launch-or-focus-webapp 'https://mail.google.com'"; }
 
     // TUI / system controls — Mod+Shift+Ctrl
     Mod+Shift+Ctrl+Return hotkey-overlay-title="Open Tmux (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\" bash -c 'tmux attach || tmux new -s Work'"; }
