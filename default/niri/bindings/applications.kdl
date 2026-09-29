@@ -1,9 +1,8 @@
 binds {
-    Mod+T             hotkey-overlay-title="Open a Terminal" { spawn "xdg-terminal-exec"; }
     Mod+Return        hotkey-overlay-title="Open a Terminal (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\""; }
-    Mod+Shift+Return  hotkey-overlay-title="Open File Manager (Current Directory)" { spawn-sh "nautilus --new-window \"$(omarchy-cmd-terminal-cwd)\""; }
 
     // Standard apps — Mod+Shift
+    Mod+Shift+Return  hotkey-overlay-title="Open File Manager (Current Directory)" { spawn-sh "nautilus --new-window \"$(omarchy-cmd-terminal-cwd)\""; }
     Mod+Shift+B hotkey-overlay-title="Open Browser" { spawn-sh "omarchy-launch-browser"; }
     Mod+Shift+N hotkey-overlay-title="Open Editor" { spawn-sh "omarchy-launch-editor"; }
     Mod+Shift+Slash hotkey-overlay-title="Open Passwords" { spawn-sh "omarchy-launch-or-focus keepassxc 'uwsm-app -- keepassxc'"; }
