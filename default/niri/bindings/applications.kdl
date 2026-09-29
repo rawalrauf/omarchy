@@ -14,4 +14,10 @@ binds {
     Mod+Shift+E hotkey-overlay-title="Open Email" { spawn-sh "omarchy-launch-webapp 'https://app.hey.com'"; }
     Mod+Shift+Y hotkey-overlay-title="Open YouTube" { spawn-sh "omarchy-launch-webapp 'https://youtube.com'"; }
     Mod+Shift+W hotkey-overlay-title="Open WhatsApp" { spawn-sh "omarchy-launch-or-focus-webapp WhatsApp 'https://web.whatsapp.com'"; }
+
+    // System control TUIs
+    Mod+Ctrl+A hotkey-overlay-title="Audio Controls" { spawn-sh "omarchy-launch-audio"; }
+    Mod+Ctrl+B hotkey-overlay-title="Bluetooth Controls" { spawn-sh "omarchy-launch-bluetooth"; }
+    Mod+Ctrl+W hotkey-overlay-title="Wifi Controls" { spawn-sh "omarchy-launch-wifi"; }
+    Mod+Ctrl+T hotkey-overlay-title="Activity Monitor" { spawn-sh "omarchy-launch-or-focus-tui btop"; }
 }

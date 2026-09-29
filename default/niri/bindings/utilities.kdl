@@ -1,28 +1,26 @@
 binds {
-
     Mod+Q repeat=false hotkey-overlay-title="Close Window" { close-window; }
     Mod+Ctrl+L hotkey-overlay-title="Lock the Screen" { spawn-sh "omarchy-system-lock"; }
+    Mod+Shift+Q hotkey-overlay-title="Log Out" { spawn-sh "omarchy-system-logout"; }
 
     Mod+Space hotkey-overlay-title="Omarchy Menu" { spawn-sh "omarchy-menu"; }
     Mod+Shift+Space hotkey-overlay-title="Apps Menu" { spawn-sh "omarchy-menu apps"; }
     Mod+Escape hotkey-overlay-title="System Menu" { spawn-sh "omarchy-menu system"; }
     XF86PowerOff allow-when-locked=true hotkey-overlay-title="Power Menu" { spawn-sh "omarchy-menu system"; }
 
-    Mod+Shift+A hotkey-overlay-title="Toggle Screen Reader (Accessibility)" { spawn-sh "pkill orca || exec orca"; }
-
     Print hotkey-overlay-title="Screenshot (Select Region)" { spawn-sh "omarchy-capture-screenshot"; }
     Ctrl+Print hotkey-overlay-title="Screenshot (Full Screen)" { spawn-sh "omarchy-capture-screenshot fullscreen"; }
     Alt+Print hotkey-overlay-title="Screenshot (Active Window)" { spawn-sh "omarchy-capture-screenshot window"; }
     Mod+Ctrl+Print hotkey-overlay-title="Extract Text (OCR)" { spawn-sh "omarchy-capture-text-extraction"; }
-
-    Mod+Shift+E hotkey-overlay-title="Log Out" { spawn-sh "omarchy-system-logout"; }
-
-    Mod+Shift+P hotkey-overlay-title="Power Off Monitors" { power-off-monitors; }
-    Mod+P hotkey-overlay-title="Toggle Window Opacity" { toggle-window-rule-opacity; }
+    Mod+Ctrl+S hotkey-overlay-title="Screen Recording" { spawn-sh "omarchy-capture-screenrecording"; }
 
     Mod+K hotkey-overlay-title="Keybindings" { spawn-sh "omarchy-menu-keybindings"; }
     Mod+Ctrl+E hotkey-overlay-title="Emoji Picker" { spawn-sh "omarchy-launch-walker -m symbols"; }
     Mod+Ctrl+V allow-when-locked=true hotkey-overlay-title="Clipboard History" { spawn-sh "omarchy-launch-walker -m clipboard"; }
+
+    // Notifications
+    Mod+Ctrl+N hotkey-overlay-title="Dismiss Last Notification" { spawn-sh "makoctl dismiss"; }
+    Mod+Shift+Ctrl+N hotkey-overlay-title="Dismiss All Notifications" { spawn-sh "makoctl dismiss --all"; }
 
     // Toggles
     Mod+Backspace       hotkey-overlay-title="Toggle Window Transparency" { spawn-sh "omarchy-niri-window-transparency-toggle"; }
