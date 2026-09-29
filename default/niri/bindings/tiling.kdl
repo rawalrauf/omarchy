@@ -98,11 +98,11 @@ binds {
     Mod+Period hotkey-overlay-title="Expel Window from Column" { expel-window-from-column; }
 
     Mod+R        hotkey-overlay-title="Cycle Column Width" { switch-preset-column-width; }
-    Mod+Shift+R  hotkey-overlay-title="Cycle Window Height" { switch-preset-window-height; }
-    Mod+Ctrl+R   hotkey-overlay-title="Reset Window Height" { reset-window-height; }
+    Mod+Ctrl+R   hotkey-overlay-title="Cycle Window Height" { switch-preset-window-height; }
+    Mod+Shift+Ctrl+R hotkey-overlay-title="Reset Window Height" { reset-window-height; }
     Mod+F        hotkey-overlay-title="Maximize Column" { maximize-column; }
-    Mod+Shift+F  hotkey-overlay-title="Fullscreen Window" { fullscreen-window; }
-    Mod+Ctrl+F   hotkey-overlay-title="Expand Column to Available Width" { expand-column-to-available-width; }
+    Mod+Ctrl+F   hotkey-overlay-title="Fullscreen Window" { fullscreen-window; }
+    Mod+Shift+Ctrl+F hotkey-overlay-title="Expand Column to Available Width" { expand-column-to-available-width; }
 
     Mod+C        hotkey-overlay-title="Center Column" { center-column; }
     Mod+Ctrl+C   hotkey-overlay-title="Center Visible Columns" { center-visible-columns; }
@@ -113,7 +113,7 @@ binds {
     Mod+Shift+Equal  hotkey-overlay-title="Grow Window Height" { set-window-height "+10%"; }
 
     Mod+V        hotkey-overlay-title="Toggle Window Floating" { toggle-window-floating; }
-    Mod+Shift+V  hotkey-overlay-title="Switch Focus Between Floating and Tiling" { switch-focus-between-floating-and-tiling; }
+    Mod+Ctrl+V   hotkey-overlay-title="Switch Focus Between Floating and Tiling" { switch-focus-between-floating-and-tiling; }
     Mod+W        hotkey-overlay-title="Toggle Tabbed Column Display" { toggle-column-tabbed-display; }
 
 }
