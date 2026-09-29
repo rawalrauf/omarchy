@@ -34,11 +34,11 @@ binds {
     Mod+Alt+Ctrl+R     hotkey-overlay-title="Clear Reminders" { spawn-sh "omarchy-reminder clear"; }
 
     // Notifications
-    Mod+Alt+N          hotkey-overlay-title="Dismiss Last Notification" { spawn-sh "makoctl dismiss"; }
-    Mod+Alt+Shift+N    hotkey-overlay-title="Dismiss All Notifications" { spawn-sh "makoctl dismiss --all"; }
-    Mod+Alt+Shift+I    hotkey-overlay-title="Invoke Last Notification" { spawn-sh "makoctl invoke"; }
-    Mod+Alt+Comma      hotkey-overlay-title="Open Last Notification" { spawn-sh "makoctl invoke"; }
-    Mod+Alt+Ctrl+N     hotkey-overlay-title="Toggle Notification Silencing" { spawn-sh "omarchy-toggle-notification-silencing"; }
+    Mod+Alt+N          hotkey-overlay-title="Toggle Notification Silencing" { spawn-sh "omarchy-toggle-notification-silencing"; }
+    Mod+Alt+Shift+N    hotkey-overlay-title="Dismiss Last Notification" { spawn-sh "makoctl dismiss"; }
+    Mod+Alt+Ctrl+N     hotkey-overlay-title="Dismiss All Notifications" { spawn-sh "makoctl dismiss --all"; }
+    Mod+Alt+Comma      hotkey-overlay-title="Invoke Last Notification" { spawn-sh "makoctl invoke"; }
+    Mod+Alt+Shift+Comma hotkey-overlay-title="Restore Last Notification" { spawn-sh "makoctl restore"; }
 
     // Toggles
     Mod+Backspace          hotkey-overlay-title="Toggle Window Transparency" { spawn-sh "omarchy-niri-window-transparency-toggle"; }
