@@ -4,6 +4,7 @@ binds {
     // Standard apps — Mod+Shift
     Mod+Shift+Return  hotkey-overlay-title="Open File Manager (Current Directory)" { spawn-sh "nautilus --new-window \"$(omarchy-cmd-terminal-cwd)\""; }
     Mod+Shift+B hotkey-overlay-title="Open Browser" { spawn-sh "omarchy-launch-browser"; }
+    Mod+Shift+P hotkey-overlay-title="Open Browser (Private)" { spawn-sh "omarchy-launch-browser --private"; }
     Mod+Shift+N hotkey-overlay-title="Open Editor" { spawn-sh "omarchy-launch-editor"; }
     Mod+Shift+Slash hotkey-overlay-title="Open Passwords" { spawn-sh "omarchy-launch-or-focus keepassxc 'uwsm-app -- keepassxc'"; }
     Mod+Shift+M hotkey-overlay-title="Open Music" { spawn-sh "omarchy-launch-or-focus spotify 'uwsm-app -- spotify'"; }
