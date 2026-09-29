@@ -8,10 +8,9 @@ binds {
     Mod+Alt+Space      hotkey-overlay-title="Omarchy Menu" { spawn-sh "omarchy-menu"; }
     Mod+Escape         hotkey-overlay-title="System Menu" { spawn-sh "omarchy-menu system"; }
     Mod+Alt+T          hotkey-overlay-title="Theme Menu" { spawn-sh "omarchy-menu theme"; }
-    Mod+Alt+A          hotkey-overlay-title="Style Menu" { spawn-sh "omarchy-menu style"; }
     Mod+Alt+B          hotkey-overlay-title="Background / Wallpaper" { spawn-sh "omarchy-menu background"; }
     Mod+Alt+S          hotkey-overlay-title="Share Menu" { spawn-sh "omarchy-menu share"; }
-    Mod+Alt+O          hotkey-overlay-title="Toggle Menu" { spawn-sh "omarchy-menu toggle"; }
+    Mod+Alt+Period     hotkey-overlay-title="Toggle Menu" { spawn-sh "omarchy-menu toggle"; }
 
     // Captures
     Print              hotkey-overlay-title="Screenshot (Select Region)" { spawn-sh "omarchy-capture-screenshot"; }
