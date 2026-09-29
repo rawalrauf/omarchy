@@ -1,7 +1,6 @@
 binds {
     // System
     Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn-sh "omarchy-system-lock"; }
-    Mod+Alt+Q hotkey-overlay-title="Log Out" { spawn-sh "omarchy-system-logout"; }
     XF86PowerOff allow-when-locked=true hotkey-overlay-title="Power Menu" { spawn-sh "omarchy-menu system"; }
 
     // Menus
@@ -11,7 +10,6 @@ binds {
     Mod+Alt+T          hotkey-overlay-title="Theme Menu" { spawn-sh "omarchy-menu theme"; }
     Mod+Alt+A          hotkey-overlay-title="Style Menu" { spawn-sh "omarchy-menu style"; }
     Mod+Alt+B          hotkey-overlay-title="Background / Wallpaper" { spawn-sh "omarchy-menu background"; }
-    Mod+Alt+H          hotkey-overlay-title="Hardware Menu" { spawn-sh "omarchy-menu hardware"; }
     Mod+Alt+S          hotkey-overlay-title="Share Menu" { spawn-sh "omarchy-menu share"; }
     Mod+Alt+O          hotkey-overlay-title="Toggle Menu" { spawn-sh "omarchy-menu toggle"; }
 
@@ -33,21 +31,22 @@ binds {
     // Reminders
     Mod+Alt+R          hotkey-overlay-title="Set Reminder" { spawn-sh "omarchy-menu reminder-set"; }
     Mod+Alt+Shift+R    hotkey-overlay-title="Show Reminders" { spawn-sh "omarchy-reminder show"; }
+    Mod+Alt+Ctrl+R     hotkey-overlay-title="Clear Reminders" { spawn-sh "omarchy-reminder clear"; }
 
     // Notifications
     Mod+Alt+N          hotkey-overlay-title="Dismiss Last Notification" { spawn-sh "makoctl dismiss"; }
     Mod+Alt+Shift+N    hotkey-overlay-title="Dismiss All Notifications" { spawn-sh "makoctl dismiss --all"; }
     Mod+Alt+Shift+I    hotkey-overlay-title="Invoke Last Notification" { spawn-sh "makoctl invoke"; }
+    Mod+Alt+Ctrl+N     hotkey-overlay-title="Toggle Notification Silencing" { spawn-sh "omarchy-toggle-notification-silencing"; }
 
     // Toggles
-    Mod+Backspace      hotkey-overlay-title="Toggle Window Transparency" { spawn-sh "omarchy-niri-window-transparency-toggle"; }
-    Mod+Alt+Backspace  hotkey-overlay-title="Toggle Window Gaps" { spawn-sh "omarchy-niri-window-gaps-toggle"; }
-    Mod+Alt+D          hotkey-overlay-title="Toggle Laptop Display" { spawn-sh "omarchy-niri-monitor-internal toggle"; }
-    Mod+Alt+M          hotkey-overlay-title="Toggle Laptop Display Mirror" { spawn-sh "omarchy-niri-monitor-internal-mirror toggle"; }
-    Mod+Alt+W          hotkey-overlay-title="Toggle Top Bar (Waybar)" { spawn-sh "omarchy-toggle-waybar"; }
-    Mod+Alt+I          hotkey-overlay-title="Toggle Idle Lock" { spawn-sh "omarchy-toggle-idle"; }
-    Mod+Alt+P          hotkey-overlay-title="Toggle Notification Silencing" { spawn-sh "omarchy-toggle-notification-silencing"; }
-    Mod+Alt+Escape     allow-inhibiting=false hotkey-overlay-title="Toggle Keyboard Shortcuts Inhibitor" { toggle-keyboard-shortcuts-inhibit; }
+    Mod+Backspace          hotkey-overlay-title="Toggle Window Transparency" { spawn-sh "omarchy-niri-window-transparency-toggle"; }
+    Mod+Alt+Backspace      hotkey-overlay-title="Toggle Window Gaps" { spawn-sh "omarchy-niri-window-gaps-toggle"; }
+    Mod+Alt+Delete         hotkey-overlay-title="Toggle Laptop Display" { spawn-sh "omarchy-niri-monitor-internal toggle"; }
+    Mod+Alt+Shift+Delete   hotkey-overlay-title="Toggle Laptop Display Mirror" { spawn-sh "omarchy-niri-monitor-internal-mirror toggle"; }
+    Mod+Alt+W              hotkey-overlay-title="Toggle Top Bar (Waybar)" { spawn-sh "omarchy-toggle-waybar"; }
+    Mod+Alt+I              hotkey-overlay-title="Toggle Idle Lock" { spawn-sh "omarchy-toggle-idle"; }
+    Mod+Alt+Escape         allow-inhibiting=false hotkey-overlay-title="Toggle Keyboard Shortcuts Inhibitor" { toggle-keyboard-shortcuts-inhibit; }
 
     // Voxtype dictation (only active if voxtype is installed)
     Mod+Alt+X          hotkey-overlay-title="Toggle Dictation" { spawn-sh "omarchy-cmd-present voxtype && voxtype record toggle || notify-send -u low 'Dictation not installed' 'Install via Menu → Install → AI → Dictation'"; }
