@@ -10,7 +10,7 @@ binds {
     Mod+Shift+Z hotkey-overlay-title="Open Writing App" { spawn-sh "uwsm-app -- typora --enable-wayland-ime"; }
 
     // Web apps — Mod+Shift
-    Mod+Shift+E hotkey-overlay-title="Open Email" { spawn-sh "omarchy-launch-webapp 'https://app.hey.com'"; }
+    Mod+Shift+E hotkey-overlay-title="Open Email" { spawn-sh "omarchy-launch-or-focus-webapp 'https://mail.google.com'"; }
     Mod+Shift+Y hotkey-overlay-title="Open YouTube" { spawn-sh "omarchy-launch-webapp 'https://youtube.com'"; }
     Mod+Shift+W hotkey-overlay-title="Open WhatsApp" { spawn-sh "omarchy-launch-or-focus-webapp 'https://web.whatsapp.com'"; }
 
