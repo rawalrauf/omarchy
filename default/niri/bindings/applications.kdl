@@ -1,8 +1,8 @@
 binds {
     Mod+Return        hotkey-overlay-title="Open a Terminal (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\""; }
-    Mod+Shift+Return  hotkey-overlay-title="Open Tmux (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\" bash -c 'tmux attach || tmux new -s Work'"; }
 
     // Standard apps — Mod+Shift
+    Mod+Shift+Return  hotkey-overlay-title="Open Tmux (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\" bash -c 'tmux attach || tmux new -s Work'"; }
     Mod+Shift+F hotkey-overlay-title="Open File Manager (Current Directory)" { spawn-sh "nautilus --new-window \"$(omarchy-cmd-terminal-cwd)\""; }
     Mod+Shift+B hotkey-overlay-title="Open Browser" { spawn-sh "omarchy-launch-browser"; }
     Mod+Shift+P hotkey-overlay-title="Open Browser (Private)" { spawn-sh "omarchy-launch-browser --private"; }
@@ -18,7 +18,6 @@ binds {
     Mod+Shift+E hotkey-overlay-title="Open Email (Gmail)" { spawn-sh "omarchy-launch-or-focus-webapp 'https://mail.google.com'"; }
 
     // TUI / system controls — Mod+Shift+Ctrl
-    Mod+Shift+Ctrl+Return hotkey-overlay-title="Open Tmux (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\" bash -c 'tmux attach || tmux new -s Work'"; }
     Mod+Shift+Ctrl+A hotkey-overlay-title="Audio Controls" { spawn-sh "omarchy-launch-audio"; }
     Mod+Shift+Ctrl+B hotkey-overlay-title="Bluetooth Controls" { spawn-sh "omarchy-launch-bluetooth"; }
     Mod+Shift+Ctrl+W hotkey-overlay-title="Wifi Controls" { spawn-sh "omarchy-launch-wifi"; }
