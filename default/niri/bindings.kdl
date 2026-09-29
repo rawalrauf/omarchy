@@ -1,3 +1,4 @@
 include "~/.local/share/omarchy/default/niri/bindings/tiling.kdl"
 include "~/.local/share/omarchy/default/niri/bindings/media.kdl"
+include "~/.local/share/omarchy/default/niri/bindings/applications.kdl"
 include "~/.local/share/omarchy/default/niri/bindings/utilities.kdl"
