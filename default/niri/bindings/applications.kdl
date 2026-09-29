@@ -1,23 +1,25 @@
 binds {
     Mod+T             hotkey-overlay-title="Open a Terminal" { spawn "xdg-terminal-exec"; }
     Mod+Return        hotkey-overlay-title="Open a Terminal (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\""; }
-    Mod+Ctrl+Return   hotkey-overlay-title="Open Tmux (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\" bash -c 'tmux attach || tmux new -s Work'"; }
     Mod+Shift+Return  hotkey-overlay-title="Open File Manager (Current Directory)" { spawn-sh "nautilus --new-window \"$(omarchy-cmd-terminal-cwd)\""; }
 
+    // Standard apps — Mod+Shift
     Mod+Shift+B hotkey-overlay-title="Open Browser" { spawn-sh "omarchy-launch-browser"; }
     Mod+Shift+N hotkey-overlay-title="Open Editor" { spawn-sh "omarchy-launch-editor"; }
     Mod+Shift+Slash hotkey-overlay-title="Open Passwords" { spawn-sh "omarchy-launch-or-focus keepassxc 'uwsm-app -- keepassxc'"; }
     Mod+Shift+M hotkey-overlay-title="Open Music" { spawn-sh "omarchy-launch-or-focus spotify 'uwsm-app -- spotify'"; }
-    Mod+Shift+D hotkey-overlay-title="Open Docker TUI" { spawn-sh "omarchy-launch-tui lazydocker"; }
     Mod+Shift+Z hotkey-overlay-title="Open Writing App" { spawn-sh "uwsm-app -- typora --enable-wayland-ime"; }
 
+    // Web apps — Mod+Shift
     Mod+Shift+E hotkey-overlay-title="Open Email" { spawn-sh "omarchy-launch-webapp 'https://app.hey.com'"; }
     Mod+Shift+Y hotkey-overlay-title="Open YouTube" { spawn-sh "omarchy-launch-webapp 'https://youtube.com'"; }
     Mod+Shift+W hotkey-overlay-title="Open WhatsApp" { spawn-sh "omarchy-launch-or-focus-webapp WhatsApp 'https://web.whatsapp.com'"; }
 
-    // System control TUIs
-    Mod+Ctrl+A hotkey-overlay-title="Audio Controls" { spawn-sh "omarchy-launch-audio"; }
-    Mod+Ctrl+B hotkey-overlay-title="Bluetooth Controls" { spawn-sh "omarchy-launch-bluetooth"; }
-    Mod+Ctrl+W hotkey-overlay-title="Wifi Controls" { spawn-sh "omarchy-launch-wifi"; }
-    Mod+Ctrl+T hotkey-overlay-title="Activity Monitor" { spawn-sh "omarchy-launch-or-focus-tui btop"; }
+    // TUI / system controls — Mod+Shift+Ctrl
+    Mod+Shift+Ctrl+Return hotkey-overlay-title="Open Tmux (Current Directory)" { spawn-sh "xdg-terminal-exec --dir=\"$(omarchy-cmd-terminal-cwd)\" bash -c 'tmux attach || tmux new -s Work'"; }
+    Mod+Shift+Ctrl+A hotkey-overlay-title="Audio Controls" { spawn-sh "omarchy-launch-audio"; }
+    Mod+Shift+Ctrl+B hotkey-overlay-title="Bluetooth Controls" { spawn-sh "omarchy-launch-bluetooth"; }
+    Mod+Shift+Ctrl+W hotkey-overlay-title="Wifi Controls" { spawn-sh "omarchy-launch-wifi"; }
+    Mod+Shift+Ctrl+T hotkey-overlay-title="Activity Monitor" { spawn-sh "omarchy-launch-or-focus-tui btop"; }
+    Mod+Shift+Ctrl+D hotkey-overlay-title="Docker TUI" { spawn-sh "omarchy-launch-tui lazydocker"; }
 }
