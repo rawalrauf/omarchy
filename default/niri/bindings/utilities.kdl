@@ -1,5 +1,4 @@
 binds {
-    Mod+Q repeat=false hotkey-overlay-title="Close Window" { close-window; }
     Mod+Ctrl+L hotkey-overlay-title="Lock the Screen" { spawn-sh "omarchy-system-lock"; }
     Mod+Shift+Q hotkey-overlay-title="Log Out" { spawn-sh "omarchy-system-logout"; }
 
