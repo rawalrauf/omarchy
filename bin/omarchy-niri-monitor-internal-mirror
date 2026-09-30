@@ -3,8 +3,8 @@
 # omarchy:summary=Toggle mirroring the internal laptop display to an external monitor via wl-mirror
 # omarchy:args=<on|off|toggle|recover>
 
-STATE_FILE="$HOME/.local/state/omarchy/mirror-on"
-mkdir -p "$HOME/.local/state/omarchy"
+STATE_FILE="$HOME/.local/state/omarchy/toggles/niri/mirror-on"
+mkdir -p "$(dirname "$STATE_FILE")"
 
 INTERNAL=$(niri msg outputs 2>/dev/null | grep -oP '\(\K[^)]+' | grep "eDP" | head -1)
 EXTERNAL=$(niri msg outputs 2>/dev/null | grep -oP '\(\K[^)]+' | grep -v "eDP\|preferred\|current" | head -1)
@@ -28,20 +28,30 @@ enable() {
 }
 
 disable() {
-  pkill -x wl-mirror 2>/dev/null || true
+  local FOCUSED_ID
+  FOCUSED_ID=$(niri msg --json focused-window 2>/dev/null | jq -r '.id // empty')
+
+  local mirror_id
+  mirror_id=$(niri msg --json windows 2>/dev/null | jq -r '.[] | select(.app_id == "at.yrlf.wl_mirror") | .id // empty' | head -1)
+
+  if [[ -n $mirror_id ]]; then
+    niri msg action close-window --id "$mirror_id" 2>/dev/null
+  else
+    pkill -x wl-mirror 2>/dev/null || true
+  fi
+
+  if [[ -n $FOCUSED_ID ]]; then
+    niri msg action focus-window --id "$FOCUSED_ID" 2>/dev/null
+  fi
+
   rm -f "$STATE_FILE"
   notify-send -u low "󰍹  Mirroring disabled"
 }
 
 recover() {
-  if [[ -f $STATE_FILE ]]; then
-    if [[ -n $EXTERNAL ]]; then
-      pkill -x wl-mirror 2>/dev/null || true
-      sleep 1
-      enable
-    else
-      pkill -x wl-mirror 2>/dev/null || true
-    fi
+  if ! omarchy-hw-external-monitors && [[ -f $STATE_FILE ]]; then
+    pkill -x wl-mirror 2>/dev/null || true
+    rm -f "$STATE_FILE"
   fi
 }
 
