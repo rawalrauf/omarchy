@@ -8,6 +8,4 @@ sddm install scripts add and rename hyprland-uwsm edit those, remove cross curso
 
 add omarchy restart niri in omarchy-theme-set if needed
 
-swayidle triggering hyrplock that trun blank after 3 secs, and keyboard light won't come back
-
 new gum has breaking changes so look for its updated syntax, currently switching back to old version

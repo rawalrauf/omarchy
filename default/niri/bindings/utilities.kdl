@@ -23,6 +23,7 @@ binds {
 
     // Tools
     Mod+K              hotkey-overlay-title="Keybindings" { spawn-sh "omarchy-menu-keybindings"; }
+    Mod+Alt+K          hotkey-overlay-title="Tmux Keybindings" { spawn-sh "omarchy-menu-tmux-keybindings"; }
     Mod+Alt+E          hotkey-overlay-title="Emoji Picker" { spawn-sh "omarchy-launch-walker -m symbols"; }
     Mod+Alt+C          allow-when-locked=true hotkey-overlay-title="Clipboard History" { spawn-sh "omarchy-launch-walker -m clipboard"; }
     XF86Calculator     hotkey-overlay-title="Calculator" { spawn "gnome-calculator"; }
