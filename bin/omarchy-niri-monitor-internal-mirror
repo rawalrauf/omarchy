@@ -55,7 +55,7 @@ disable() {
     niri msg action focus-window --id "$FOCUSED_ID" 2>/dev/null
   fi
 
-  rm -f "$STATE_FILE"
+  rm -f "$STATE_FILE" "$HOME/.local/state/omarchy/toggles/niri/wl-mirror-output.kdl"
   notify-send -u low "󰍹  Mirroring disabled"
 }
 
