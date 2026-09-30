@@ -2,13 +2,14 @@
 
 # omarchy:summary=Watch niri output events and recover monitor state when a monitor is removed
 
-LAST_TRIGGER=0
+LAST_TRIGGER_FILE="/tmp/omarchy-monitor-watch-trigger"
 
 niri msg --json event-stream 2>/dev/null | while read -r event; do
   if echo "$event" | grep -q '"WorkspacesChanged"'; then
     NOW=$(date +%s)
-    if (( NOW - LAST_TRIGGER >= 3 )); then
-      LAST_TRIGGER=$NOW
+    LAST=$(cat "$LAST_TRIGGER_FILE" 2>/dev/null || echo 0)
+    if (( NOW - LAST >= 3 )); then
+      echo "$NOW" > "$LAST_TRIGGER_FILE"
       omarchy-niri-monitor-internal recover
       omarchy-niri-monitor-internal-mirror recover
     fi
