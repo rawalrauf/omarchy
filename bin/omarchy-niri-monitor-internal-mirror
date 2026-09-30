@@ -26,11 +26,10 @@ enable() {
   local new_rule="window-rule {
     match app-id=\"at.yrlf.wl_mirror\"
     open-on-output \"$EXTERNAL\"
-    open-focused false
 }"
   if [[ "$(cat "$RULE_FILE" 2>/dev/null)" != "$new_rule" ]]; then
     echo "$new_rule" > "$RULE_FILE"
-    niri msg action load-config-file 2>/dev/null
+    omarchy-restart-niri
   fi
 
   nohup wl-mirror --fullscreen-output "$EXTERNAL" "$INTERNAL" >/dev/null 2>&1 &
@@ -62,8 +61,7 @@ disable() {
 
 recover() {
   if ! omarchy-hw-external-monitors && [[ -f $STATE_FILE ]]; then
-    pkill -x wl-mirror 2>/dev/null || true
-    rm -f "$STATE_FILE"
+    disable
   fi
 }
 
