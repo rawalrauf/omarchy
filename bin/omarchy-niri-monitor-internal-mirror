@@ -32,10 +32,18 @@ window-rule {
 KDL
 
   niri msg action load-config-file 2>/dev/null
-  sleep 0.1
 
+  local FOCUSED_ID
+  FOCUSED_ID=$(niri msg --json focused-window 2>/dev/null | jq -r '.id // empty')
+
+  niri msg action focus-monitor "$EXTERNAL" 2>/dev/null
   nohup wl-mirror --fullscreen-output "$EXTERNAL" "$INTERNAL" >/dev/null 2>&1 &
   disown $!
+
+  if [[ -n $FOCUSED_ID ]]; then
+    niri msg action focus-window --id "$FOCUSED_ID" 2>/dev/null
+  fi
+
   touch "$STATE_FILE"
   notify-send -u low "󰍹  Mirroring enabled on $EXTERNAL"
 }
@@ -72,7 +80,7 @@ recover() {
       enable
     else
       pkill -x wl-mirror 2>/dev/null || true
-      rm -f "$RULE_FILE" "$STATE_FILE"
+      rm -f "$RULE_FILE"
       niri msg action load-config-file 2>/dev/null
     fi
   fi
