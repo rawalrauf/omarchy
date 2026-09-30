@@ -119,4 +119,4 @@ fi
 records=$(output_keybindings)
 monitor_height=$(niri msg --json focused-output 2>/dev/null | jq -r '.logical.height // 1080')
 menu_height=$((monitor_height * 40 / 100))
-printf '%s\n' "$records" | omarchy-menu-select 'Tmux keybindings' -- --width 800 --height "$menu_height" >/dev/null || true
+printf '%s\n' "$records" | walker --dmenu -p 'Tmux keybindings' --width 800 --height "$menu_height" >/dev/null || true
