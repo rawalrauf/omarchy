@@ -21,6 +21,18 @@ enable() {
   if pgrep -x wl-mirror >/dev/null; then
     return 0
   fi
+
+  local RULE_FILE="$HOME/.local/state/omarchy/toggles/niri/wl-mirror-output.kdl"
+  local new_rule="window-rule {
+    match app-id=\"at.yrlf.wl_mirror\"
+    open-on-output \"$EXTERNAL\"
+    open-focused false
+}"
+  if [[ "$(cat "$RULE_FILE" 2>/dev/null)" != "$new_rule" ]]; then
+    echo "$new_rule" > "$RULE_FILE"
+    niri msg action load-config-file 2>/dev/null
+  fi
+
   nohup wl-mirror --fullscreen-output "$EXTERNAL" "$INTERNAL" >/dev/null 2>&1 &
   disown $!
   touch "$STATE_FILE"
