@@ -10,6 +10,21 @@ mkdir -p "$HOME/.local/state/omarchy/toggles/niri"
 INTERNAL=$(niri msg outputs 2>/dev/null | grep -oP '\(\K[^)]+' | grep "eDP" | head -1)
 EXTERNAL=$(niri msg outputs 2>/dev/null | grep -oP '\(\K[^)]+' | grep -v "eDP\|preferred\|current" | head -1)
 
+write_rule() {
+  local new_rule
+  new_rule="window-rule {
+    match app-id=\"at.yrlf.wl_mirror\"
+    open-on-output \"$EXTERNAL\"
+    open-focused false
+}"
+  local existing
+  existing=$(cat "$RULE_FILE" 2>/dev/null)
+  if [[ "$existing" != "$new_rule" ]]; then
+    echo "$new_rule" > "$RULE_FILE"
+    niri msg action load-config-file 2>/dev/null
+  fi
+}
+
 enable() {
   if [[ -z $EXTERNAL ]]; then
     notify-send -u low "󰍹  No external monitor found"
@@ -23,15 +38,7 @@ enable() {
     return 0
   fi
 
-  cat > "$RULE_FILE" <<KDL
-window-rule {
-    match app-id="at.yrlf.wl_mirror"
-    open-on-output "$EXTERNAL"
-    open-focused false
-}
-KDL
-
-  niri msg action load-config-file 2>/dev/null
+  write_rule
 
   local FOCUSED_ID
   FOCUSED_ID=$(niri msg --json focused-window 2>/dev/null | jq -r '.id // empty')
@@ -65,8 +72,7 @@ disable() {
     niri msg action focus-window --id "$FOCUSED_ID" 2>/dev/null
   fi
 
-  rm -f "$RULE_FILE" "$STATE_FILE"
-  niri msg action load-config-file 2>/dev/null
+  rm -f "$STATE_FILE"
   notify-send -u low "󰍹  Mirroring disabled"
 }
 
@@ -80,8 +86,6 @@ recover() {
       enable
     else
       pkill -x wl-mirror 2>/dev/null || true
-      rm -f "$RULE_FILE"
-      niri msg action load-config-file 2>/dev/null
     fi
   fi
 }
