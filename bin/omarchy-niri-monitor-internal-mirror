@@ -30,7 +30,9 @@ enable() {
     match app-id=\"at.yrlf.wl_mirror\"
     open-on-output \"$EXTERNAL\"
 }"
-  if [[ "$(cat "$RULE_FILE" 2>/dev/null)" != "$new_rule" ]]; then
+  local current_output
+  current_output=$(grep -oP 'open-on-output "\K[^"]+' "$RULE_FILE" 2>/dev/null)
+  if [[ "$current_output" != "$EXTERNAL" ]]; then
     echo "$new_rule" > "$RULE_FILE"
     omarchy-restart-niri
   fi
