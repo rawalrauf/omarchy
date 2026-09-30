@@ -21,14 +21,49 @@ enable() {
   if pgrep -x wl-mirror >/dev/null; then
     return 0
   fi
+
+  local FOCUSED_ID
+  FOCUSED_ID=$(niri msg --json focused-window 2>/dev/null | jq -r '.id // empty')
+
   nohup wl-mirror --fullscreen-output "$EXTERNAL" "$INTERNAL" >/dev/null 2>&1 &
   disown $!
+
+  local count=0
+  local mirror_id=""
+  while [[ -z $mirror_id ]] && (( count < 30 )); do
+    sleep 0.1
+    mirror_id=$(niri msg --json windows 2>/dev/null | jq -r '.[] | select(.app_id == "at.yrlf.wl_mirror") | .id // empty' | head -1)
+    (( count++ ))
+  done
+
+  if [[ -n $mirror_id ]]; then
+    niri msg action move-window-to-monitor --id "$mirror_id" "$EXTERNAL" 2>/dev/null
+    if [[ -n $FOCUSED_ID ]]; then
+      niri msg action focus-window --id "$FOCUSED_ID" 2>/dev/null
+    fi
+  fi
+
   touch "$STATE_FILE"
   notify-send -u low "󰍹  Mirroring enabled on $EXTERNAL"
 }
 
 disable() {
-  pkill -x wl-mirror 2>/dev/null || true
+  local FOCUSED_ID
+  FOCUSED_ID=$(niri msg --json focused-window 2>/dev/null | jq -r '.id // empty')
+
+  local mirror_id
+  mirror_id=$(niri msg --json windows 2>/dev/null | jq -r '.[] | select(.app_id == "at.yrlf.wl_mirror") | .id // empty' | head -1)
+
+  if [[ -n $mirror_id ]]; then
+    niri msg action close-window --id "$mirror_id" 2>/dev/null
+  else
+    pkill -x wl-mirror 2>/dev/null || true
+  fi
+
+  if [[ -n $FOCUSED_ID ]]; then
+    niri msg action focus-window --id "$FOCUSED_ID" 2>/dev/null
+  fi
+
   rm -f "$STATE_FILE"
   notify-send -u low "󰍹  Mirroring disabled"
 }
@@ -36,7 +71,9 @@ disable() {
 recover() {
   if [[ -f $STATE_FILE ]]; then
     if [[ -n $EXTERNAL ]]; then
-      pkill -x wl-mirror 2>/dev/null || true
+      local mirror_id
+      mirror_id=$(niri msg --json windows 2>/dev/null | jq -r '.[] | select(.app_id == "at.yrlf.wl_mirror") | .id // empty' | head -1)
+      [[ -n $mirror_id ]] && niri msg action close-window --id "$mirror_id" 2>/dev/null || pkill -x wl-mirror 2>/dev/null || true
       sleep 1
       enable
     else
