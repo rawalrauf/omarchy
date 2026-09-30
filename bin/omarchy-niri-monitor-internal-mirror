@@ -11,8 +11,7 @@ INTERNAL=$(niri msg outputs 2>/dev/null | grep -oP '\(\K[^)]+' | grep "eDP" | he
 EXTERNAL=$(niri msg outputs 2>/dev/null | grep -oP '\(\K[^)]+' | grep -v "eDP\|preferred\|current" | head -1)
 
 write_rule() {
-  local new_rule
-  new_rule="window-rule {
+  local new_rule="window-rule {
     match app-id=\"at.yrlf.wl_mirror\"
     open-on-output \"$EXTERNAL\"
     open-focused false
@@ -78,15 +77,8 @@ disable() {
 
 recover() {
   if [[ -f $STATE_FILE ]]; then
-    if [[ -n $EXTERNAL ]]; then
-      local mirror_id
-      mirror_id=$(niri msg --json windows 2>/dev/null | jq -r '.[] | select(.app_id == "at.yrlf.wl_mirror") | .id // empty' | head -1)
-      [[ -n $mirror_id ]] && niri msg action close-window --id "$mirror_id" 2>/dev/null || pkill -x wl-mirror 2>/dev/null || true
-      sleep 1
-      enable
-    else
-      pkill -x wl-mirror 2>/dev/null || true
-    fi
+    pkill -x wl-mirror 2>/dev/null || true
+    rm -f "$STATE_FILE"
   fi
 }
 
