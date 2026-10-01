@@ -31,7 +31,13 @@
     padding: 0px 10px;
 }
 
-#custom-screenrecording-indicator,
+#custom-omarchy {
+  min-width: 12px;
+  margin: 0 7.5px;
+  font-size: 16px;
+}
+
+
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-update,

@@ -29,6 +29,7 @@
     "pulseaudio#microphone",
     "battery",
     "clock",
+    "custom/omarchy",
   ],
 "niri/workspaces": {
   "format": "{icon} {index}",
@@ -214,5 +215,11 @@
     "tooltip-format-connected": " {device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}",
     "on-click": "omarchy-launch-bluetooth",
+  },
+  "custom/omarchy": {
+    "format": "<span font='omarchy'>\ue900</span>",
+    "on-click": "omarchy-menu",
+    "on-click-right": "xdg-terminal-exec",
+    "tooltip-format": "Omarchy Menu\n\nMod + Alt + Space"
   },
 }
