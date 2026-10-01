@@ -5,14 +5,13 @@ autoconf-archive
 asusctl
 base
 base-devel
-broadcom-wl
+broadcom-wl-dkms
 btrfs-progs
 dkms
 egl-wayland
 git
 gst-plugin-pipewire
 gtk4-layer-shell
-jdk-openjdk
 libpulse
 intel-ipu7-camera
 intel-lpmd
@@ -25,8 +24,6 @@ limine-snapper-sync
 linux
 linux-firmware
 linux-headers
-linux-ptl
-linux-ptl-headers
 macbook12-spi-driver-dkms
 nvidia-580xx-dkms
 nvidia-dkms
@@ -70,4 +67,3 @@ apple-t2-audio-config
 linux-t2
 linux-t2-headers
 t2fanrd
-tiny-dfr
