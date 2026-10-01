@@ -46,7 +46,7 @@ binds {
     Mod+Alt+Delete         hotkey-overlay-title="Toggle Laptop Display" { spawn-sh "omarchy-niri-monitor-internal toggle"; }
     Mod+Alt+Shift+Delete   hotkey-overlay-title="Toggle Laptop Display Mirror" { spawn-sh "omarchy-niri-monitor-internal-mirror toggle"; }
     Mod+Alt+W              hotkey-overlay-title="Toggle Top Bar (Waybar)" { spawn-sh "omarchy-toggle-waybar"; }
-    Mod+Alt+Shift+W        hotkey-overlay-title="Toggle Waybar Transparency" { spawn-sh "omarchy-toggle-waybar-transparency"; }
+    Mod+Alt+Shift+W        hotkey-overlay-title="Toggle Top Bar Transparency (Waybar)" { spawn-sh "omarchy-toggle-waybar-transparency"; }
     Mod+Alt+I              hotkey-overlay-title="Toggle Idle Lock" { spawn-sh "omarchy-toggle-idle"; }
     Mod+Alt+Escape         allow-inhibiting=false hotkey-overlay-title="Toggle Keyboard Shortcuts Inhibitor" { toggle-keyboard-shortcuts-inhibit; }
 

@@ -216,7 +216,7 @@ show_toggle_menu() {
   local idle="󱫖  Idle Lock"
   local notifications="󰂛  Notifications"
   local bar="󰍜  Top Bar"
-  local barTransparency="󰍜  Waybar Transparency"
+  local barTransparency="󰍜  Top Bar Transparency"
   local gaps="  Window Gaps"
   local transparency="󰂵  Window Transparency"
   local directboot="  Direct Boot"
