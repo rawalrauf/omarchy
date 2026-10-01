@@ -3,5 +3,5 @@
 # omarchy:summary=Display a "Done!" message with a spinner and wait for user to press any key.
 
 echo
-echo "Done! Press any key to close..."
+gum style --foreground 212 --bold "🌐  Done! Press any key to close..."
 read -n 1 -s
