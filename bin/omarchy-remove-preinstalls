@@ -11,24 +11,14 @@ if gum confirm "Are you sure you want to remove all preinstalled web apps, TUI w
   omarchy-refresh-niri
 
   # Remove npx stubs
-  rm -f ~/.local/bin/codex ~/.local/bin/gemini ~/.local/bin/copilot \
-       ~/.local/bin/opencode ~/.local/bin/playwright-cli ~/.local/bin/pi \
-       ~/.local/bin/ghui
+  rm -f ~/.local/bin/opencode ~/.local/bin/ghui
 
   omarchy-pkg-drop \
     aether \
-    cliamp \
     typora \
     spotify \
     libreoffice-fresh \
-    xournalpp \
-    signal-desktop \
-    pinta \
-    obsidian \
-    obs-studio \
-    kdenlive \
     lazydocker \
     keepassxc \
-    opencode \
-    claude-code
+    opencode
 fi

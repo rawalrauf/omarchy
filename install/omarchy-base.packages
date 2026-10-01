@@ -1,6 +1,5 @@
 # Omarchy core package list installed via install/packaging/base.sh
 # This file is also used by the ISO builder when determining needs
-
 niri
 swaybg
 swayosd
@@ -21,8 +20,6 @@ brightnessctl
 btop
 chromium
 clang
-claude-code
-cliamp
 cups
 cups-browsed
 cups-filters
@@ -64,7 +61,6 @@ inetutils
 inxi
 iwd
 jq
-kdenlive
 kernel-modules-hook
 kvantum-qt5
 lazydocker
@@ -90,12 +86,9 @@ noto-fonts-cjk
 noto-fonts-emoji
 nss-mdns
 nvim
-obs-studio
-obsidian
 omarchy-nvim
 omarchy-walker
 pamixer
-pinta
 playerctl
 plocate
 plymouth
@@ -111,7 +104,6 @@ ruby
 rust
 satty
 sddm
-signal-desktop
 slurp
 spotify
 socat
@@ -144,7 +136,6 @@ xdg-desktop-portal-gtk
 xdg-terminal-exec
 wl-mirror
 xmlstarlet
-xournalpp
 yaru-icon-theme
 yay
 zoxide
