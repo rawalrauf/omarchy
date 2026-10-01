@@ -13,7 +13,7 @@ if [[ -f $STATE_FILE ]]; then
 else
   mkdir -p "$(dirname "$STATE_FILE")"
   touch "$STATE_FILE"
-  printf 'window#waybar {\n    background-color: transparent;\n    border-bottom: none;\n}\n' > "$TRANSPARENT_CSS"
+  printf 'window#waybar,\nwindow#waybar * {\n    background-color: transparent;\n}\nwindow#waybar {\n    border-bottom: none;\n}\n' > "$TRANSPARENT_CSS"
   notify-send -u low "󰍜  Waybar background transparent"
 fi
 
