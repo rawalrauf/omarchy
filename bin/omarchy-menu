@@ -235,7 +235,7 @@ show_toggle_menu() {
   *Idle*) omarchy-toggle-idle ;;
   *Notifications*) omarchy-toggle-notification-silencing ;;
   *"Top Bar"*) omarchy-toggle-waybar ;;
-  *"Waybar Transparency"*) omarchy-toggle-waybar-transparency ;;
+  *"Top Bar Transparency"*) omarchy-toggle-waybar-transparency ;;
   *Gaps*) omarchy-niri-window-gaps-toggle ;;
   *Transparency*) omarchy-niri-window-transparency-toggle ;;
   *Scaling*) show_monitor_scaling_menu ;;
