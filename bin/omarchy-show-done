@@ -3,5 +3,7 @@
 # omarchy:summary=Display a "Done!" message with a spinner and wait for user to press any key.
 
 echo
-gum style --foreground 212 --bold "🌐  Done! Press any key to close..."
+gum spin --spinner "globe" --title "Done! Press any key to close..." bash -c 'sleep infinity' &
+SPIN_PID=$!
 read -n 1 -s
+kill $SPIN_PID 2>/dev/null || true
