@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# omarchy:summary=Check if a niri toggle flag is currently disabled.
+# omarchy:args=<flag-name>
+
+[[ ! -f "$HOME/.local/state/omarchy/toggles/niri/$1.kdl" ]]
