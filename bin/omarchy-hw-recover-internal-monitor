@@ -4,6 +4,6 @@
 
 TOGGLE="$HOME/.local/state/omarchy/toggles/niri/internal-monitor-off"
 
-if [[ -f $TOGGLE ]] && ! omarchy-hw-external-monitors; then
+if omarchy-niri-toggle-enabled internal-monitor-off && ! omarchy-hw-external-monitors; then
   rm -f "$TOGGLE"
 fi

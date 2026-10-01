@@ -30,7 +30,7 @@ disable() {
 }
 
 recover() {
-  if ! omarchy-hw-external-monitors && [[ -f $STATE_FILE ]]; then
+  if ! omarchy-hw-external-monitors && omarchy-niri-toggle-enabled internal-monitor-off; then
     enable
   fi
 }
@@ -38,7 +38,7 @@ recover() {
 case "$1" in
   on) enable ;;
   off) disable ;;
-  toggle) [[ -f $STATE_FILE ]] && enable || disable ;;
+  toggle) omarchy-niri-toggle-enabled internal-monitor-off && enable || disable ;;
   recover) recover ;;
   *)
     echo "Usage: $(basename "$0") {on|off|toggle|recover}" >&2

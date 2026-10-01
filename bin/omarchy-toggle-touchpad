@@ -21,5 +21,5 @@ disable() {
 case "${1:-toggle}" in
   on) enable ;;
   off) disable ;;
-  toggle) [[ -f $STATE_FILE ]] && enable || disable ;;
+  toggle) omarchy-niri-toggle-enabled touchpad-disabled && enable || disable ;;
 esac
