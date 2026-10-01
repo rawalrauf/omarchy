@@ -53,6 +53,7 @@ fi
 if pgrep -x waybar >/dev/null; then
   omarchy-restart-waybar
 fi
+omarchy-restart-niri
 omarchy-restart-swayosd
 omarchy-restart-terminal
 omarchy-restart-btop

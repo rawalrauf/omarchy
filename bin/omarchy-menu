@@ -487,7 +487,7 @@ show_setup_default_editor_menu() {
 show_setup_config_menu() {
   case $(menu "Setup" "  Swayidle\n  Hyprlock\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n󰞅  Compose Shortcuts") in
   *Swayidle*) open_in_editor ~/.config/swayidle/swayidle.conf && omarchy-restart-swayidle ;;
-  *Hyprlock*) open_in_editor ~/.config/hypr/hyprlock.conf ;;
+  *Hyprlock*) open_in_editor ~/.config/hypr/hyprlock.conf && pkill -x hyprlock || true ;;
   *Swayosd*) open_in_editor ~/.config/swayosd/config.toml && omarchy-restart-swayosd ;;
   *Walker*) open_in_editor ~/.config/walker/config.toml && omarchy-restart-walker ;;
   *Waybar*) open_in_editor ~/.config/waybar/config.jsonc && omarchy-restart-waybar ;;

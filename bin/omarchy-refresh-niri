@@ -10,4 +10,4 @@ omarchy-refresh-config niri/monitors.kdl
 omarchy-refresh-config niri/input.kdl
 omarchy-refresh-config niri/flags.kdl
 
-niri msg action load-config-file 2>/dev/null || true
+omarchy-restart-niri 2>/dev/null || true
