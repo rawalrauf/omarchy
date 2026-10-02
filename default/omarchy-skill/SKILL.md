@@ -2,174 +2,207 @@
 name: omarchy
 description: >
   REQUIRED for end-user customization of Linux desktop, window manager, or system config.
-  Use when editing ~/.config/hypr/, ~/.config/waybar/, ~/.config/walker/,
+  Use when editing ~/.config/niri/, ~/.config/waybar/, ~/.config/walker/,
   ~/.config/alacritty/, ~/.config/foot/, ~/.config/kitty/, ~/.config/ghostty/, ~/.config/mako/,
-  or ~/.config/omarchy/. Triggers: Hyprland, window rules, animations, keybindings,
-  monitors, gaps, borders, blur, opacity, waybar, walker, terminal config, themes,
-  wallpaper, night light, idle, lock screen, screenshots, reminders, layer rules,
-  workspace settings, display config, and user-facing omarchy commands. Excludes Omarchy
-  source development in ~/.local/share/omarchy/ and `omarchy dev` workflows.
+  or ~/.config/omarchy/. Triggers: niri, window rules, keybindings, monitors, gaps, borders,
+  opacity, waybar, walker, terminal config, themes, wallpaper, night light, idle, lock screen,
+  screenshots, layer rules, workspace settings, display config, and user-facing omarchy commands.
+  Excludes Omarchy source development in ~/.local/share/omarchy/ and `omarchy dev` workflows.
 ---
 
 # Omarchy Skill
 
-Manage [Omarchy](https://omarchy.org/) Linux systems - a beautiful, modern, opinionated Arch Linux distribution with Hyprland.
+Manage a custom niri-based Arch Linux system built on top of [Omarchy](https://omarchy.org/).
 
-This skill is for end-user customization on installed systems.
-It is not for contributing to Omarchy source code.
+This is a fork of DHH's omarchy — migrated from Hyprland to **niri** as the Wayland compositor.
+This skill is for end-user customization on installed systems only.
+It is NOT for contributing to Omarchy source code.
 
 ## When This Skill MUST Be Used
 
 **ALWAYS invoke this skill for end-user requests involving ANY of these:**
 
-- Editing ANY file in `~/.config/hypr/` (window rules, animations, keybindings, monitors, etc.)
+- Editing ANY file in `~/.config/niri/` (window rules, keybindings, monitors, looknfeel, etc.)
 - Editing ANY file in `~/.config/waybar/`, `~/.config/walker/`, `~/.config/mako/`
 - Editing terminal configs (alacritty, foot, kitty, ghostty)
 - Editing ANY file in `~/.config/omarchy/`
-- Window behavior, animations, opacity, blur, gaps, borders
-- Layer rules, workspace settings, display/monitor configuration
+- Window behavior, opacity, gaps, borders, layer rules, workspace settings
 - Themes, wallpapers, fonts, appearance changes
-- User-facing `omarchy` commands (`omarchy theme ...`, `omarchy refresh ...`, `omarchy restart ...`, etc.)
+- Display/monitor configuration, mirror mode
 - Screenshots, screen recording, reminders, night light, idle behavior, lock screen
+- User-facing `omarchy` commands
 
 **If you're about to edit a config file in ~/.config/ on this system, STOP and use this skill first.**
 
-**Do NOT use this skill for Omarchy development tasks** (editing files in `~/.local/share/omarchy/`, creating migrations, or running `omarchy dev ...` workflows).
+**Do NOT use this skill for Omarchy source development** (editing files in `~/.local/share/omarchy/`).
 
 ## Critical Safety Rules
 
-**For end-user customization tasks, NEVER modify anything in `~/.local/share/omarchy/`** - but READING is safe and encouraged.
+**NEVER modify anything in `~/.local/share/omarchy/`** — reading is safe and encouraged.
 
-This directory contains Omarchy's source files managed by git. Any changes will be:
-- Lost on next `omarchy update`
-- Cause conflicts with upstream
-- Break the system's update mechanism
+This directory is managed by git. Changes will be lost on `omarchy update` and cause conflicts.
 
 ```
 ~/.local/share/omarchy/     # READ-ONLY - NEVER EDIT (reading is OK)
 ├── bin/                    # Source scripts (symlinked to PATH)
 ├── config/                 # Default config templates
+├── default/niri/           # Niri defaults (sourced by user config via include)
 ├── themes/                 # Stock themes
-├── default/                # System defaults
 ├── migrations/             # Update migrations
 └── install/                # Installation scripts
 ```
 
-**Reading `~/.local/share/omarchy/` is SAFE and useful** - do it freely to:
-- Understand how omarchy commands work: `omarchy theme set --help` or `cat $(which omarchy-theme-set)`
-- See default configs before customizing: `cat ~/.local/share/omarchy/config/waybar/config.jsonc`
-- Check stock theme files to copy for customization
-- Reference default hyprland settings: `cat ~/.local/share/omarchy/default/hypr/*`
-
 **Always use these safe locations instead:**
-- `~/.config/` - User configuration (safe to edit)
-- `~/.config/omarchy/themes/<custom-name>/` - Custom themes (must be real directories)
-- `~/.config/omarchy/hooks/` - Custom automation hooks
-
-If the request is to develop Omarchy itself, this skill is out of scope. Follow repository development instructions instead of this skill.
+- `~/.config/` — user configuration (safe to edit)
+- `~/.config/omarchy/themes/<custom-name>/` — custom themes
+- `~/.config/omarchy/hooks/` — custom automation hooks
 
 ## System Architecture
-
-Omarchy is built on:
 
 | Component | Purpose | Config Location |
 |-----------|---------|-----------------|
 | **Arch Linux** | Base OS | `/etc/`, `~/.config/` |
-| **Hyprland** | Wayland compositor/WM | `~/.config/hypr/` |
+| **niri** | Wayland compositor/WM | `~/.config/niri/` |
 | **Waybar** | Status bar | `~/.config/waybar/` |
 | **Walker** | App launcher | `~/.config/walker/` |
 | **Alacritty/Foot/Kitty/Ghostty** | Terminals | `~/.config/<terminal>/` |
 | **Mako** | Notifications | `~/.config/mako/` |
 | **SwayOSD** | On-screen display | `~/.config/swayosd/` |
+| **swayidle** | Idle management | `~/.config/swayidle/` |
+| **hyprlock** | Lock screen | `~/.config/hypr/hyprlock.conf` |
+
+## Niri Config Architecture
+
+Niri config uses KDL format. The user's `~/.config/niri/config.kdl` is the entry point — it sources everything via `include` directives:
+
+```
+~/.config/niri/
+├── config.kdl          # Entry point — includes everything below
+├── autostart.kdl       # Startup applications
+├── monitors.kdl        # Display/monitor configuration
+├── input.kdl           # Keyboard, mouse, touchpad settings
+├── bindings.kdl        # Keybindings (sourced from default + user overrides)
+├── looknfeel.kdl       # Appearance (gaps, borders, animations, opacity)
+├── flags.kdl           # Optional toggle includes (gaps, transparency, mirror, etc.)
+└── system.kdl          # Window rules (floating, fullscreen, etc.)
+```
+
+**Key architecture detail:** Omarchy defaults live in `~/.local/share/omarchy/default/niri/` and are included by `config.kdl` via:
+```kdl
+include "~/.local/share/omarchy/default/niri/default.kdl"
+```
+
+User files in `~/.config/niri/` override/extend the defaults. Edit those — not the defaults.
+
+### Niri Reload
+
+Niri does NOT auto-reload on save. Always reload after config changes:
+
+```bash
+omarchy restart niri         # or: niri msg action load-config-file
+```
+
+Always validate config before reloading:
+```bash
+niri validate --config ~/.config/niri/config.kdl
+```
+
+If validation fails, fix errors before reloading.
+
+### Niri Toggles
+
+Toggles are managed via flag files in `~/.local/state/omarchy/toggles/` and KDL snippets in `~/.local/share/omarchy/default/niri/toggles/`. The `flags.kdl` optionally includes them.
+
+Current toggles and their binds:
+- `Mod+Backspace` — window transparency
+- `Mod+Alt+Backspace` — window gaps
+- `Mod+Alt+Delete` — laptop display toggle
+- `Mod+Alt+Shift+Delete` — mirror display
+- `Mod+Alt+W` — top bar (waybar)
+- `Mod+Alt+Shift+W` — top bar transparency
+- `Mod+Alt+I` — idle lock
+- `Mod+Alt+Period` — toggle menu
+
+## Keybinding Conventions
+
+```
+Mod = Super key
+
+Mod+Space               — app launcher (walker)
+Mod+Alt+Space           — omarchy menu
+Mod+Alt+<letter>        — utilities, toggles, menus
+Mod+Shift+<letter>      — launch apps
+Mod+Shift+Ctrl+<letter> — TUI controls
+Mod+Ctrl+<letter>       — tiling controls
+```
+
+**When adding keybindings**, edit `~/.config/niri/bindings.kdl`. Check for conflicts first:
+```bash
+grep -r "Mod" ~/.config/niri/bindings.kdl ~/.local/share/omarchy/default/niri/bindings/
+```
+
+Niri keybind format:
+```kdl
+binds {
+  Mod+E { spawn "nautilus"; }
+  Mod+Shift+Q { close-window; }
+}
+```
+
+## Waybar
+
+```
+~/.config/waybar/
+├── config.jsonc        # Bar layout and modules
+└── style.css           # Styling (transparent.css dynamically imported by toggle)
+```
+
+Waybar does NOT auto-reload. After any config change:
+```bash
+omarchy restart waybar
+```
+
+The waybar transparency toggle dynamically adds/removes a `transparent.css` import and sends `SIGUSR2` for CSS reload — no full restart needed for that specific toggle.
 
 ## Command Discovery
 
-Omarchy ships a single `omarchy` CLI that dispatches to all `omarchy-*` binaries via `omarchy <group> <action>`. Always prefer this form — it is self-documenting and stable. The underlying `omarchy-*` binaries still exist on `PATH` and remain safe to read for source.
-
 ```bash
-# List every documented command and its summary
-omarchy commands
-
-# Show the commands inside a group
-omarchy theme --help
-omarchy refresh --help
-omarchy restart --help
-
-# Show help for a specific command (does not execute it)
-omarchy theme set --help
-
-# Machine-readable listing (binary, route, summary, args, aliases)
-omarchy commands --json
-
-# Read a command's source to understand it
-cat $(which omarchy-theme-set)
+omarchy commands                  # List all commands
+omarchy <group> --help            # Commands in a group
+omarchy commands --json           # Machine-readable listing
+cat $(which omarchy-theme-set)    # Read a command's source
 ```
 
 ### Command Groups
 
-Run `omarchy --help` for the full list. The most common groups:
-
 | Group | Purpose | Example |
 |-------|---------|---------|
-| `omarchy refresh` | Reset config to defaults (backs up first) | `omarchy refresh waybar` |
+| `omarchy refresh` | Reset config to defaults (backs up first) | `omarchy refresh niri` |
 | `omarchy restart` | Restart a service/app | `omarchy restart waybar` |
 | `omarchy toggle` | Toggle feature on/off | `omarchy toggle nightlight` |
 | `omarchy theme` | Theme management | `omarchy theme set <name>` |
-| `omarchy install` | Install optional software / packages | `omarchy install docker dbs` |
+| `omarchy install` | Install optional software | `omarchy install docker` |
 | `omarchy launch` | Launch apps | `omarchy launch browser` |
 | `omarchy capture` | Screenshots and recordings | `omarchy capture screenshot` |
-| `omarchy reminder` | Desktop notification reminders | `omarchy reminder 15 "Pickup Jack"` |
-| `omarchy pkg` | Package management | `omarchy pkg install <pkg>` |
-| `omarchy setup` | Initial setup tasks | `omarchy setup fingerprint` |
+| `omarchy reminder` | Desktop notification reminders | `omarchy reminder 15 "Call back"` |
+| `omarchy pkg` | Package management | `omarchy pkg add <pkg>` |
+| `omarchy setup` | Setup wizards | `omarchy setup fingerprint` |
 | `omarchy update` | System updates | `omarchy update` |
+| `omarchy niri` | Niri-specific controls | `omarchy niri monitor mirror` |
 
 ## Configuration Locations
 
-### Hyprland (Window Manager)
+### Niri (Window Manager)
 
-```
-~/.config/hypr/
-├── hyprland.conf      # Main config (sources others)
-├── bindings.conf      # Keybindings
-├── monitors.conf      # Display configuration
-├── input.conf         # Keyboard/mouse settings
-├── looknfeel.conf     # Appearance (gaps, borders, animations)
-├── envs.conf          # Environment variables
-├── autostart.conf     # Startup applications
-├── hypridle.conf      # Idle behavior (screen off, lock, suspend)
-├── hyprlock.conf      # Lock screen appearance
-└── hyprsunset.conf    # Night light / blue light filter
-```
+Edit files in `~/.config/niri/` — never in `~/.local/share/omarchy/default/niri/`.
 
-**Key behaviors:**
-- Hyprland auto-reloads on config save (no restart needed for most changes)
-- Use `hyprctl reload` to force reload
-- After ANY Hyprland config change, validate with `hyprctl reload` followed by `hyprctl configerrors`
-- If `hyprctl configerrors` reports errors, address them and rerun validation until clean or until a real blocker is identified
-- Use `omarchy refresh hyprland` to reset to defaults
-
-### Waybar (Status Bar)
-
-```
-~/.config/waybar/
-├── config.jsonc       # Bar layout and modules (JSONC format)
-└── style.css          # Styling
-```
-
-**Waybar does NOT auto-reload.** You MUST run `omarchy restart waybar` after any config changes.
-
-**Commands:** `omarchy restart waybar`, `omarchy refresh waybar`, `omarchy toggle waybar`
-
-### Terminals
-
-```
-~/.config/alacritty/alacritty.toml
-~/.config/foot/foot.ini
-~/.config/kitty/kitty.conf
-~/.config/ghostty/config
-```
-
-**Command:** `omarchy restart terminal`
+Key files:
+- `monitors.kdl` — display configuration
+- `input.kdl` — keyboard/touchpad/mouse
+- `bindings.kdl` — keybindings
+- `looknfeel.kdl` — gaps, borders, animations, opacity
+- `autostart.kdl` — startup apps
+- `window-rules.kdl` — window rules
 
 ### Other Configs
 
@@ -181,69 +214,47 @@ Run `omarchy --help` for the full list. The most common groups:
 | starship | `~/.config/starship.toml` |
 | git | `~/.config/git/config` |
 | walker | `~/.config/walker/config.toml` |
+| hyprlock | `~/.config/hypr/hyprlock.conf` |
 
 ## Safe Customization Patterns
 
 ### Pattern 1: Edit User Config Directly
 
-For simple changes, edit files in `~/.config/`:
-
 ```bash
 # 1. Read current config
-cat ~/.config/hypr/bindings.conf
+cat ~/.config/niri/bindings.kdl
 
-# 2. Backup before changes
-cp ~/.config/hypr/bindings.conf ~/.config/hypr/bindings.conf.bak.$(date +%s)
+# 2. Make changes with Edit tool
 
-# 3. Make changes with Edit tool
+# 3. Validate
+niri validate --config ~/.config/niri/config.kdl
 
-# 4. Apply changes
-# - Hyprland: auto-reloads on save, but MUST validate with `hyprctl reload` and `hyprctl configerrors`
-# - Waybar: MUST restart with `omarchy restart waybar`
-# - Walker: MUST restart with `omarchy restart walker`
-# - Terminals: MUST restart with `omarchy restart terminal`
+# 4. Reload
+omarchy restart niri
 ```
 
-### Pattern 2: Make a new theme
+### Pattern 2: Make a New Theme
 
-1. Create a directory under ~/.config/omarchy/themes.
-2. See how an existing theme is done via ~/.local/share/omarchy/themes/catppuccin.
-3. Download a matching background (or several) from the internet and put them in ~/.config/omarchy/themes/[name-of-new-theme]
-4. When done with the theme, run `omarchy theme set "Name of new theme"`
+1. Create a directory under `~/.config/omarchy/themes/`
+2. See how an existing theme is done: `ls ~/.local/share/omarchy/themes/catppuccin/`
+3. Add backgrounds and a `colors.toml` matching the theme format
+4. Apply: `omarchy theme set "Name of new theme"`
 
 ### Pattern 3: Use Hooks for Automation
 
-Create scripts in `~/.config/omarchy/hooks/` to run automatically on events:
-
 ```bash
-# Available hooks (see samples in ~/.config/omarchy/hooks/):
 ~/.config/omarchy/hooks/
 ├── theme-set        # Runs after theme change (receives theme name as $1)
 ├── font-set         # Runs after font change
-└── post-update      # Runs after `omarchy update`
+└── post-update      # Runs after omarchy update
 ```
 
-Example hook (`~/.config/omarchy/hooks/theme-set`):
-```bash
-#!/bin/bash
-THEME_NAME=$1
-echo "Theme changed to: $THEME_NAME"
-# Add custom actions here
-```
-
-### Pattern 4: Reset to Defaults -- ALWAYS SEEK USER CONFIRMATION BEFORE RUNNING
-
-When customizations go wrong:
+### Pattern 4: Reset to Defaults — ALWAYS SEEK USER CONFIRMATION FIRST
 
 ```bash
-# Reset specific config (creates backup automatically)
-omarchy refresh waybar
-omarchy refresh hyprland
-
-# The refresh command:
-# 1. Backs up current config with timestamp
-# 2. Copies default from ~/.local/share/omarchy/config/
-# 3. Restarts the component
+omarchy refresh niri          # Reset all niri configs (backs up first)
+omarchy refresh waybar        # Reset waybar config
+omarchy refresh walker        # Reset walker config
 ```
 
 ## Common Tasks
@@ -258,110 +269,60 @@ omarchy theme bg next           # Cycle wallpaper
 omarchy theme install <url>     # Install from git repo
 ```
 
-### Keybindings
-
-Edit `~/.config/hypr/bindings.conf`. Format:
-```
-bind = SUPER, Return, exec, xdg-terminal-exec
-bind = SUPER, Q, killactive
-bind = SUPER SHIFT, E, exit
-```
-
-View current bindings: `omarchy menu keybindings --print`
-
-**IMPORTANT: When re-binding an existing key:**
-
-1. First check existing bindings: `omarchy menu keybindings --print`
-2. If the key is already bound, you MUST add an `unbind` directive BEFORE your new `bind`
-3. Inform the user what the key was previously bound to
-
-Example - rebinding SUPER+F (which is bound to fullscreen by default):
-```
-# Unbind existing SUPER+F (was: fullscreen)
-unbind = SUPER, F
-# New binding for file manager
-bind = SUPER, F, exec, nautilus
-```
-
-Always tell the user: "Note: SUPER+F was previously bound to fullscreen. I've added an unbind directive to override it."
-
 ### Display/Monitors
 
-Edit `~/.config/hypr/monitors.conf`. Format:
-```
-monitor = eDP-1, 1920x1080@60, 0x0, 1
-monitor = HDMI-A-1, 2560x1440@144, 1920x0, 1
+Edit `~/.config/niri/monitors.kdl`. List monitors:
+```bash
+niri msg outputs
 ```
 
-List monitors: `hyprctl monitors`
+Niri monitor format:
+```kdl
+output "eDP-1" {
+  mode "1920x1200@60"
+  scale 1.5
+  position x=0 y=0
+}
+```
+
+Mirror mode: `Mod+Alt+Shift+Delete` or `omarchy niri monitor mirror`
 
 ### Window Rules
 
-**CRITICAL: Hyprland window rules syntax changes frequently between versions.**
+Window rules go in `~/.config/niri/system.kdl`. Niri KDL format:
+```kdl
+window-rule {
+  match app-id="org.gnome.Calculator"
+  open-floating true
+  default-floating-size { width 400; height 500; }
+}
+```
 
-Before writing ANY window rules, you MUST fetch the current documentation from the official Hyprland wiki:
-- https://github.com/hyprwm/hyprland-wiki/blob/main/content/Configuring/Window-Rules.md
-
-DO NOT rely on cached or memorized window rule syntax. The format has changed multiple times and using outdated syntax will cause errors or unexpected behavior.
-
-Window rules go in `~/.config/hypr/hyprland.conf` or a sourced file. Always verify the current syntax from the wiki first.
+Always validate after adding rules:
+```bash
+niri validate --config ~/.config/niri/config.kdl
+```
 
 ### Fonts
 
 ```bash
-omarchy font list               # Available fonts
-omarchy font current            # Current font
-omarchy font set <name>         # Change font
+omarchy font list
+omarchy font current
+omarchy font set <name>
 ```
 
 ### System
 
 ```bash
 omarchy update                  # Full system update
-omarchy version                 # Show Omarchy version
+omarchy version                 # Show version
 omarchy debug --no-sudo --print # Debug info (ALWAYS use these flags)
 omarchy system lock             # Lock screen
 omarchy system shutdown         # Shutdown
 omarchy system reboot           # Reboot
 ```
 
-**IMPORTANT:** Always run `omarchy debug` with `--no-sudo --print` flags to avoid interactive sudo prompts that will hang the terminal.
-
-## Troubleshooting
-
-```bash
-# Get debug information (ALWAYS use these flags to avoid interactive prompts)
-omarchy debug --no-sudo --print
-
-# Upload logs for support
-omarchy upload log
-
-# Reset specific config to defaults
-omarchy refresh <app>
-
-# Refresh specific config file
-# config-file path is relative to ~/.config/
-# eg. `omarchy refresh config hypr/hyprlock.conf` will refresh ~/.config/hypr/hyprlock.conf
-omarchy refresh config <config-file>
-
-# Full reinstall of configs (nuclear option)
-omarchy reinstall
-```
-
-## Decision Framework
-
-When user requests system changes:
-
-1. **Is it a stock omarchy command?** Use it directly
-2. **Is it a config edit?** Edit in `~/.config/`, never `~/.local/share/omarchy/`
-3. **Is it a theme customization?** Create a NEW custom theme directory
-4. **Is it automation?** Use hooks in `~/.config/omarchy/hooks/`
-5. **Is it a package install?** Use `omarchy pkg add <pkgs...>` (or `omarchy pkg aur add <pkgs...>` for AUR-only packages)
-6. **Unsure if command exists?** Run `omarchy commands` (or `omarchy <group> --help` for one group)
-
-### Reminder Requests
-
-When the user asks to set a reminder, use `omarchy reminder <minutes> [message]` directly. Convert natural language durations to minutes and title-case short reminder labels when appropriate.
+### Reminders
 
 ```bash
 omarchy reminder 15 "Pickup Jack"
@@ -370,23 +331,40 @@ omarchy reminder show
 omarchy reminder clear
 ```
 
+## Troubleshooting
+
+```bash
+omarchy debug --no-sudo --print   # Debug info (always use these flags)
+omarchy upload log                # Upload logs for support
+omarchy refresh niri              # Reset niri configs to defaults
+omarchy refresh <app>             # Reset any app config to defaults
+omarchy reinstall                 # Nuclear option — full config reinstall
+```
+
+## Decision Framework
+
+1. **Is it a stock omarchy command?** Use it directly
+2. **Is it a config edit?** Edit in `~/.config/`, never `~/.local/share/omarchy/`
+3. **Is it a theme customization?** Create a NEW custom theme directory
+4. **Is it automation?** Use hooks in `~/.config/omarchy/hooks/`
+5. **Is it a package install?** Use `omarchy pkg add <pkgs...>` (or `omarchy pkg aur add <pkgs...>` for AUR)
+6. **Unsure if command exists?** Run `omarchy commands` first
+
 ## Out of Scope
 
-This skill intentionally does not cover Omarchy source development. Do not use this skill for:
-- Editing files in `~/.local/share/omarchy/` (`bin/`, `config/`, `default/`, `themes/`, `migrations/`, etc.)
+This skill does NOT cover Omarchy source development. Do not use it for:
+- Editing files in `~/.local/share/omarchy/`
 - Creating or editing migrations
 - Running `omarchy dev ...` commands
 
 ## Example Requests
 
-- "Change my theme to catppuccin" -> `omarchy theme set catppuccin`
-- "Add a keybinding for Super+E to open file manager" -> Check existing bindings first, add `unbind` if needed, then add `bind` in `~/.config/hypr/bindings.conf`
-- "Configure my external monitor" -> Edit `~/.config/hypr/monitors.conf`
-- "Make the window gaps smaller" -> Edit `~/.config/hypr/looknfeel.conf`
-- "Set up night light to turn on at sunset" -> `omarchy toggle nightlight` or edit `~/.config/hypr/hyprsunset.conf`
-- "Set a reminder to pickup jack in 15 minutes" -> `omarchy reminder 15 "Pickup Jack"`
-- "Show my reminders" -> `omarchy reminder show`
-- "Clear all reminders" -> `omarchy reminder clear`
-- "Customize the catppuccin theme colors" -> Create `~/.config/omarchy/themes/catppuccin-custom/` by copying from stock, then edit
-- "Run a script every time I change themes" -> Create `~/.config/omarchy/hooks/theme-set`
-- "Reset waybar to defaults" -> `omarchy refresh waybar`
+- "Change my theme to catppuccin" → `omarchy theme set catppuccin`
+- "Add a keybinding for Super+E to open file manager" → check conflicts, add to `~/.config/niri/bindings.kdl`, validate, reload
+- "Configure my external monitor" → edit `~/.config/niri/monitors.kdl`, validate, reload
+- "Make window gaps smaller" → edit `~/.config/niri/looknfeel.kdl`, validate, reload
+- "Set up night light" → `omarchy toggle nightlight`
+- "Set a reminder in 15 minutes" → `omarchy reminder 15 "message"`
+- "Mirror my display" → `Mod+Alt+Shift+Delete` or `omarchy niri monitor mirror`
+- "Reset waybar to defaults" → `omarchy refresh waybar`
+- "Run a script every time I change themes" → create `~/.config/omarchy/hooks/theme-set`
