@@ -9,5 +9,6 @@ omarchy-refresh-config niri/looknfeel.kdl
 omarchy-refresh-config niri/monitors.kdl
 omarchy-refresh-config niri/input.kdl
 omarchy-refresh-config niri/flags.kdl
+omarchy-refresh-config niri/system.kdl
 
 omarchy-restart-niri 2>/dev/null || true
