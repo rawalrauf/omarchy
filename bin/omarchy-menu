@@ -225,9 +225,11 @@ show_toggle_menu() {
   pgrep -x waybar >/dev/null && bar="$bar ✓"
   omarchy-niri-toggle-enabled gaps-enabled && gaps="$gaps ✓"
   ! omarchy-niri-toggle-enabled transparency-disabled && transparency="$transparency ✓"
+  local sudopasswordless="󰟵  Passwordless Sudo"
   omarchy-toggle-enabled direct-boot-enabled && directboot="$directboot ✓"
+  sudo test -f "/etc/sudoers.d/99-omarchy-nopasswd-${USER}" 2>/dev/null && sudopasswordless="$sudopasswordless ✓"
 
-  local options="$idle\n$notifications\n$bar\n$gaps\n$transparency\n󰍹  Monitor Scaling\n$directboot\n󰟵  Passwordless Sudo"
+  local options="$idle\n$notifications\n$bar\n$gaps\n$transparency\n󰍹  Monitor Scaling\n$directboot\n$sudopasswordless"
 
   case $(menu "Toggle" "$options") in
   *Idle*) omarchy-toggle-idle ;;
