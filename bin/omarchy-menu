@@ -84,7 +84,7 @@ show_learn_menu() {
   case $(menu "Learn" "  Keybindings\n  Omarchy\n  Niri\n󰣇  Arch\n  Neovim\n󱆃  Bash") in
   *Keybindings*) omarchy-menu-keybindings ;;
   *Omarchy*) omarchy-launch-webapp "https://github.com/rawalrauf/omarchy" ;;
-  *Niri*) omarchy-launch-webapp "https://github.com/YaLTeR/niri/wiki" ;;
+  *Niri*) omarchy-launch-webapp "https://niri-wm.github.io/niri/index.html" ;;
   *Arch*) omarchy-launch-webapp "https://wiki.archlinux.org/title/Main_page" ;;
   *Bash*) omarchy-launch-webapp "https://devhints.io/bash" ;;
   *Neovim*) omarchy-launch-webapp "https://www.lazyvim.org/keymaps" ;;
