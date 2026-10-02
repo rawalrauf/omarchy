@@ -488,7 +488,7 @@ show_setup_default_editor_menu() {
 
 show_setup_config_menu() {
   case $(menu "Setup" "  Niri\n  Swayidle\n  Hyprlock\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n󰞅  Compose Shortcuts") in
-  *Niri*) open_in_editor ~/.config/niri/config.kdl ;;
+  *Niri*) open_in_editor ~/.config/niri/config.kdl && omarchy-restart-niri ;;
   *Swayidle*) open_in_editor ~/.config/swayidle/swayidle.conf && omarchy-restart-swayidle ;;
   *Hyprlock*) open_in_editor ~/.config/hypr/hyprlock.conf && pkill -x hyprlock || true ;;
   *Swayosd*) open_in_editor ~/.config/swayosd/config.toml && omarchy-restart-swayosd ;;
