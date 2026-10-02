@@ -487,7 +487,7 @@ show_setup_default_editor_menu() {
 
 
 show_setup_config_menu() {
-  case $(menu "Setup" "  Niri\n  Swayidle\n  Hyprlock\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n󰞅  Compose Shortcuts") in
+  case $(menu "Setup" "  Niri\n  Swayidle\n  Hyprlock\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n󰞅  Compose Shortcuts") in
   *Niri*) open_in_editor ~/.config/niri/config.kdl && omarchy-restart-niri ;;
   *Swayidle*) open_in_editor ~/.config/swayidle/swayidle.conf && omarchy-restart-swayidle ;;
   *Hyprlock*) open_in_editor ~/.config/hypr/hyprlock.conf && pkill -x hyprlock || true ;;
@@ -784,7 +784,7 @@ show_remove_elixir_menu() {
 }
 
 show_update_menu() {
-  case $(menu "Update" "  Omarchy\n󰔫  Channel\n  Config\n󰸌  Extra Themes\n  Process\n󰇅  Hardware\n  Firmware\n  Password\n  Timezone\n  Time") in
+  case $(menu "Update" "  Omarchy\n󰔫  Channel\n  Config\n󰸌  Extra Themes\n  Process\n󰇅  Hardware\n  Firmware\n  Password\n  Timezone\n  Time") in
   *Omarchy*) present_terminal omarchy-update ;;
   *Channel*) show_update_channel_menu ;;
   *Config*) show_update_config_menu ;;
@@ -807,19 +807,20 @@ show_update_channel_menu() {
   present_terminal "omarchy-channel-set $channel"
 }
 show_update_process_menu() {
-  case $(menu "Restart" "  Swayidle\n󰎟  Mako\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n  Niri") in
+  case $(menu "Restart" "  Niri\n󰎟  Mako\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n  Swayidle") in
+  *Niri*) omarchy-restart-niri ;;
   *Swayidle*) omarchy-restart-swayidle ;;
   *Mako*) omarchy-restart-mako ;;
   *Swayosd*) omarchy-restart-swayosd ;;
   *Walker*) omarchy-restart-walker ;;
   *Waybar*) omarchy-restart-waybar ;;
-  *Niri*) omarchy-restart-niri ;;
   *) show_update_menu ;;
   esac
 }
 
 show_update_config_menu() {
-  case $(menu "Use default config" "  Swayidle\n  Hyprlock\n󱣴  Plymouth\n  Swayosd\n  Tmux\n󰌧  Walker\n󰍜  Waybar\n  Niri") in
+  case $(menu "Use default config" "  Niri\n  Swayidle\n  Hyprlock\n󱣴  Plymouth\n  Swayosd\n  Tmux\n󰌧  Walker\n󰍜  Waybar") in
+  *Niri*) present_terminal omarchy-refresh-niri ;;
   *Swayidle*) present_terminal omarchy-refresh-swayidle ;;
   *Hyprlock*) present_terminal omarchy-refresh-hyprlock ;;
   *Plymouth*) present_terminal omarchy-refresh-plymouth ;;
@@ -827,7 +828,6 @@ show_update_config_menu() {
   *Tmux*) present_terminal omarchy-refresh-tmux ;;
   *Walker*) present_terminal omarchy-refresh-walker ;;
   *Waybar*) present_terminal omarchy-refresh-waybar ;;
-  *Niri*) present_terminal omarchy-refresh-niri ;;
   *) show_update_menu ;;
   esac
 }
@@ -855,7 +855,7 @@ show_about() {
 }
 
 show_system_menu() {
-  local options="  Lock"
+  local options="  Lock"
   ! omarchy-toggle-enabled suspend-off && options="$options\n󰒲  Suspend"
   omarchy-hibernation-available && options="$options\n󰤁  Hibernate"
   options="$options\n󰍃  Logout\n󰜉  Restart\n󰐥  Shutdown"
