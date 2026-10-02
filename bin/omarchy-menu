@@ -52,7 +52,7 @@ present_terminal() {
 }
 
 open_in_editor() {
-  notify-send -u low "Editing config file" "$1"
+  notify-send -u low "󰈙  Editing config file" "$1"
   omarchy-launch-editor "$1"
 }
 
@@ -174,7 +174,7 @@ show_webcam_select_menu() {
   local count=$(echo "$devices" | grep -c . 2>/dev/null || echo 0)
 
   if [[ -z $devices ]] || ((count == 0)); then
-    notify-send "No webcam devices found" -u critical -t 3000
+    notify-send "󰀦  No webcam devices found" -u critical -t 3000
     return 1
   fi
 
