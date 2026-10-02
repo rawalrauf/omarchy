@@ -81,7 +81,7 @@ aur_install_and_launch() {
 }
 
 show_learn_menu() {
-  case $(menu "Learn" "  Keybindings\n  Omarchy\n  Niri\n󰣇  Arch\n  Neovim\n󱆃  Bash") in
+  case $(menu "Learn" "  Keybindings\n  Omarchy\n  Niri\n󰣇  Arch\n  Neovim\n󱆃  Bash") in
   *Keybindings*) omarchy-menu-keybindings ;;
   *Omarchy*) omarchy-launch-webapp "https://github.com/rawalrauf/omarchy" ;;
   *Niri*) omarchy-launch-webapp "https://niri-wm.github.io/niri/index.html" ;;
@@ -93,7 +93,7 @@ show_learn_menu() {
 }
 
 show_trigger_menu() {
-  case $(menu "Trigger" "󰔛  Reminder\n  Capture\n󰧸  Transcode\n  Share\n󰔎  Toggle\n  Hardware") in
+  case $(menu "Trigger" "󰔛  Reminder\n  Capture\n󰧸  Transcode\n  Share\n  Toggle\n  Hardware") in
   *Reminder*) show_reminder_menu ;;
   *Capture*) show_capture_menu ;;
   *Transcode*) omarchy-transcode || back_to show_trigger_menu ;;
@@ -140,7 +140,7 @@ show_reminder_message_input() {
 }
 
 show_capture_menu() {
-  case $(menu "Capture" "  Screenshot\n  Screenrecord\n󰴑  Text Extraction\n󰃉  Color") in
+  case $(menu "Capture" "  Screenshot\n  Screenrecord\n󰴑  Text Extraction\n󰃉  Color") in
   *Screenshot*) show_screenshot_menu ;;
   *Screenrecord*) show_screenrecord_menu ;;
   *Text*) omarchy-capture-text-extraction ;;
@@ -150,7 +150,7 @@ show_capture_menu() {
 }
 
 show_screenshot_menu() {
-  case $(menu "Screenshot" "  Select Region\n  Full Screen\n  Active Window") in
+  case $(menu "Screenshot" "󰩭  Select Region\n  Full Screen\n  Active Window") in
   *"Select Region"*) omarchy-capture-screenshot ;;
   *"Full Screen"*) omarchy-capture-screenshot fullscreen ;;
   *"Active Window"*) omarchy-capture-screenshot window ;;
@@ -216,9 +216,9 @@ show_toggle_menu() {
   local idle="󱫖  Idle Lock"
   local notifications="󰂛  Notifications"
   local bar="󰍜  Top Bar"
-  local gaps="  Window Gaps"
+  local gaps="  Window Gaps"
   local transparency="󰂵  Window Transparency"
-  local directboot="  Direct Boot"
+  local directboot="  Direct Boot"
 
   pgrep -x swayidle >/dev/null && idle="$idle ✓"
   ! makoctl mode | grep -q 'do-not-disturb' && notifications="$notifications ✓"
@@ -294,7 +294,7 @@ show_hardware_touchpad_haptics_menu() {
 }
 
 show_style_menu() {
-  case $(menu "Style" "󰸌  Theme\n󰟵  Unlock\n  Font\n  Background\n  Niri\n  About") in
+  case $(menu "Style" "󰸌  Theme\n󰟵  Unlock\n  Font\n  Background\n  Niri\n  About") in
   *Theme*) show_theme_menu ;;
   *Unlock*) omarchy-launch-walker -m menus:omarchyunlocks --width 800 --minheight 400 ;;
   *Font*) show_font_menu ;;
@@ -334,10 +334,10 @@ show_font_menu() {
 }
 
 show_setup_menu() {
-  local options="  Audio\n  Wifi\n󰂯  Bluetooth\n󱐋  Power Profile\n  System Sleep\n󰍹  Monitors"
-  [[ -f ~/.config/niri/bindings.kdl ]] && options="$options\n  Keybindings"
-  [[ -f ~/.config/niri/input.kdl ]] && options="$options\n  Input"
-  options="$options\n  Defaults\n󰱔  DNS\n  Security\n  Config"
+  local options="  Audio\n  Wifi\n󰂯  Bluetooth\n󱐋  Power Profile\n  System Sleep\n󰍹  Monitors"
+  [[ -f ~/.config/niri/bindings.kdl ]] && options="$options\n  Keybindings"
+  [[ -f ~/.config/niri/input.kdl ]] && options="$options\n  Input"
+  options="$options\n  Defaults\n󰱔  DNS\n  Security\n  Config"
 
   case $(menu "Setup" "$options") in
   *Audio*) omarchy-launch-audio ;;
@@ -487,7 +487,8 @@ show_setup_default_editor_menu() {
 
 
 show_setup_config_menu() {
-  case $(menu "Setup" "  Swayidle\n  Hyprlock\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n󰞅  Compose Shortcuts") in
+  case $(menu "Setup" "  Niri\n  Swayidle\n  Hyprlock\n  Swayosd\n󰌧  Walker\n󰍜  Waybar\n󰞅  Compose Shortcuts") in
+  *Niri*) open_in_editor ~/.config/niri/config.kdl ;;
   *Swayidle*) open_in_editor ~/.config/swayidle/swayidle.conf && omarchy-restart-swayidle ;;
   *Hyprlock*) open_in_editor ~/.config/hypr/hyprlock.conf && pkill -x hyprlock || true ;;
   *Swayosd*) open_in_editor ~/.config/swayosd/config.toml && omarchy-restart-swayosd ;;
