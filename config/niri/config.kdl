@@ -10,7 +10,7 @@ include "~/.config/niri/monitors.kdl"
 include "~/.config/niri/input.kdl"
 include "~/.config/niri/bindings.kdl"
 include "~/.config/niri/looknfeel.kdl"
-include "~/.config/niri/system.kdl"
+include "~/.config/niri/window-rules.kdl"
 
 // ── Toggle flags ─────────────────────────────────────────────────────────────
 include "~/.config/niri/flags.kdl"
