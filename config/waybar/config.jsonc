@@ -147,11 +147,11 @@
   },
   "pulseaudio#microphone": {
     "format": "{format_source}",
-    "format-source": " {volume}%",
-    "format-source-muted": " Muted",
+    "format-source": " {volume}%",
+    "format-source-muted": "  Muted",
     "on-click": "omarchy-audio-input-mute",
-    "on-scroll-up": "pamixer --default-source -i 5",
-    "on-scroll-down": "pamixer --default-source -d 5",
+    "on-scroll-up": "pamixer --default-source -d 5",
+    "on-scroll-down": "pamixer --default-source -i 5",
   },
   "network": {
     "on-click":"omarchy-launch-wifi",
