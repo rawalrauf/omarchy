@@ -2,29 +2,15 @@
 
 sleep_action=${SYSTEMD_SLEEP_ACTION:-$2}
 
-device=""
-for candidate in /sys/class/leds/*kbd_backlight*; do
-  if [[ -e "$candidate" ]]; then
-    device="$(basename "$candidate")"
-    break
-  fi
-done
-
-if [[ $1 == "pre" && $sleep_action == "suspend" ]]; then
-  if [[ -n "$device" ]]; then
-    brightnessctl -sd "$device" set 0 >/dev/null 2>&1
-  fi
-fi
-
-if [[ $1 == "post" && $sleep_action == "suspend" ]]; then
-  if [[ -n "$device" ]]; then
-    uid=$(loginctl list-sessions --no-legend | awk '{print $2}' | head -1)
-    [[ -n $uid ]] && su - "$(id -un "$uid")" -c \
-      "XDG_RUNTIME_DIR=/run/user/${uid} brightnessctl -rd '$device'" >/dev/null 2>&1 || true
-  fi
-fi
-
 if [[ $1 == "pre" && $sleep_action == "hibernate" ]]; then
+  device=""
+  for candidate in /sys/class/leds/*kbd_backlight*; do
+    if [[ -e "$candidate" ]]; then
+      device="$(basename "$candidate")"
+      break
+    fi
+  done
+
   if [[ -n "$device" ]]; then
     brightnessctl -d "$device" set 0 >/dev/null 2>&1
   fi
@@ -37,3 +23,4 @@ if [[ $1 == "post" && $sleep_action == "hibernate" ]]; then
   [[ -n $uid ]] && su - "$(id -un "$uid")" -c \
     "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${uid}/bus omarchy-restart-swayidle" >/dev/null 2>&1 || true
 fi
+
