@@ -16,6 +16,7 @@ image)
   fi
   ;;
 text)
+  notify-send -u low "󰈙  Editing config file" ~/.config/omarchy/branding/about.txt
   omarchy-launch-editor ~/.config/omarchy/branding/about.txt >/dev/null 2>&1 && omarchy-launch-about >/dev/null 2>&1
   ;;
 reset)
