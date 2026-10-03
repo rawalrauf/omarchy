@@ -6,4 +6,3 @@
 # omarchy:examples=omarchy system wake
 
 omarchy-brightness-display on
-omarchy-brightness-keyboard restore
