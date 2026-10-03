@@ -19,5 +19,12 @@ if ! pidof hyprlock >/dev/null; then
       hyprlock --immediate-render
       omarchy-system-wake
     ) &
+
+    (
+      sleep 3
+      pidof hyprlock >/dev/null || exit 0
+      omarchy-brightness-keyboard off
+      omarchy-brightness-display off
+    ) &
   fi
 fi
