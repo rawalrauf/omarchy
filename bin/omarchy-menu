@@ -227,7 +227,7 @@ show_toggle_menu() {
   ! omarchy-niri-toggle-enabled transparency-disabled && transparency="$transparency ✓"
   local sudopasswordless="󰟵  Passwordless Sudo"
   omarchy-toggle-enabled direct-boot-enabled && directboot="$directboot ✓"
-  [[ -f "/tmp/omarchy-sudo-passwordless-${USER}" ]] && sudopasswordless="$sudopasswordless ✓"
+  sudo test -f "/etc/sudoers.d/99-omarchy-nopasswd-${USER}" && sudopasswordless="$sudopasswordless ✓"
 
   local options="$idle\n$notifications\n$bar\n$gaps\n$transparency\n󰍹  Monitor Scaling\n$directboot\n$sudopasswordless"
 
