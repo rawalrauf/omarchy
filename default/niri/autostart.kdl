@@ -21,7 +21,7 @@ spawn-sh-at-startup "omarchy-powerprofiles-init"
 // First boot setup (runs once, deletes its own marker after)
 spawn-sh-at-startup "omarchy-first-run"
 
-// Monitor event watcher for recover on external monitor disconnect
+// Monitor event watcher for recover on disconnect
 spawn-sh-at-startup "uwsm app -- omarchy-niri-monitor-watch"
 
 // Pre-warm keybindings cache so first open is instant
@@ -30,6 +30,4 @@ spawn-sh-at-startup "sleep 3 && omarchy-menu-keybindings --print > /dev/null 2>&
 // Post-boot hooks from ~/.config/omarchy/hooks/post-boot.d/
 spawn-sh-at-startup "sleep 2 && omarchy-hook post-boot"
 
-// Save keyboard brightness state for reliable lid-close restore
-spawn-sh-at-startup "omarchy-brightness-keyboard --no-osd off && omarchy-brightness-keyboard restore"
 
