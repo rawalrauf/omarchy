@@ -36,4 +36,8 @@ binds {
     XF86AudioPrev  allow-when-locked=true hotkey-overlay-title="Previous Track" { spawn-sh "omarchy-swayosd-client --playerctl previous"; }
 
     Mod+XF86AudioMute allow-when-locked=true hotkey-overlay-title="Switch Audio Output" { spawn-sh "omarchy-audio-output-switch"; }
+
+    // System keys
+    XF86PowerOff allow-when-locked=true hotkey-overlay-title="Power Menu" { spawn-sh "omarchy-menu system"; }
+    XF86Calculator     hotkey-overlay-title="Calculator" { spawn "gnome-calculator"; }
 }

@@ -1,7 +1,6 @@
 binds {
     // System
     Mod+Alt+L hotkey-overlay-title="Lock the Screen" { spawn-sh "omarchy-system-lock"; }
-    XF86PowerOff allow-when-locked=true hotkey-overlay-title="Power Menu" { spawn-sh "omarchy-menu system"; }
 
     // Menus
     Mod+Space          hotkey-overlay-title="Apps Menu" { spawn-sh "omarchy-menu apps"; }
@@ -26,7 +25,6 @@ binds {
     Mod+Alt+K          hotkey-overlay-title="Tmux Keybindings" { spawn-sh "omarchy-menu-tmux-keybindings"; }
     Mod+Alt+E          hotkey-overlay-title="Emoji Picker" { spawn-sh "omarchy-launch-walker -m symbols"; }
     Mod+Alt+C          allow-when-locked=true hotkey-overlay-title="Clipboard History" { spawn-sh "omarchy-launch-walker -m clipboard"; }
-    XF86Calculator     hotkey-overlay-title="Calculator" { spawn "gnome-calculator"; }
 
     // Reminders
     Mod+Alt+R          hotkey-overlay-title="Set Reminder" { spawn-sh "omarchy-menu reminder-set"; }
