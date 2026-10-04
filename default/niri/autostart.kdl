@@ -30,4 +30,7 @@ spawn-sh-at-startup "sleep 3 && omarchy-menu-keybindings --print > /dev/null 2>&
 // Post-boot hooks from ~/.config/omarchy/hooks/post-boot.d/
 spawn-sh-at-startup "sleep 2 && omarchy-hook post-boot"
 
+// Initialize keyboard brightness save state for reliable lid-close restore
+spawn-sh-at-startup "omarchy-brightness-keyboard-init"
+
 
