@@ -31,5 +31,5 @@ spawn-sh-at-startup "sleep 3 && omarchy-menu-keybindings --print > /dev/null 2>&
 spawn-sh-at-startup "sleep 2 && omarchy-hook post-boot"
 
 // Save keyboard brightness state for reliable lid-close restore
-spawn-sh-at-startup "omarchy-brightness-keyboard save"
+spawn-sh-at-startup "omarchy-brightness-keyboard --no-osd off && omarchy-brightness-keyboard restore"
 
