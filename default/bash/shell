@@ -12,8 +12,5 @@ fi
 # Ensure command hashing is off for mise
 set +h
 
-# Update terminal window title to current command or directory
-_omarchy_set_title() { printf "\033]0;%s\007" "$1"; }
-_omarchy_preexec() { _omarchy_set_title "$1"; }
-trap '_omarchy_preexec "$(history 1 | sed "s/^[[:space:]]*[0-9]*[[:space:]]*//")"' DEBUG
-PROMPT_COMMAND='_omarchy_set_title "${PWD/#$HOME/\~}"'
+# Update terminal window title to current directory
+PROMPT_COMMAND='printf "\033]0;%s\007" "${PWD/#$HOME/\~}"'
