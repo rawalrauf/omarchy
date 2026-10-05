@@ -10,14 +10,16 @@
 # rebuilds the initramfs. Also syncs the SDDM login screen (the post-logout
 # screen) with the same colors and logo so boot/login stay visually unified.
 
-if [[ $# -ne 3 ]]; then
-  echo "Usage: omarchy-plymouth-set <background-hex> <text-hex> <path-to-logo.png>" >&2
+if [[ $# -lt 3 ]]; then
+  echo "Usage: omarchy-plymouth-set <background-hex> <text-hex> <path-to-logo.png> [surface-hex]" >&2
   exit 1
 fi
 
 bg_hex="${1#\#}"
 text_hex="${2#\#}"
 logo_path="$3"
+surface_hex="${4:+${4#\#}}"
+[[ -z $surface_hex ]] && surface_hex="$bg_hex"
 
 if ! [[ $bg_hex =~ ^[0-9a-fA-F]{6}$ ]]; then
   echo "Invalid background color: $1 (expected #RRGGBB)" >&2
@@ -53,7 +55,7 @@ sed -i \
 for asset in bullet.png entry.png lock.png progress_bar.png; do
   magick "$staging_dir/$asset" -channel RGB +level-colors "#$text_hex","#$text_hex" "$staging_dir/$asset"
 done
-magick "$staging_dir/progress_box.png" -channel RGB +level-colors "#$bg_hex","#$bg_hex" "$staging_dir/progress_box.png"
+magick "$staging_dir/progress_box.png" -channel RGB +level-colors "#$surface_hex","#$surface_hex" "$staging_dir/progress_box.png"
 
 sudo cp -a "$staging_dir/." "$theme_dir/"
 sudo plymouth-set-default-theme omarchy
