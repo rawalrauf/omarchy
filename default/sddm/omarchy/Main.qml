@@ -43,7 +43,7 @@ Rectangle {
   // --- CONFIGURABLE PROGRESS BAR TIMER ---
   Timer {
     id: loginDelayTimer
-    interval: 6000 // Customizable delay for immidiate logout & login error! (1000 = 1s)
+    interval: 3000 // Progress bar animation duration before login (1000 = 1s)
     repeat: false
     onTriggered: {
       sddm.login(root.currentUser, password.text, root.sessionIndex)
