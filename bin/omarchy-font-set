@@ -23,7 +23,8 @@ if [[ -n $font_name ]]; then
     fi
 
     if [[ -f ~/.config/foot/foot.ini ]]; then
-      sed -i "s/^font=.*/font=$font_name:size=9/g" ~/.config/foot/foot.ini
+      current_size=$(grep -oP '(?<=:size=)\d+' ~/.config/foot/foot.ini || echo "11")
+      sed -i "s/^font=.*/font=$font_name:size=$current_size/g" ~/.config/foot/foot.ini
     fi
 
     if [[ -f ~/.config/hypr/hyprlock.conf ]]; then
