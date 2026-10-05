@@ -50,9 +50,10 @@ sed -i \
   -e "s/^Window.SetBackgroundBottomColor.*/Window.SetBackgroundBottomColor($bg_r, $bg_g, $bg_b);/" \
   "$staging_dir/omarchy.script"
 
-for asset in bullet.png entry.png lock.png progress_bar.png progress_box.png; do
+for asset in bullet.png entry.png lock.png progress_bar.png; do
   magick "$staging_dir/$asset" -channel RGB +level-colors "#$text_hex","#$text_hex" "$staging_dir/$asset"
 done
+magick "$staging_dir/progress_box.png" -channel RGB +level-colors "#$bg_hex","#$bg_hex" "$staging_dir/progress_box.png"
 
 sudo cp -a "$staging_dir/." "$theme_dir/"
 sudo plymouth-set-default-theme omarchy
