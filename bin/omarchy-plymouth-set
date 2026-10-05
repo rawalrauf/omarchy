@@ -50,7 +50,7 @@ sed -i \
   -e "s/^Window.SetBackgroundBottomColor.*/Window.SetBackgroundBottomColor($bg_r, $bg_g, $bg_b);/" \
   "$staging_dir/omarchy.script"
 
-for asset in bullet.png entry.png lock.png progress_bar.png; do
+for asset in bullet.png entry.png lock.png progress_bar.png progress_box.png; do
   magick "$staging_dir/$asset" -channel RGB +level-colors "#$text_hex","#$text_hex" "$staging_dir/$asset"
 done
 
@@ -73,7 +73,7 @@ sed \
   "$sddm_template" | sudo tee "$sddm_dir/Main.qml" >/dev/null
 
 sudo cp "$logo_path" "$sddm_dir/logo.png"
-for asset in bullet.png entry.png lock.png; do
+for asset in bullet.png entry.png lock.png progress_bar.png progress_box.png; do
   sudo cp "$staging_dir/$asset" "$sddm_dir/$asset"
 done
 for asset in entry lock; do
