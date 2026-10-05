@@ -11,3 +11,6 @@ fi
 
 # Ensure command hashing is off for mise
 set +h
+
+# Update terminal window title to current directory
+PROMPT_COMMAND='printf "\033]0;%s\007" "${PWD/#$HOME/\~}"'
