@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# omarchy:summary=Launch the system monitor TUI (provided by btop).
+
+exec omarchy-launch-or-focus-tui --title="System Monitor" btop

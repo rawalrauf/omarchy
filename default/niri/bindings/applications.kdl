@@ -21,6 +21,6 @@ binds {
     Mod+Shift+Ctrl+A hotkey-overlay-title="Audio Controls" { spawn-sh "omarchy-launch-audio"; }
     Mod+Shift+Ctrl+B hotkey-overlay-title="Bluetooth Controls" { spawn-sh "omarchy-launch-bluetooth"; }
     Mod+Shift+Ctrl+W hotkey-overlay-title="Wifi Controls" { spawn-sh "omarchy-launch-wifi"; }
-    Mod+Shift+Ctrl+T hotkey-overlay-title="Activity Monitor" { spawn-sh "omarchy-launch-or-focus-tui btop"; }
+    Mod+Shift+Ctrl+T hotkey-overlay-title="Activity Monitor" { spawn-sh "omarchy-launch-system-monitor"; }
     Mod+Shift+Ctrl+D hotkey-overlay-title="Docker TUI" { spawn-sh "omarchy-launch-tui lazydocker"; }
 }
