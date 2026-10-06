@@ -9,14 +9,23 @@ if (($# == 0)); then
 fi
 
 APP_ID=""
+TITLE=""
 if [[ "$1" == --app-id=* ]]; then
   APP_ID="${1#--app-id=}"
   shift
 fi
 
-if [[ -z "$APP_ID" ]]; then
-CMD_NAME=$(basename "$1")
-APP_ID="org.omarchy.$CMD_NAME"
+if [[ "$1" == --title=* ]]; then
+  TITLE="${1#--title=}"
+  shift
 fi
 
-exec setsid uwsm-app -- xdg-terminal-exec --app-id="$APP_ID" --title="$CMD_NAME" -e "$@"
+CMD_NAME=$(basename "$1")
+if [[ -z "$APP_ID" ]]; then
+  APP_ID="org.omarchy.$CMD_NAME"
+fi
+if [[ -z "$TITLE" ]]; then
+  TITLE="$CMD_NAME"
+fi
+
+exec setsid uwsm-app -- xdg-terminal-exec --app-id="$APP_ID" --title="$TITLE" -e "$@"

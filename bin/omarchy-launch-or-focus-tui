@@ -32,6 +32,6 @@ else
   fi
 fi
 
-LAUNCH_COMMAND="omarchy-launch-tui --app-id=$TARGET_APP_ID $@"
+LAUNCH_COMMAND="omarchy-launch-tui --app-id=$TARGET_APP_ID --title=$CMD_NAME $@"
 
 exec omarchy-launch-or-focus "$TARGET_APP_ID" "$LAUNCH_COMMAND"
