@@ -2,5 +2,5 @@
 Version=1.0
 Name=Bash
 Type=Application
-Icon=bash
+Icon=devhints
 NoDisplay=true
