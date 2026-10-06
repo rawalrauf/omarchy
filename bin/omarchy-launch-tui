@@ -15,8 +15,8 @@ if [[ "$1" == --app-id=* ]]; then
 fi
 
 if [[ -z "$APP_ID" ]]; then
-  CMD_NAME=$(basename "$1")
-  APP_ID="org.omarchy.$CMD_NAME"
+CMD_NAME=$(basename "$1")
+APP_ID="org.omarchy.$CMD_NAME"
 fi
 
-exec setsid uwsm-app -- xdg-terminal-exec --app-id="$APP_ID" -e "$@"
+exec setsid uwsm-app -- xdg-terminal-exec --app-id="$APP_ID" --title="$CMD_NAME" -e "$@"
