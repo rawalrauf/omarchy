@@ -48,23 +48,24 @@ for file in "${webapp_desktop_files[@]}"; do
 
   echo "Removing web app: $app_name"
 
-  # 1. Remove main files
+  # 1. Remove main desktop file, check icon is not used by other files before deleting
   rm -f "$file"
-  [[ -n "$icon_path" && -f "$icon_path" ]] && rm -f "$icon_path"
+  if [[ -n "$icon_path" ]]; then
+    remaining=$(grep -rl "^Icon=$icon_path" "$APP_DIR" 2>/dev/null | wc -l)
+    (( remaining == 0 )) && rm -f "$icon_path"
+  fi
 
-  # 2. Remove hidden pre-generated desktop files and icon symlinks
+  # 2. Remove hidden pre-generated desktop files
   if [[ -n "$APP_ID_BASE" ]]; then
     for prefix in chrome brave msedge opera vivaldi helium thorium; do
       APP_ID="${prefix}-${APP_ID_BASE}-Default"
       rm -f "$APP_DIR/${APP_ID}.desktop"
-      rm -f "$ICON_DIR/${APP_ID}.png"
     done
   fi
 done
 
 # Extra safety pass to clean any stray hidden app entries
 rm -f "$APP_DIR"/*-__-Default.desktop 2>/dev/null || true
-rm -f "$ICON_DIR"/*-__-Default.png 2>/dev/null || true
 
 # Update databases
 update-desktop-database "$APP_DIR" &>/dev/null

@@ -75,16 +75,18 @@ for APP_NAME in "${APP_NAMES[@]}"; do
 
   ICON_PATH=$(grep "^Icon=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2-)
 
-  # 1. Remove main desktop file and main icon
+  # 1. Remove main desktop file, check icon is not used by other files before deleting
   rm -f "$DESKTOP_FILE"
-  [[ -n "$ICON_PATH" && -f "$ICON_PATH" ]] && rm -f "$ICON_PATH"
+  if [[ -n "$ICON_PATH" ]]; then
+    REMAINING=$(grep -rl "^Icon=$ICON_PATH" "$DESKTOP_DIR" 2>/dev/null | wc -l)
+    (( REMAINING == 0 )) && rm -f "$ICON_PATH"
+  fi
 
-  # 2. Remove hidden pre-generated app_id desktop entries and icon symlinks
+  # 2. Remove hidden pre-generated app_id desktop entries
   if [[ -n "$APP_ID_BASE" ]]; then
     for prefix in chrome brave msedge opera vivaldi helium thorium; do
       APP_ID="${prefix}-${APP_ID_BASE}-Default"
       rm -f "$DESKTOP_DIR/${APP_ID}.desktop"
-      rm -f "$ICON_DIR/${APP_ID}.png"
     done
   fi
 
