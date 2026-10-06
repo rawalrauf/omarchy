@@ -54,7 +54,7 @@ cat >"$DESKTOP_FILE" <<EOF
 Version=1.0
 Name=$APP_NAME
 Comment=$APP_NAME
-Exec=omarchy-launch-tui --app-id=$APP_ID $APP_EXEC
+Exec=omarchy-launch-tui --app-id=$APP_ID --title="$APP_NAME" $APP_EXEC
 Terminal=false
 Type=Application
 Icon=$ICON_PATH
