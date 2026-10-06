@@ -9,8 +9,14 @@ if (($# == 0)); then
 fi
 
 EXPLICIT_ID=""
+EXPLICIT_TITLE=""
 if [[ "$1" == --app-id=* ]]; then
   EXPLICIT_ID="${1#--app-id=}"
+  shift
+fi
+
+if [[ "$1" == --title=* ]]; then
+  EXPLICIT_TITLE="${1#--title=}"
   shift
 fi
 
@@ -32,6 +38,7 @@ else
   fi
 fi
 
-LAUNCH_COMMAND="omarchy-launch-tui --app-id=$TARGET_APP_ID --title=$CMD_NAME $@"
+TITLE="${EXPLICIT_TITLE:-$CMD_NAME}"
+LAUNCH_COMMAND="omarchy-launch-tui --app-id=$TARGET_APP_ID --title=\"$TITLE\" $@"
 
 exec omarchy-launch-or-focus "$TARGET_APP_ID" "$LAUNCH_COMMAND"
