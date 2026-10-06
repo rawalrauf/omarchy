@@ -88,12 +88,15 @@ fi
 
 mkdir -p "$ICON_DIR" "$APPS_DIR"
 
+# Slugify app name for icon filename (lowercase, spaces to hyphens)
+ICON_SLUG=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/-$//')
+
 if [[ -z $ICON_REF ]]; then
   ICON_REF="https://www.google.com/s2/favicons?domain=${APP_URL}&sz=128"
 fi
 
 if [[ $ICON_REF =~ ^https?:// ]]; then
-  ICON_PATH="$ICON_DIR/$APP_NAME.png"
+  ICON_PATH="$ICON_DIR/${ICON_SLUG}.png"
   if ! curl -fsSL --connect-timeout 8 -o "$ICON_PATH" "$ICON_REF" 2>/dev/null || [[ ! -s $ICON_PATH ]]; then
     echo "Error: Failed to download icon."
     exit 1
@@ -141,9 +144,6 @@ fi
 # Pre-generate hidden app_id mappings using the exact "prefix-domain__path-Default" format
 for prefix in chrome brave msedge opera vivaldi helium thorium; do
   APP_ID="${prefix}-${APP_ID_BASE}-Default"
-
-  # Symlink icon for niri/window GTK lookup
-  ln -sf "$ICON_PATH" "$ICON_DIR/${APP_ID}.png"
 
   # Create hidden desktop entry for wlr/taskbar matching (NoDisplay=true hides from launchers)
   cat >"$APPS_DIR/${APP_ID}.desktop" <<EOF

@@ -2,5 +2,5 @@
 Version=1.0
 Name=Bash
 Type=Application
-Icon=/home/rawalrauf/.local/share/icons/hicolor/512x512@2/apps/Bash.png
+Icon=bash
 NoDisplay=true

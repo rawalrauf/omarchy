@@ -2,5 +2,5 @@
 Version=1.0
 Name=Arch
 Type=Application
-Icon=/home/rawalrauf/.local/share/icons/hicolor/512x512@2/apps/Arch.png
+Icon=arch
 NoDisplay=true

@@ -2,5 +2,5 @@
 Version=1.0
 Name=Audio
 Type=Application
-Icon=org.omarchy.wiremix
+Icon=wiremix
 NoDisplay=true

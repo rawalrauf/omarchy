@@ -2,5 +2,5 @@
 Version=1.0
 Name=Niri
 Type=Application
-Icon=/home/rawalrauf/.local/share/icons/hicolor/512x512@2/apps/Niri.png
+Icon=niri
 NoDisplay=true
