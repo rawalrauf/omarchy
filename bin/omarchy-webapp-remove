@@ -75,12 +75,9 @@ for APP_NAME in "${APP_NAMES[@]}"; do
 
   ICON_PATH=$(grep "^Icon=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2-)
 
-  # 1. Remove main desktop file, delete icon if no other visible webapp uses it
+  # 1. Remove main desktop file and its icon
   rm -f "$DESKTOP_FILE"
-  if [[ -n "$ICON_PATH" && -f "$ICON_PATH" ]]; then
-    REMAINING=$(grep -rl "^Icon=$ICON_PATH" "$DESKTOP_DIR" 2>/dev/null | xargs grep -lv '^NoDisplay=true' 2>/dev/null | wc -l)
-    (( REMAINING == 0 )) && rm -f "$ICON_PATH"
-  fi
+  [[ -n "$ICON_PATH" && -f "$ICON_PATH" ]] && rm -f "$ICON_PATH"
 
   # 2. Remove hidden pre-generated app_id desktop entries
   if [[ -n "$APP_ID_BASE" ]]; then

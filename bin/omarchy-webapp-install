@@ -146,12 +146,13 @@ for prefix in chrome brave msedge opera vivaldi helium thorium; do
   APP_ID="${prefix}-${APP_ID_BASE}-Default"
 
   # Create hidden desktop entry for wlr/taskbar matching (NoDisplay=true hides from launchers)
+  # Use icon slug name (not full path) so removal can safely check if visible file still needs the icon
   cat >"$APPS_DIR/${APP_ID}.desktop" <<EOF
 [Desktop Entry]
 Version=1.0
 Name=$APP_NAME
 Type=Application
-Icon=$ICON_PATH
+Icon=$ICON_SLUG
 NoDisplay=true
 EOF
 done
