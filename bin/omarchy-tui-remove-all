@@ -26,10 +26,21 @@ for file in "${tui_desktop_files[@]}"; do
   display_name=$(grep "^Name=" "$file" 2>/dev/null | cut -d= -f2- | head -1)
   [[ -z $display_name ]] && display_name="$full_id"
 
+  icon_ref=$(grep "^Icon=" "$file" 2>/dev/null | cut -d= -f2- | head -1)
+
   echo "Removing TUI: $display_name"
 
   rm -f "$file"
-  rm -f "$ICON_DIR/$full_id.png"
+
+  if [[ -n $icon_ref ]]; then
+    if [[ $icon_ref == /* ]]; then
+      icon_file="$icon_ref"
+    else
+      icon_file="$ICON_DIR/${icon_ref}.png"
+    fi
+    remaining=$(grep -rl "^Icon=$icon_ref" "$DESKTOP_DIR" 2>/dev/null | wc -l)
+    (( remaining == 0 )) && rm -f "$icon_file"
+  fi
 done
 
 if command -v update-desktop-database &>/dev/null; then

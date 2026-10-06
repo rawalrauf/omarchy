@@ -47,11 +47,23 @@ if ((${#APP_IDS[@]} == 0)); then
 fi
 
 for ID in "${APP_IDS[@]}"; do
-  DISPLAY_NAME=$(grep "^Name=" "$DESKTOP_DIR/$ID.desktop" 2>/dev/null | cut -d= -f2- | head -1)
+  DESKTOP_FILE="$DESKTOP_DIR/$ID.desktop"
+  DISPLAY_NAME=$(grep "^Name=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2- | head -1)
   [[ -z $DISPLAY_NAME ]] && DISPLAY_NAME="$ID"
 
-  rm -f "$DESKTOP_DIR/$ID.desktop"
-  rm -f "$ICON_DIR/$ID.png"
+  ICON_REF=$(grep "^Icon=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2- | head -1)
+
+  rm -f "$DESKTOP_FILE"
+
+  if [[ -n $ICON_REF ]]; then
+    if [[ $ICON_REF == /* ]]; then
+      ICON_FILE="$ICON_REF"
+    else
+      ICON_FILE="$ICON_DIR/${ICON_REF}.png"
+    fi
+    REMAINING=$(grep -rl "^Icon=$ICON_REF" "$DESKTOP_DIR" 2>/dev/null | wc -l)
+    (( REMAINING == 0 )) && rm -f "$ICON_FILE"
+  fi
 
   echo "Removed $DISPLAY_NAME"
 done
