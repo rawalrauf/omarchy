@@ -27,8 +27,8 @@ spawn-sh-at-startup "uwsm app -- omarchy-niri-monitor-watch"
 // Pre-warm keybindings cache so first open is instant
 spawn-sh-at-startup "sleep 3 && omarchy-menu-keybindings --print > /dev/null 2>&1 &"
 
-// Preload ghostty so subsequent launches are instant
-spawn-sh-at-startup "omarchy-cmd-present ghostty && ghostty --initial-window=false &"
+// Preload ghostty so subsequent launches are instant (only if it's the default terminal)
+spawn-sh-at-startup "omarchy-cmd-present ghostty && [[ $(head -1 ~/.config/xdg-terminals.list | grep -v '^#') == 'com.mitchellh.ghostty.desktop' ]] && ghostty --initial-window=false &"
 
 // Post-boot hooks from ~/.config/omarchy/hooks/post-boot.d/
 spawn-sh-at-startup "sleep 2 && omarchy-hook post-boot"
