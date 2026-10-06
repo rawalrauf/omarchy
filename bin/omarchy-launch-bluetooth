@@ -3,4 +3,4 @@
 # omarchy:summary=Launch the Omarchy bluetooth controls TUI (provided by bluetui).
 
 rfkill unblock bluetooth
-exec omarchy-launch-or-focus-tui --title=bluetui bluetui
+exec omarchy-launch-or-focus-tui --title="Bluetooth" bluetui
