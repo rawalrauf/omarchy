@@ -7,65 +7,48 @@ set -e
 APP_DIR="${1:-$HOME/.local/share/applications}"
 ICON_DIR="$HOME/.local/share/icons/hicolor/512x512@2/apps"
 
-echo "Scanning for web apps in $APP_DIR..."
-
-webapp_desktop_files=()
-while IFS= read -r -d '' file; do
-  # Find all main web app launchers (ignoring NoDisplay=true entries)
-  if grep -q "Exec=omarchy-launch-webapp\|Exec=omarchy-webapp-handler" "$file" 2>/dev/null; then
-    if ! grep -q '^NoDisplay=true' "$file" 2>/dev/null; then
-      webapp_desktop_files+=("$file")
-    fi
+url_to_app_id_base() {
+  local stripped
+  stripped=$(echo "$1" | sed -E 's|^[a-zA-Z0-9+.-]+://||')
+  stripped="${stripped%/}"
+  if [[ $stripped == */* ]]; then
+    local domain="${stripped%%/*}" path="${stripped#*/}"
+    path="${path%/}"; path="${path//\//_}"
+    echo "${domain}__${path}"
+  else
+    echo "${stripped}__"
   fi
-done < <(find "$APP_DIR" -maxdepth 1 -name "*.desktop" -print0 2>/dev/null)
+}
 
-if (( ${#webapp_desktop_files[@]} == 0 )); then
-  # Fallback cleanup check for orphaned hidden desktop entries/symlinks
-  rm -f "$APP_DIR"/*-__-Default.desktop 2>/dev/null || true
-  rm -f "$ICON_DIR"/*-__-Default.png 2>/dev/null || true
+mapfile -d '' files < <(find "$APP_DIR" -maxdepth 1 -name "*.desktop" -print0 2>/dev/null)
+
+webapp_files=()
+for file in "${files[@]}"; do
+  grep -qE '^Exec=.*(omarchy-launch-webapp|omarchy-webapp-handler)' "$file" 2>/dev/null || continue
+  grep -q '^NoDisplay=true' "$file" 2>/dev/null && continue
+  webapp_files+=("$file")
+done
+
+if (( ${#webapp_files[@]} == 0 )); then
   echo "No web apps found."
   exit 0
 fi
 
-for file in "${webapp_desktop_files[@]}"; do
+for file in "${webapp_files[@]}"; do
   app_name=$(basename "$file" .desktop)
+  exec_url=$(grep "^Exec=" "$file" | head -1 | awk '{print $2}')
+  icon_path=$(grep "^Icon=" "$file" | cut -d= -f2-)
+  app_id_base=$(url_to_app_id_base "$exec_url")
 
-  # Extract URL to derive app-id base matching Chromium's exact format
-  EXEC_URL=$(grep "^Exec=" "$file" | head -1 | awk '{print $2}')
-  APP_URL_STRIPPED=$(echo "$EXEC_URL" | sed -E 's|^[a-zA-Z0-9+.-]+://||')
-  APP_URL_STRIPPED="${APP_URL_STRIPPED%/}"
-  if [[ $APP_URL_STRIPPED == */* ]]; then
-    APP_ID_DOMAIN="${APP_URL_STRIPPED%%/*}"
-    APP_ID_PATH="${APP_URL_STRIPPED#*/}"
-    APP_ID_PATH="${APP_ID_PATH%/}"
-    APP_ID_PATH="${APP_ID_PATH//\//_}"
-    APP_ID_BASE="${APP_ID_DOMAIN}__${APP_ID_PATH}"
-  else
-    APP_ID_BASE="${APP_URL_STRIPPED}__"
-  fi
-
-  icon_path=$(grep "^Icon=" "$file" 2>/dev/null | cut -d= -f2-)
-
-  echo "Removing web app: $app_name"
-
-  # 1. Remove main desktop file and its icon
+  echo "Removing: $app_name"
   rm -f "$file"
-  [[ -n "$icon_path" && -f "$icon_path" ]] && rm -f "$icon_path"
+  [[ -n $icon_path && -f $icon_path ]] && rm -f "$icon_path"
 
-  # 2. Remove hidden pre-generated desktop files
-  if [[ -n "$APP_ID_BASE" ]]; then
-    for prefix in chrome brave msedge opera vivaldi helium thorium; do
-      APP_ID="${prefix}-${APP_ID_BASE}-Default"
-      rm -f "$APP_DIR/${APP_ID}.desktop"
-    done
-  fi
+  for prefix in chrome brave msedge opera vivaldi helium thorium; do
+    rm -f "$APP_DIR/${prefix}-${app_id_base}-Default.desktop"
+  done
 done
 
-# Extra safety pass to clean any stray hidden app entries
-rm -f "$APP_DIR"/*-__-Default.desktop 2>/dev/null || true
-
-# Update databases
 update-desktop-database "$APP_DIR" &>/dev/null
 gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" &>/dev/null
-
-echo "All web apps removed successfully."
+echo "All web apps removed."

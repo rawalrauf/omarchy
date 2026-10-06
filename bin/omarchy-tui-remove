@@ -4,72 +4,50 @@
 
 set -e
 
-ICON_DIR="$HOME/.local/share/icons/hicolor/512x512@2/apps"
 DESKTOP_DIR="$HOME/.local/share/applications"
+ICON_DIR="$HOME/.local/share/icons/hicolor/512x512@2/apps"
 
 if (($# == 0)); then
   declare -A NAME_TO_ID
-  TUI_NAMES=()
-
   while IFS= read -r -d '' file; do
-    if grep -qE '^Exec=.*(omarchy-launch-tui|omarchy-launch-or-focus-tui)' "$file"; then
-      FULL_ID=$(basename "${file%.desktop}")
-      APP_NAME=$(grep "^Name=" "$file" | cut -d= -f2- | head -1)
-      [[ -z $APP_NAME ]] && APP_NAME="$FULL_ID"
-
-      NAME_TO_ID["$APP_NAME"]="$FULL_ID"
-      TUI_NAMES+=("$APP_NAME")
-    fi
+    grep -qE '^Exec=.*(omarchy-launch-tui|omarchy-launch-or-focus-tui)' "$file" || continue
+    id=$(basename "${file%.desktop}")
+    name=$(grep "^Name=" "$file" | cut -d= -f2- | head -1)
+    [[ -z $name ]] && name="$id"
+    NAME_TO_ID["$name"]="$id"
+    TUI_NAMES+=("$name")
   done < <(find "$DESKTOP_DIR" -maxdepth 1 -name 'org.omarchy.*.desktop' -print0)
 
-  if ((${#TUI_NAMES[@]})); then
-    IFS=$'\n' SORTED_NAMES=($(sort <<<"${TUI_NAMES[*]}"))
-    unset IFS
+  (( ${#TUI_NAMES[@]} )) || { echo "No TUIs to remove."; exit 1; }
 
-    SELECTED_NAMES_STRING=$(gum choose --no-limit --header "Select TUI to remove..." --selected-prefix="✗ " "${SORTED_NAMES[@]}")
+  IFS=$'\n' SORTED=($(sort <<<"${TUI_NAMES[*]}")); unset IFS
+  mapfile -t SELECTED < <(gum choose --no-limit --header "Select TUI to remove..." --selected-prefix="✗ " "${SORTED[@]}")
 
-    APP_IDS=()
-    while IFS= read -r line; do
-      if [[ -n "$line" && -n "${NAME_TO_ID[$line]}" ]]; then
-        APP_IDS+=("${NAME_TO_ID[$line]}")
-      fi
-    done <<< "$SELECTED_NAMES_STRING"
-  else
-    echo "No TUIs to remove."
-    exit 1
-  fi
+  APP_IDS=()
+  for name in "${SELECTED[@]}"; do
+    [[ -n ${NAME_TO_ID[$name]} ]] && APP_IDS+=("${NAME_TO_ID[$name]}")
+  done
 else
   APP_IDS=("$@")
 fi
 
-if ((${#APP_IDS[@]} == 0)); then
-  exit 0
-fi
+(( ${#APP_IDS[@]} )) || exit 0
 
 for ID in "${APP_IDS[@]}"; do
   DESKTOP_FILE="$DESKTOP_DIR/$ID.desktop"
-  DISPLAY_NAME=$(grep "^Name=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2- | head -1)
-  [[ -z $DISPLAY_NAME ]] && DISPLAY_NAME="$ID"
-
-  ICON_REF=$(grep "^Icon=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2- | head -1)
+  NAME=$(grep "^Name=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2- | head -1)
+  ICON_REF=$(grep "^Icon=" "$DESKTOP_FILE" 2>/dev/null | cut -d= -f2-)
 
   rm -f "$DESKTOP_FILE"
 
   if [[ -n $ICON_REF ]]; then
-    if [[ $ICON_REF == /* ]]; then
-      ICON_FILE="$ICON_REF"
-    else
-      ICON_FILE="$ICON_DIR/${ICON_REF}.png"
-    fi
+    [[ $ICON_REF == /* ]] && ICON_FILE="$ICON_REF" || ICON_FILE="$ICON_DIR/${ICON_REF}.png"
     REMAINING=$(grep -rl "^Icon=$ICON_REF" "$DESKTOP_DIR" 2>/dev/null | wc -l)
     (( REMAINING == 0 )) && rm -f "$ICON_FILE"
   fi
 
-  echo "Removed $DISPLAY_NAME"
+  echo "Removed ${NAME:-$ID}"
 done
 
-if command -v update-desktop-database &>/dev/null; then
-  update-desktop-database "$DESKTOP_DIR" &>/dev/null
-fi
-
-gtk-update-icon-cache -q -f "$HOME/.local/share/icons/hicolor" >/dev/null 2>&1
+update-desktop-database "$DESKTOP_DIR" &>/dev/null
+gtk-update-icon-cache -q -f "$HOME/.local/share/icons/hicolor" &>/dev/null
