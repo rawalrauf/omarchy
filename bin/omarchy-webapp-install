@@ -71,6 +71,7 @@ if [[ $ICON_REF =~ ^https?:// ]]; then
   curl -fsSL --connect-timeout 8 -o "$ICON_PATH" "$ICON_REF" 2>/dev/null && [[ -s $ICON_PATH ]] || { echo "Error: Failed to download icon."; exit 1; }
 else
   ICON_PATH="$ICON_DIR/$ICON_REF"
+  ICON_SLUG="${ICON_REF%.png}"
 fi
 
 DESKTOP_FILE="$APPS_DIR/$APP_NAME.desktop"
