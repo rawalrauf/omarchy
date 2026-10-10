@@ -11,4 +11,4 @@ if ! pgrep -f "walker --gapplication-service" > /dev/null; then
   setsid uwsm-app -- env GSK_RENDERER=cairo walker --gapplication-service &
 fi
 
-exec walker --width 644 --maxheight 300 --minheight 300 "$@"
+exec walker --width 644 --maxheight 320 --minheight 320 "$@"
