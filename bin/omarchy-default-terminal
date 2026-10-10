@@ -33,4 +33,13 @@ cat >~/.config/xdg-terminals.list <<EOF
 $desktop_id
 EOF
 
+mkdir -p ~/.local/share/applications
+cat >~/.local/share/applications/org.omarchy.terminal.desktop <<EOF
+[Desktop Entry]
+Name=Hoopoo
+Type=Application
+Icon=${desktop_id%.desktop}
+NoDisplay=true
+EOF
+
 notify-send -u low "$glyph    $name is now the default terminal"
